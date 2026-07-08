@@ -5,6 +5,7 @@ from app.database.session import engine
 from app.api.auth import router as auth_router
 from app.api.users import router as users_router
 from fastapi import FastAPI
+from app.api.news import router as news_router
 
 
 app = FastAPI(
@@ -37,3 +38,4 @@ def startup():
 
 app.include_router(auth_router)
 app.include_router(users_router)
+app.include_router(news_router)

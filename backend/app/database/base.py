@@ -6,3 +6,4 @@ class Base(DeclarativeBase):
 
 
 from app.models.user import User
+from app.models.news import News
