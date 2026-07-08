@@ -14,7 +14,7 @@ from app.schemas.news import (
     NewsResponse,
     NewsUpdate,
 )
-
+from app.services.news_fetcher import fetch_technology_news
 router = APIRouter(
     prefix="/news",
     tags=["News"]
@@ -31,6 +31,13 @@ def create_news_endpoint(
 @router.get("/", response_model=list[NewsResponse])
 def get_all_news(db: Session = Depends(get_db)):
     return get_news(db)
+
+
+
+@router.get("/fetch")
+def fetch_news():
+    return fetch_technology_news()
+
 
 @router.get("/{news_id}", response_model=NewsResponse)
 def get_news_detail(
@@ -61,6 +68,8 @@ def delete_news_endpoint(
         )
 
     return {"message": "News deleted successfully"}
+
+
 
 @router.put("/{news_id}", response_model=NewsResponse)
 def update_news_endpoint(
