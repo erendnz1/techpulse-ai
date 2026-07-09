@@ -21,7 +21,8 @@ router = APIRouter(
     prefix="/news",
     tags=["News"]
 )
-
+from app.services.ai_service import generate_summary
+from app.services.ai_service import generate_summary
 
 @router.post("/", response_model=NewsResponse)
 def create_news_endpoint(
@@ -33,8 +34,6 @@ def create_news_endpoint(
 @router.get("/", response_model=list[NewsResponse])
 def get_all_news(db: Session = Depends(get_db)):
     return get_news(db)
-
-
 
 @router.get("/fetch")
 def fetch_news(db: Session = Depends(get_db)):
@@ -48,14 +47,33 @@ def fetch_news(db: Session = Depends(get_db)):
         if existing_news:
             continue
 
+        summary = generate_summary(article["content"])
+        article["summary"] = summary
+
         news = save_news(db, article)
         saved_news.append(news)
 
     return {
     "message": "News fetched successfully.",
-    "saved_count": len(saved_news),
-    "news": saved_news
+    "saved_count": len(saved_news)
     }
+
+
+
+@router.get("/test-ai")
+def test_ai():
+    sample_text = """
+    OpenAI announced a new GPT model with improved reasoning,
+    faster responses and lower latency for developers.
+    """
+
+    summary = generate_summary(sample_text)
+
+    return {
+        "original": sample_text,
+        "summary": summary
+    }
+
 
 @router.get("/{news_id}", response_model=NewsResponse)
 def get_news_detail(
