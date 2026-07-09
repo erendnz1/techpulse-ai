@@ -8,6 +8,8 @@ from app.crud.news import (
     get_news_by_id,
     update_news,
     delete_news,
+    save_news,
+    get_news_by_url
 )
 from app.schemas.news import (
     NewsCreate,
@@ -35,9 +37,25 @@ def get_all_news(db: Session = Depends(get_db)):
 
 
 @router.get("/fetch")
-def fetch_news():
-    return fetch_technology_news()
+def fetch_news(db: Session = Depends(get_db)):
+    articles = fetch_technology_news()
 
+    saved_news = []
+
+    for article in articles:
+        existing_news = get_news_by_url(db, article["url"])
+
+        if existing_news:
+            continue
+
+        news = save_news(db, article)
+        saved_news.append(news)
+
+    return {
+    "message": "News fetched successfully.",
+    "saved_count": len(saved_news),
+    "news": saved_news
+    }
 
 @router.get("/{news_id}", response_model=NewsResponse)
 def get_news_detail(

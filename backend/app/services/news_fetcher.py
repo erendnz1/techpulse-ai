@@ -16,4 +16,24 @@ def fetch_technology_news():
 
     response = requests.get(BASE_URL, params=params)
 
-    return response.json()
+    data = response.json()
+
+    articles = data.get("articles", [])
+
+    transformed_articles = [
+    transform_news(article)
+    for article in articles
+    ]
+
+    return transformed_articles
+
+
+def transform_news(article):
+    return {
+        "title": article.get("title"),
+        "content": article.get("content") or article.get("description"),
+        "source": article.get("source", {}).get("name"),
+        "url": article.get("url"),
+        "image_url": article.get("urlToImage"),
+        "published_at": article.get("publishedAt"),
+    }

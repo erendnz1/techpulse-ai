@@ -24,9 +24,6 @@ def create_news(db: Session, news: NewsCreate):
 def get_news(db: Session):
     return db.query(News).all()
 
-def get_news(db: Session):
-    return db.query(News).all()
-
 def get_news_by_id(db: Session, news_id: int):
     return db.query(News).filter(News.id == news_id).first()
 
@@ -61,3 +58,15 @@ def update_news(db: Session, news_id: int, news: NewsUpdate):
     db.refresh(db_news)
 
     return db_news
+
+def get_news_by_url(db: Session, url: str):
+    return db.query(News).filter(News.url == url).first()
+
+def save_news(db: Session, news_data: dict):
+    news = News(**news_data)
+
+    db.add(news)
+    db.commit()
+    db.refresh(news)
+
+    return news
