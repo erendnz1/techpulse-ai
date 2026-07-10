@@ -10,14 +10,14 @@ def fetch_technology_news():
     params = {
         "category": "technology",
         "country": "us",
-        "pageSize": 10,
+        "pageSize":1,
         "apiKey": NEWS_API_KEY,
     }
 
     response = requests.get(BASE_URL, params=params)
 
     data = response.json()
-
+    print(data)
     articles = data.get("articles", [])
 
     transformed_articles = [

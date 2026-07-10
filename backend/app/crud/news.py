@@ -53,6 +53,9 @@ def update_news(db: Session, news_id: int, news: NewsUpdate):
     db_news.image_url = news.image_url
     db_news.author = news.author
     db_news.published_at = news.published_at
+    db_news.summary = news.summary
+    db_news.category = news.category
+
 
     db.commit()
     db.refresh(db_news)

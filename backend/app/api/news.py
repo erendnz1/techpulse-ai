@@ -22,8 +22,6 @@ router = APIRouter(
     tags=["News"]
 )
 from app.services.ai_service import generate_summary
-from app.services.ai_service import generate_summary
-
 @router.post("/", response_model=NewsResponse)
 def create_news_endpoint(
     news: NewsCreate,
@@ -39,25 +37,42 @@ def get_all_news(db: Session = Depends(get_db)):
 def fetch_news(db: Session = Depends(get_db)):
     articles = fetch_technology_news()
 
+    
+
     saved_news = []
 
-    for article in articles:
+    for index, article in enumerate(articles, start=1):
+        
+
         existing_news = get_news_by_url(db, article["url"])
 
         if existing_news:
+            print("Duplicate news, skipped.")
             continue
 
-        summary = generate_summary(article["content"])
-        article["summary"] = summary
+        content = article["content"] or ""
 
+        
+        summary = generate_summary(content)
+
+        if summary:
+           article["summary"] = summary
+        else:
+           article["summary"] = None
+
+        
+        
         news = save_news(db, article)
+        
+
         saved_news.append(news)
 
-    return {
-    "message": "News fetched successfully.",
-    "saved_count": len(saved_news)
-    }
+    
 
+    return {
+        "message": "News fetched successfully.",
+        "saved_count": len(saved_news)
+    }
 
 
 @router.get("/test-ai")
