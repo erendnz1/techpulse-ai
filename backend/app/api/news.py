@@ -58,9 +58,13 @@ def fetch_news(db: Session = Depends(get_db)):
         if analysis:
            article["summary"] = analysis.get("summary")
            article["category"] = analysis.get("category")
+           article["importance_score"] = analysis.get("importance_score")
+           article["risk_level"] = analysis.get("risk_level")
         else:
            article["summary"] = None
            article["category"] = None
+           article["importance_score"] = None
+           article["risk_level"] = None
 
         
         

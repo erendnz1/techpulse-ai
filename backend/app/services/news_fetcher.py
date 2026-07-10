@@ -1,9 +1,7 @@
 import requests
-
 from app.core.config import NEWS_API_KEY
 
 BASE_URL = "https://newsapi.org/v2/top-headlines"
-
 
 def fetch_technology_news():
 
@@ -26,7 +24,6 @@ def fetch_technology_news():
     ]
 
     return transformed_articles
-
 
 def transform_news(article):
     return {

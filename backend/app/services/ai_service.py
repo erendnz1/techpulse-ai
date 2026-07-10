@@ -3,10 +3,21 @@ import time
 import json
 from groq import Groq
 from app.core.config import  GROQ_API_KEY
+
 groq_client = Groq(api_key=GROQ_API_KEY)
-
-
 logger = logging.getLogger(__name__)
+
+ALLOWED_CATEGORIES = {
+    "AI",
+    "Security",
+    "Cloud",
+    "DevOps",
+    "Software",
+    "Mobile",
+    "Gaming",
+    "Business",
+    "Other",
+}
 
 
 def analyze_news(text: str) -> dict | None:
@@ -29,32 +40,85 @@ Choose exactly one category from this list:
 - Business
 - Other
 
+Rate the importance of the news from 1 to 10:
+- 1-3: Low importance
+- 4-6: Medium importance
+- 7-8: High importance
+- 9-10: Critical importance
+
+Choose exactly one risk level from this list:
+- Low
+- Medium
+- High
+- Critical
+
+
+
 Return ONLY valid JSON in exactly this format:
 {{
     "summary": "A 2-3 sentence summary of the news.",
-    "category": "One category from the allowed list"
+    "category": "One category from the allowed list",
+    "importance_score": 1,
+    "risk_level": "Low"
 }}
 
 News:
 {text}
 """
-    
+
     for attempt in range(3):
         logger.info(f"Starting attempt {attempt + 1}")
+
         try:
             response = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
-           {
-            "role": "user",
-            "content": prompt,
-           }
-           ],
-           )
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    }
+                ],
+            )
+
             response_text = response.choices[0].message.content
+
             if response_text:
-               result = json.loads(response_text)
-               return result
+                result = json.loads(response_text)
+
+                if not isinstance(result, dict):
+                    logger.warning("Groq response is not a valid dictionary.")
+                    return None
+
+                summary = result.get("summary")
+                category = result.get("category")
+                importance_score = result.get("importance_score")
+                risk_level = result.get("risk_level")
+
+                if not summary:
+                    logger.warning("Groq response does not contain a summary.")
+                    return None
+
+                if category not in ALLOWED_CATEGORIES:
+                    logger.warning(f"Invalid category returned by Groq: {category}")
+                    category = "Other"
+
+
+                if not isinstance(importance_score, int) or not 1 <= importance_score <= 10:
+                     logger.warning(f"Invalid importance score returned by Groq: {importance_score}")
+                     importance_score = None
+
+                allowed_risk_levels = {"Low", "Medium", "High", "Critical"}
+
+                if risk_level not in allowed_risk_levels:
+                     logger.warning(f"Invalid risk level returned by Groq: {risk_level}")
+                     risk_level = None    
+
+                return {
+    "summary": summary,
+    "category": category,
+    "importance_score": importance_score,
+    "risk_level": risk_level,
+}
 
             logger.warning("Groq returned empty response.")
             return None
