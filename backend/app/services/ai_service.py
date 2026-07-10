@@ -54,13 +54,23 @@ Choose exactly one risk level from this list:
 
 
 
-Return ONLY valid JSON in exactly this format:
+Return only valid JSON in exactly this format:
+
 {{
     "summary": "A 2-3 sentence summary of the news.",
     "category": "One category from the allowed list",
     "importance_score": 1,
-    "risk_level": "Low"
+    "risk_level": "Low",
+    "affected_technologies": ["Technology 1", "Technology 2"],
+    "recommended_action": "A clear and concise recommended action."
 }}
+
+Identify the technologies directly affected or mentioned in the news.
+Return affected_technologies as a JSON array of strings.
+If no specific technology is affected or mentioned, return an empty array [].
+
+Provide a clear and concise recommended action for software developers or IT teams.
+If no specific action is required, return "No immediate action required."
 
 News:
 {text}
@@ -93,7 +103,8 @@ News:
                 category = result.get("category")
                 importance_score = result.get("importance_score")
                 risk_level = result.get("risk_level")
-
+                affected_technologies = result.get("affected_technologies")
+                recommended_action = result.get("recommended_action")
                 if not summary:
                     logger.warning("Groq response does not contain a summary.")
                     return None
@@ -112,12 +123,26 @@ News:
                 if risk_level not in allowed_risk_levels:
                      logger.warning(f"Invalid risk level returned by Groq: {risk_level}")
                      risk_level = None    
+                
+                if not isinstance(affected_technologies, list):
+                    logger.warning(
+                    f"Invalid affected technologies returned by Groq: {affected_technologies}"
+                 )
+                affected_technologies = []
+ 
+                if not isinstance(recommended_action, str) or not recommended_action.strip():
+                   logger.warning(
+                   f"Invalid recommended action returned by Groq: {recommended_action}"
+                 )
+                recommended_action = "No immediate action required."
 
                 return {
     "summary": summary,
     "category": category,
     "importance_score": importance_score,
     "risk_level": risk_level,
+    "affected_technologies": affected_technologies,
+    "recommended_action": recommended_action,
 }
 
             logger.warning("Groq returned empty response.")

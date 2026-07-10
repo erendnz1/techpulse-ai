@@ -51,45 +51,39 @@ def fetch_news(db: Session = Depends(get_db)):
             continue
 
         content = article["content"] or ""
-
-        
         analysis = analyze_news(content)
 
         if analysis:
-           article["summary"] = analysis.get("summary")
-           article["category"] = analysis.get("category")
-           article["importance_score"] = analysis.get("importance_score")
-           article["risk_level"] = analysis.get("risk_level")
+          article["summary"] = analysis.get("summary")
+          article["category"] = analysis.get("category")
+          article["importance_score"] = analysis.get("importance_score")
+          article["risk_level"] = analysis.get("risk_level")
+          article["affected_technologies"] = analysis.get("affected_technologies")
+          article["recommended_action"] = analysis.get("recommended_action")
         else:
-           article["summary"] = None
-           article["category"] = None
-           article["importance_score"] = None
-           article["risk_level"] = None
+          article["summary"] = None
+          article["category"] = None
+          article["importance_score"] = None
+          article["risk_level"] = None
+          article["affected_technologies"] = []
+          article["recommended_action"] = None
 
-        
-        
         news = save_news(db, article)
         
 
         saved_news.append(news)
 
-    
-
     return {
         "message": "News fetched successfully.",
         "saved_count": len(saved_news)
     }
-
-
 @router.get("/test-ai")
 def test_ai():
     sample_text = """
     OpenAI announced a new GPT model with improved reasoning,
     faster responses and lower latency for developers.
     """
-
     analysis = analyze_news(sample_text)
-
     return {
         "original": sample_text,
         "analysis": analysis

@@ -14,6 +14,8 @@ class NewsCreate(BaseModel):
     url: str
     image_url: str | None = None
     author: str | None = None
+    affected_technologies: list[str] | None = None
+    recommended_action: str | None = None
     published_at: datetime
 
 
@@ -29,6 +31,8 @@ class NewsResponse(BaseModel):
     category: str | None = None
     importance_score: int | None = None
     risk_level: str | None = None
+    affected_technologies: list[str] | None = None
+    recommended_action: str | None = None
     published_at: datetime
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)

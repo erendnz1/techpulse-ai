@@ -1,6 +1,6 @@
 from datetime import datetime, UTC
 
-from sqlalchemy import Column, Integer, String, Text, DateTime
+from sqlalchemy import Column, Integer, String, Text, DateTime, JSON
 
 from app.database.base import Base
 
@@ -25,10 +25,15 @@ class News(Base):
     author = Column(String(100), nullable=True)
 
     category = Column(String(50), nullable=True)
+    
     importance_score = Column(Integer, nullable=True)
 
     risk_level = Column(String(20), nullable=True)
-    
+
+    affected_technologies = Column(JSON, nullable=True)
+
+    recommended_action = Column(Text, nullable=True)
+
     published_at = Column(DateTime, nullable=False)
 
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
