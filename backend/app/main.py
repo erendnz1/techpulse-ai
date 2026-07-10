@@ -1,17 +1,54 @@
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
 from sqlalchemy import text
+
 from app.database.base import Base
 from app.database.session import engine
 from app.api.auth import router as auth_router
 from app.api.users import router as users_router
-from fastapi import FastAPI
 from app.api.news import router as news_router
+from app.services.scheduler_service import scheduler
 
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+
+        print("✅ PostgreSQL bağlantısı başarılı.")
+
+        Base.metadata.create_all(bind=engine)
+
+        print("✅ Database tabloları oluşturuldu.")
+
+        if not scheduler.running:
+            scheduler.start()
+            print("✅ News scheduler başlatıldı.")
+
+        for job in scheduler.get_jobs():
+            print(f"📅 Scheduler job: {job.id}")
+            print(f"⏰ Next run time: {job.next_run_time}")
+
+    except Exception as e:
+        print("❌ Uygulama başlatma hatası:")
+        print(e)
+
+    yield
+
+    if scheduler.running:
+        scheduler.shutdown()
+        print("🛑 News scheduler durduruldu.")
 
 app = FastAPI(
     title="TechPulse AI API",
     version="1.0.0",
-    description="AI-powered software technology monitoring platform"
+    description="AI-powered software technology monitoring platform",
+    lifespan=lifespan
 )
+
 
 @app.get("/")
 def root():
@@ -22,18 +59,6 @@ def root():
         "message": "Welcome to TechPulse AI API"
     }
 
-@app.on_event("startup")
-def startup():
-    try:
-        with engine.connect() as connection:
-            connection.execute(text("SELECT 1"))
-        print("✅ PostgreSQL bağlantısı başarılı.")
-        Base.metadata.create_all(bind=engine)
-
-        print("✅ Database tabloları oluşturuldu.")
-    except Exception as e:
-        print("❌ Veritabanı bağlantı hatası:")
-        print(e)
 
 app.include_router(auth_router)
 app.include_router(users_router)
