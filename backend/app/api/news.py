@@ -21,7 +21,7 @@ router = APIRouter(
     prefix="/news",
     tags=["News"]
 )
-from app.services.ai_service import generate_summary
+from app.services.ai_service import analyze_news
 @router.post("/", response_model=NewsResponse)
 def create_news_endpoint(
     news: NewsCreate,
@@ -53,12 +53,14 @@ def fetch_news(db: Session = Depends(get_db)):
         content = article["content"] or ""
 
         
-        summary = generate_summary(content)
+        analysis = analyze_news(content)
 
-        if summary:
-           article["summary"] = summary
+        if analysis:
+           article["summary"] = analysis.get("summary")
+           article["category"] = analysis.get("category")
         else:
            article["summary"] = None
+           article["category"] = None
 
         
         
@@ -82,13 +84,12 @@ def test_ai():
     faster responses and lower latency for developers.
     """
 
-    summary = generate_summary(sample_text)
+    analysis = analyze_news(sample_text)
 
     return {
         "original": sample_text,
-        "summary": summary
+        "analysis": analysis
     }
-
 
 @router.get("/{news_id}", response_model=NewsResponse)
 def get_news_detail(
