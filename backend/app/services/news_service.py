@@ -2,12 +2,40 @@ from sqlalchemy.orm import Session
 from app.services.news_fetcher import fetch_technology_news
 from app.services.ai_service import analyze_news
 from app.crud.news import get_news_by_url, save_news
-
+from app.services.devto_fetcher import (
+    fetch_devto_articles,
+    transform_devto_article,
+)
 def process_and_save_news(db: Session):
-    articles = fetch_technology_news()
+    articles = []
+
+    try:
+        newsapi_articles = fetch_technology_news()
+        articles.extend(newsapi_articles)
+        print(f"NewsAPI: {len(newsapi_articles)} articles fetched.")
+
+    except Exception as error:
+        print(f"NewsAPI fetch failed: {error}")
+
+    try:
+        devto_articles = fetch_devto_articles()
+
+        transformed_devto_articles = [
+            transform_devto_article(article)
+            for article in devto_articles
+        ]
+
+        articles.extend(transformed_devto_articles)
+
+        print(
+            f"Dev.to: {len(transformed_devto_articles)} "
+            f"articles fetched."
+        )
+
+    except Exception as error:
+        print(f"Dev.to fetch failed: {error}")
 
     saved_news = []
-
     for article in articles:
         existing_news = get_news_by_url(db, article["url"])
 
