@@ -6,6 +6,14 @@ from app.services.devto_fetcher import (
     fetch_devto_articles,
     transform_devto_article,
 )
+from app.services.github_fetcher import (
+    fetch_github_releases,
+    transform_github_release,
+)
+from app.services.cve_fetcher import (
+    fetch_recent_cves,
+    transform_cve,
+)
 def process_and_save_news(db: Session):
     articles = []
 
@@ -35,6 +43,42 @@ def process_and_save_news(db: Session):
     except Exception as error:
         print(f"Dev.to fetch failed: {error}")
 
+    try:
+        github_releases = fetch_github_releases()
+
+        transformed_github_releases = [
+        transform_github_release(release)
+        for release in github_releases
+        ]
+
+        articles.extend(transformed_github_releases)
+
+        print(
+        f"GitHub Releases: {len(transformed_github_releases)} "
+        f"releases fetched."
+    )
+
+    except Exception as error:
+        print(f"GitHub Releases fetch failed: {error}"),
+    
+    try:
+        cve_vulnerabilities = fetch_recent_cves()
+
+        transformed_cves = [
+        transform_cve(vulnerability)
+        for vulnerability in cve_vulnerabilities
+        ]
+
+        articles.extend(transformed_cves)
+
+        print(
+             f"NVD/CVE: {len(transformed_cves)} "
+             f"vulnerabilities fetched."
+        )
+
+    except Exception as error:
+        print(f"NVD/CVE fetch failed: {error}")
+
     saved_news = []
     for article in articles:
         existing_news = get_news_by_url(db, article["url"])
@@ -44,8 +88,8 @@ def process_and_save_news(db: Session):
             continue
 
         content = article["content"] or ""
-
-        analysis = analyze_news(content)
+        content_for_analysis = content[:5000]
+        analysis = analyze_news(content_for_analysis)
 
         if analysis:
             article["summary"] = analysis.get("summary")

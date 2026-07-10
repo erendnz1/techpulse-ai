@@ -45,14 +45,18 @@ def fetch_news(db: Session = Depends(get_db)):
 @router.get("/test-ai")
 def test_ai():
     sample_text = """
-    OpenAI announced a new GPT model with improved reasoning,
-    faster responses and lower latency for developers.
-    """
+An improper certificate validation vulnerability in the Prisma Access Agent
+for iOS enables an attacker to perform a man-in-the-middle (MitM) attack
+to intercept VPN traffic.
+
+The Prisma Access Agent on Windows, macOS, Linux, Android and ChromeOS
+are not affected.
+"""
     analysis = analyze_news(sample_text)
     return {
         "original": sample_text,
         "analysis": analysis
-    }
+    } 
 
 @router.get("/{news_id}", response_model=NewsResponse)
 def get_news_detail(

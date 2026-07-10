@@ -5,6 +5,8 @@ from sqlalchemy import text
 
 from app.database.base import Base
 from app.database.session import engine
+from app.models.user import User
+from app.models.news import News
 from app.api.auth import router as auth_router
 from app.api.users import router as users_router
 from app.api.news import router as news_router
