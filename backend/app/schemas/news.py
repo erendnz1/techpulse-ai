@@ -11,13 +11,14 @@ class NewsCreate(BaseModel):
     importance_score: int | None = None
     risk_level: str | None = None
     source: str
+    region: str = "global"
     url: str
     image_url: str | None = None
     author: str | None = None
     affected_technologies: list[str] | None = None
     recommended_action: str | None = None
     published_at: datetime
-
+    
 
 class NewsResponse(BaseModel):
     id: int
@@ -25,6 +26,8 @@ class NewsResponse(BaseModel):
     content: str
     summary: str | None = None
     source: str
+    region: str | None = None
+    region: str
     url: str
     image_url: str | None = None
     author: str | None = None

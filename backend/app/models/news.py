@@ -37,3 +37,5 @@ class News(Base):
     published_at = Column(DateTime, nullable=False)
 
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
+
+    region = Column(String(20), nullable=False, default="global")

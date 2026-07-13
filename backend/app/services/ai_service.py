@@ -76,7 +76,13 @@ For recommended_action:
   return "No immediate action required."
 
 Maintain logical consistency between risk_level and recommended_action.
-
+For is_relevant:
+- Return true if the content is relevant to software development, artificial intelligence,
+  cybersecurity, cloud computing, DevOps, developer tools, frameworks, libraries,
+  operating systems, enterprise technology, mobile technology, or important technology industry developments.
+- Return false for unrelated entertainment, movies, celebrities, sports, fossils,
+  general politics, or other content without meaningful technology relevance.
+- Return only a JSON boolean: true or false.
 Return only valid JSON in exactly this format:
 
 {{
@@ -86,6 +92,7 @@ Return only valid JSON in exactly this format:
     "risk_level": "Low",
     "affected_technologies": ["Technology 1", "Technology 2"],
     "recommended_action": "A clear and concise recommended action."
+    "is_relevant": true
 }}
 
 News:
@@ -115,14 +122,20 @@ News:
              result = json.loads(response_text)
 
             if response_text:
-                result = json.loads(response_text)
+                try:
+                   result = json.loads(response_text)
+                except json.JSONDecodeError:
+                  logger.warning(
+                  f"Groq returned invalid JSON: {response_text}"
+                )
+                  raise 
 
                 if not isinstance(result, dict):
                     logger.warning(
                         "Groq response is not a valid dictionary."
                     )
                     return None
-
+ 
                 summary = result.get("summary")
                 category = result.get("category")
                 importance_score = result.get("importance_score")
@@ -133,6 +146,7 @@ News:
                 recommended_action = result.get(
                     "recommended_action"
                 )
+                is_relevant = result.get("is_relevant")
 
                 if not summary:
                     logger.warning(
@@ -188,7 +202,11 @@ News:
                     recommended_action = (
                         "No immediate action required."
                     )
-
+                if not isinstance(is_relevant, bool):
+                   logger.warning(
+                   f"Invalid is_relevant returned by Groq: {is_relevant}"
+                   )
+                   is_relevant = True
                 return {
                     "summary": summary,
                     "category": category,
@@ -196,6 +214,7 @@ News:
                     "risk_level": risk_level,
                     "affected_technologies": affected_technologies,
                     "recommended_action": recommended_action,
+                    "is_relevant": is_relevant,
                 }
 
             logger.warning("Groq returned empty response.")

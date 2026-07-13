@@ -14,6 +14,16 @@ from app.services.cve_fetcher import (
     fetch_recent_cves,
     transform_cve,
 )
+from app.services.donanimhaber_fetcher import (
+    fetch_donanimhaber_news,
+    parse_donanimhaber_news,
+)
+from app.services.shiftdelete_fetcher import (
+    fetch_shiftdelete_news,
+    parse_shiftdelete_news,
+)
+
+
 def process_and_save_news(db: Session):
     articles = []
 
@@ -79,6 +89,40 @@ def process_and_save_news(db: Session):
     except Exception as error:
         print(f"NVD/CVE fetch failed: {error}")
 
+    try:
+      donanimhaber_xml = fetch_donanimhaber_news()
+
+      donanimhaber_articles = parse_donanimhaber_news(
+        donanimhaber_xml
+      )
+
+      articles.extend(donanimhaber_articles)
+
+      print(
+        f"DonanımHaber: {len(donanimhaber_articles)} "
+        f"articles fetched."
+      )
+
+    except Exception as error:
+        print(f"DonanımHaber fetch failed: {error}")
+    
+    try:
+       shiftdelete_xml = fetch_shiftdelete_news()
+
+       shiftdelete_articles = parse_shiftdelete_news(
+        shiftdelete_xml
+       )
+
+       articles.extend(shiftdelete_articles)
+
+       print(
+          f"ShiftDelete.Net: {len(shiftdelete_articles)} "
+          f"articles fetched."
+        )
+
+    except Exception as error:
+       print(f"ShiftDelete.Net fetch failed: {error}")
+
     saved_news = []
     for article in articles:
         existing_news = get_news_by_url(db, article["url"])
@@ -92,6 +136,10 @@ def process_and_save_news(db: Session):
         analysis = analyze_news(content_for_analysis)
 
         if analysis:
+            if analysis.get("is_relevant") is False:
+               print(f"Irrelevant news, skipped: {article['title']}")
+               continue
+
             article["summary"] = analysis.get("summary")
             article["category"] = analysis.get("category")
             article["importance_score"] = analysis.get("importance_score")

@@ -52,12 +52,13 @@ to intercept VPN traffic.
 The Prisma Access Agent on Windows, macOS, Linux, Android and ChromeOS
 are not affected.
 """
+
     analysis = analyze_news(sample_text)
+
     return {
         "original": sample_text,
         "analysis": analysis
     } 
-
 @router.get("/{news_id}", response_model=NewsResponse)
 def get_news_detail(
     news_id: int,
