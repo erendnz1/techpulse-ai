@@ -13,7 +13,7 @@ from app.security.auth import (
     verify_password,
     create_access_token,
 )
-
+from sqlalchemy import or_
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
@@ -29,6 +29,16 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
             status_code=400,
             detail="Email already registered."
         )
+    
+    existing_username = db.query(User).filter(
+       User.username == user.username
+    ).first()
+
+    if existing_username:
+      raise HTTPException(
+        status_code=400,
+        detail="Username already registered"
+      )
 
     new_user = User(
         username=user.username,
@@ -50,7 +60,10 @@ def login(
 ):
 
     db_user = db.query(User).filter(
-        User.email == form_data.username
+    or_(
+        User.email == form_data.username,
+        User.username == form_data.username
+    )
     ).first()
 
     if not db_user:

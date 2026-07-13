@@ -1,5 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from app.dependencies.auth import get_current_user
+from app.models.user import User
+from app.crud.user_preferences import get_user_preferences
+
 
 from app.database.session import get_db
 from app.crud.news import (
@@ -8,6 +12,7 @@ from app.crud.news import (
     get_news_by_id,
     update_news,
     delete_news,
+    get_personalized_news
 )
 from app.schemas.news import (
     NewsCreate,
@@ -29,9 +34,53 @@ def create_news_endpoint(
 ):
     return create_news(db, news)
 
+@router.get("/personalized", response_model=list[NewsResponse])
+def get_my_personalized_news(
+    skip: int = Query(default=0, ge=0),
+    limit: int = Query(default=20, ge=1, le=100),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    preferences = get_user_preferences(db, current_user.id)
+
+    if preferences is None:
+        raise HTTPException(
+            status_code=404,
+            detail="User preferences not found"
+        )
+
+    personalized_news = get_personalized_news(
+        db=db,
+        categories=preferences.categories,
+        regions=preferences.regions,
+        minimum_importance_score=preferences.minimum_importance_score,
+        skip=skip,
+        limit=limit
+    ) 
+
+    return personalized_news
+
 @router.get("/", response_model=list[NewsResponse])
-def get_all_news(db: Session = Depends(get_db)):
-    return get_news(db)
+def get_all_news(
+    category: str | None = None,
+    region: str | None = None,
+    minimum_importance_score: int | None = None,
+    risk_level: str | None = None,
+    source: str | None = None,
+    skip: int = Query(default=0, ge=0),
+    limit: int = Query(default=20, ge=1, le=100),
+    db: Session = Depends(get_db)
+):
+    return get_news(
+      db,
+      category=category,
+      region=region,
+      minimum_importance_score=minimum_importance_score,
+      risk_level=risk_level,
+      source=source,
+      skip=skip,
+      limit=limit
+    )
 
 @router.get("/fetch")
 def fetch_news(db: Session = Depends(get_db)):

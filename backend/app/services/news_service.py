@@ -22,7 +22,7 @@ from app.services.shiftdelete_fetcher import (
     fetch_shiftdelete_news,
     parse_shiftdelete_news,
 )
-
+from app.services.notification_service import create_notifications_for_news
 
 def process_and_save_news(db: Session):
     articles = []
@@ -155,7 +155,10 @@ def process_and_save_news(db: Session):
             article["recommended_action"] = None
 
         news = save_news(db, article)
-
+        create_notifications_for_news(
+             db=db,
+             news=news
+        )
         saved_news.append(news)
 
-    return saved_news
+    return saved_news 

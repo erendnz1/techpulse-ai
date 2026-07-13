@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-
+from sqlalchemy import desc
 from app.models.news import News
 from app.schemas.news import NewsCreate
 
@@ -21,20 +21,56 @@ def create_news(db: Session, news: NewsCreate):
 
     return db_news
 
-def get_news(db: Session):
-    return db.query(News).all()
+def get_news(
+    db: Session,
+    category: str | None = None,
+    region: str | None = None,
+    minimum_importance_score: int | None = None,
+    risk_level: str | None = None,
+    source: str | None = None,
+    skip: int = 0,
+    limit: int = 20,
+):
+    query = db.query(News)
+
+    if category:
+        query = query.filter(News.category == category)
+
+    if region:
+        query = query.filter(News.region == region)
+
+    if minimum_importance_score is not None:
+        query = query.filter(
+            News.importance_score >= minimum_importance_score
+        )
+
+    if risk_level:
+        query = query.filter(
+            News.risk_level.ilike(risk_level)
+        )
+
+    if source:
+        query = query.filter(
+            News.source.ilike(source)
+        )
+ 
+    return query.order_by(
+        desc(News.importance_score),
+        desc(News.published_at)
+    ).offset(skip).limit(limit).all()
+
 
 def get_news_by_id(db: Session, news_id: int):
     return db.query(News).filter(News.id == news_id).first()
 
-def delete_news(db: Session, news_id: int):
+def delete_news(db: Session, news_id: int): 
     news = db.query(News).filter(News.id == news_id).first()
 
     if news is None:
         return None
 
     db.delete(news)
-    db.commit()
+    db.commit() 
 
     return news
 
@@ -73,3 +109,20 @@ def save_news(db: Session, news_data: dict):
     db.refresh(news)
 
     return news
+
+def get_personalized_news(
+    db: Session,
+    categories: list[str],
+    regions: list[str],
+    minimum_importance_score: int,
+    skip: int = 0,
+    limit: int = 20
+):
+    return db.query(News).filter(
+        News.category.in_(categories),
+        News.region.in_(regions),
+        News.importance_score >= minimum_importance_score
+    ).order_by(
+        News.importance_score.desc(),
+        News.published_at.desc()
+    ).offset(skip).limit(limit).all()

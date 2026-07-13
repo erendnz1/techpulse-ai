@@ -17,10 +17,11 @@ ALLOWED_CATEGORIES = {
     "Cloud",
     "DevOps",
     "Software",
+    "Developer Tools",
     "Mobile",
     "Gaming",
     "Business",
-    "Other",
+    "Other"
 }
 
 
@@ -39,7 +40,8 @@ Choose exactly one category from this list:
 - Cloud
 - DevOps
 - Software
-- Mobile
+-Developer Tools
+- Mobile 
 - Gaming
 - Business
 - Other
