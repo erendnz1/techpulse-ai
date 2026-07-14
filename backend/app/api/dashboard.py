@@ -4,7 +4,7 @@ router = APIRouter(
     prefix="/dashboard",
     tags=["Dashboard"]
 )
-
+from app.schemas.dashboard import DashboardStatsResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.database.session import get_db
@@ -12,7 +12,7 @@ from app.models.news import News
 from fastapi import Depends
 
 
-@router.get("/stats")
+@router.get("/stats", response_model=DashboardStatsResponse)
 def get_dashboard_stats(
     db: Session = Depends(get_db)
 ):
@@ -24,7 +24,7 @@ def get_dashboard_stats(
         News.category,
         func.count(News.id)
     ).group_by(
-       News.category
+       News.category 
     ).all()
     risk_stats = db.query(
       News.risk_level,

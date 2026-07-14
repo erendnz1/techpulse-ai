@@ -2,3 +2,14 @@ venv/
 .env
 __pycache__/
 *.pyc
+.pytest_cache/
+# Test files
+test_*.py
+reanalyze_cves.py
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment
+.env
