@@ -2,11 +2,16 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
-
+import { usePathname } from "next/navigation";
 export function SmoothScroll() {
+  const pathname = usePathname();
+
   useEffect(() => {
+    if (pathname !== "/") {
+  return;
+}
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 0.2,
       smoothWheel: true,
     });
 
@@ -21,7 +26,6 @@ export function SmoothScroll() {
       cancelAnimationFrame(animationFrame);
       lenis.destroy();
     };
-  }, []);
-
+  }, [pathname]);
   return null;
 }

@@ -14,6 +14,10 @@ from app.services.cve_fetcher import (
     fetch_recent_cves,
     transform_cve,
 )
+from app.services.kvkk_fetcher import (
+    fetch_kvkk_data_breaches,
+    transform_kvkk_breach,
+)
 from app.services.donanimhaber_fetcher import (
     fetch_donanimhaber_news,
     parse_donanimhaber_news,
@@ -23,6 +27,7 @@ from app.services.shiftdelete_fetcher import (
     parse_shiftdelete_news,
 )
 from app.services.notification_service import create_notifications_for_news
+
 
 def process_and_save_news(db: Session):
     articles = []
@@ -89,6 +94,25 @@ def process_and_save_news(db: Session):
     except Exception as error:
         print(f"NVD/CVE fetch failed: {error}")
 
+    
+    try:
+       kvkk_breaches = fetch_kvkk_data_breaches()
+
+       transformed_kvkk_breaches = [
+        transform_kvkk_breach(breach)
+        for breach in kvkk_breaches
+       ]
+
+       articles.extend(transformed_kvkk_breaches)
+
+       print(
+          f"KVKK: {len(transformed_kvkk_breaches)} "
+          f"data breach notifications fetched."
+        )
+
+    except Exception as error:
+        print(f"KVKK fetch failed: {error}")
+
     try:
       donanimhaber_xml = fetch_donanimhaber_news()
 
@@ -146,6 +170,9 @@ def process_and_save_news(db: Session):
             article["risk_level"] = analysis.get("risk_level")
             article["affected_technologies"] = analysis.get("affected_technologies")
             article["recommended_action"] = analysis.get("recommended_action")
+            if article.get("source") == "KVKK":
+                article["category"] = "Security"
+                article["region"] = "turkey"
         else:
             article["summary"] = None
             article["category"] = None

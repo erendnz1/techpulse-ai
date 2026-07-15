@@ -30,7 +30,7 @@ if (!response.ok) {
   return;
 }
 
-router.push("/login");
+router.push("/login?onboarding=true");
 
 } catch (error) {
   console.error(error);

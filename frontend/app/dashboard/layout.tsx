@@ -9,16 +9,63 @@ import {
   Settings,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
     const pathname = usePathname();
+    const [unreadCount, setUnreadCount] = useState(0);
+
+useEffect(() => {
+  const fetchUnreadCount = () => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      setUnreadCount(0);
+      return;
+    }
+
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/unread-count`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch unread notification count");
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        setUnreadCount(data.unread_count ?? 0);
+      })
+      .catch((error) => {
+        console.error("Unread notification count error:", error);
+        setUnreadCount(0);
+      });
+  };
+
+  fetchUnreadCount();
+
+  window.addEventListener(
+    "notifications-updated",
+    fetchUnreadCount
+  );
+
+  return () => {
+    window.removeEventListener(
+      "notifications-updated",
+      fetchUnreadCount
+    );
+  };
+}, [pathname]);
   return (
     <main className="relative min-h-screen overflow-hidden bg-white text-slate-950 transition-colors dark:bg-gray-900 dark:text-white">
       
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.12),transparent_45%)] dark:bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.18),transparent_45%)]" />
+     <div className="pointer-events-none absolute left-0 right-0 top-0 h-screen bg-[radial-gradient(circle_at_50%_30%,rgba(37,99,235,0.12),transparent_45%)] dark:bg-[radial-gradient(circle_at_50%_30%,rgba(37,99,235,0.18),transparent_45%)]" />
 
       <div className="relative z-10 flex min-h-screen">
         
@@ -79,7 +126,22 @@ export default function DashboardLayout({
   }`}
 >
   <Bell size={18} />
-  Notifications
+
+  <span className="flex-1">
+    Notifications
+  </span>
+
+  {unreadCount > 0 && (
+    <span
+      className={`flex min-w-6 items-center justify-center rounded-full px-2 py-0.5 text-xs font-semibold ${
+        pathname === "/dashboard/notifications"
+          ? "bg-white text-blue-600"
+          : "bg-red-500 text-white"
+      }`}
+    >
+      {unreadCount > 99 ? "99+" : unreadCount}
+    </span>
+  )}
 </Link>
             <Link
   href="/dashboard/preferences"
