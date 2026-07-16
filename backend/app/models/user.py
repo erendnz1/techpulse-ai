@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from datetime import datetime
 from sqlalchemy.orm import relationship
 
 from app.database.base import Base
@@ -16,6 +17,8 @@ class User(Base):
     password = Column(String(255), nullable=False)
 
     is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    
     preferences = relationship(
     "UserPreferences",
     back_populates="user",
