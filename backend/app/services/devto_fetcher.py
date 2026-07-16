@@ -26,4 +26,6 @@ def transform_devto_article(article):
         "image_url": article.get("cover_image"),
         "author": article.get("user", {}).get("name"),
         "published_at": article.get("published_at"),
+        "category": "Software",
+        "region": "global",
     } 

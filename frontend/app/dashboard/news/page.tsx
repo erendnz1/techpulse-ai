@@ -9,7 +9,7 @@ import {
   Newspaper,
   Sparkles,
 } from "lucide-react";
-
+import NewsCardSkeleton from "@/components/skeletons/NewsCardSkeleton";
 type NewsItem = {
   id: number;
   title: string;
@@ -40,6 +40,18 @@ export default function NewsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+ const PAGE_SIZE = 10;
+
+const [personalizedSkip, setPersonalizedSkip] = useState(0);
+const [allNewsSkip, setAllNewsSkip] = useState(0);
+
+const [loadingMore, setLoadingMore] = useState(false);
+
+const [hasMorePersonalized, setHasMorePersonalized] =
+  useState(true);
+
+const [hasMoreAllNews, setHasMoreAllNews] =
+  useState(true);
   useEffect(() => {
     const loadNews = async () => {
       const token = localStorage.getItem("access_token");
@@ -65,7 +77,7 @@ export default function NewsPage() {
           allNewsResponse,
         ] = await Promise.all([
           fetch(
-            `${apiUrl}/news/personalized?limit=100`,
+  `${apiUrl}/news/personalized?skip=0&limit=${PAGE_SIZE}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -73,7 +85,7 @@ export default function NewsPage() {
             }
           ),
 
-          fetch(`${apiUrl}/news?limit=100`, {
+          fetch(`${apiUrl}/news?skip=0&limit=${PAGE_SIZE}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -99,7 +111,10 @@ export default function NewsPage() {
             Array.isArray(personalizedData)
               ? personalizedData
               : []
-          );
+          );setPersonalizedSkip(PAGE_SIZE);
+          setHasMorePersonalized(
+  personalizedData.length === PAGE_SIZE
+);
         } else {
           setPersonalizedNews([]);
         }
@@ -111,7 +126,10 @@ export default function NewsPage() {
             Array.isArray(allNewsData)
               ? allNewsData
               : []
-          );
+          );setAllNewsSkip(PAGE_SIZE);
+          setHasMoreAllNews(
+  allNewsData.length === PAGE_SIZE
+);
         } else {
           setAllNews([]);
         }
@@ -167,7 +185,73 @@ export default function NewsPage() {
         return "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300";
     }
   };
+const loadMore = async () => {
+  const token = localStorage.getItem("access_token");
 
+  if (!token) return;
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  if (!apiUrl) return;
+
+  try {
+    setLoadingMore(true);
+
+    if (selectedFeed === "personalized") {
+      const nextSkip = personalizedSkip;
+
+      const response = await fetch(
+        `${apiUrl}/news/personalized?skip=${nextSkip}&limit=${PAGE_SIZE}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      setPersonalizedNews((prev) => [
+        ...prev,
+        ...data,
+      ]);
+
+      setPersonalizedSkip(nextSkip + PAGE_SIZE);
+
+      if (data.length < PAGE_SIZE) {
+        setHasMorePersonalized(false);
+      }
+    } else {
+      const nextSkip = allNewsSkip;
+
+      const response = await fetch(
+        `${apiUrl}/news?skip=${nextSkip}&limit=${PAGE_SIZE}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      setAllNews((prev) => [
+        ...prev,
+        ...data,
+      ]);
+
+      setAllNewsSkip(nextSkip + PAGE_SIZE);
+
+      if (data.length < PAGE_SIZE) {
+        setHasMoreAllNews(false);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoadingMore(false);
+  }
+};
   const openNewsDetail = (newsId: number) => {
     router.push(`/dashboard/news/${newsId}`);
   };
@@ -295,13 +379,14 @@ export default function NewsPage() {
         </div>
       )}
 
-      {/* Loading */}
-      {loading && (
-        <div className="mt-12 flex items-center gap-3 text-gray-500 dark:text-gray-400">
-          <Loader2 className="h-5 w-5 animate-spin" />
-          <span>Loading technology news...</span>
-        </div>
-      )}
+     {/* Loading */}
+{loading && (
+  <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    {Array.from({ length: 6 }).map((_, index) => (
+      <NewsCardSkeleton key={index} />
+    ))}
+  </div>
+)}
 
       {/* Error */}
       {!loading && error && (
@@ -438,7 +523,42 @@ export default function NewsPage() {
             </article>
           ))}
         </div>
+        
       )}
+      {!loading &&
+  !error &&
+  filteredNews.length > 0 && (
+    <div className="mt-10 flex justify-center">
+
+      {(selectedFeed === "personalized"
+        ? hasMorePersonalized
+        : hasMoreAllNews) ? (
+
+        <button
+          onClick={loadMore}
+          disabled={loadingMore}
+          className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {loadingMore ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Loading...
+            </span>
+          ) : (
+            "Load More"
+          )}
+        </button>
+
+      ) : (
+
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          You've reached the end.
+        </p>
+
+      )}
+
+    </div>
+)}
     </main>
   );
 }

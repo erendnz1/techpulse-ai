@@ -1,4 +1,6 @@
 from fastapi import APIRouter
+from app.models.user import User
+from app.dependencies.auth import get_current_user
 from app.models.notification import Notification
 router = APIRouter(
     prefix="/dashboard",
@@ -14,12 +16,18 @@ from fastapi import Depends
 
 @router.get("/stats", response_model=DashboardStatsResponse)
 def get_dashboard_stats(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     total_news = db.query(News).count()
-    unread_notifications = db.query(Notification).filter(
-        Notification.is_read.is_(False)
-    ).count()
+    unread_notifications = (
+    db.query(Notification)
+    .filter(
+        Notification.user_id == current_user.id,
+        Notification.is_read.is_(False),
+    )
+    .count()
+)
     category_stats = db.query(
         News.category,
         func.count(News.id)

@@ -27,14 +27,26 @@ from app.services.shiftdelete_fetcher import (
     parse_shiftdelete_news,
 )
 from app.services.notification_service import create_notifications_for_news
-
-
+from app.services.rss_fetcher import fetch_rss
+from app.services.rss_sources import RSS_SOURCES
+from app.core.exceptions import QuotaExceededError
 def process_and_save_news(db: Session):
     articles = []
-
+    stats = {
+    "sources": 0,
+    "fetched": 0,
+    "saved": 0,
+    "duplicates": 0,
+    "irrelevant": 0,
+    "notifications": 0,
+    "emails": 0,
+    "ai_status": "Available",
+}
     try:
         newsapi_articles = fetch_technology_news()
         articles.extend(newsapi_articles)
+        stats["sources"] += 1
+        stats["fetched"] += len(newsapi_articles)
         print(f"NewsAPI: {len(newsapi_articles)} articles fetched.")
 
     except Exception as error:
@@ -49,6 +61,9 @@ def process_and_save_news(db: Session):
         ]
 
         articles.extend(transformed_devto_articles)
+
+        stats["sources"] += 1
+        stats["fetched"] += len(transformed_devto_articles)
 
         print(
             f"Dev.to: {len(transformed_devto_articles)} "
@@ -67,7 +82,8 @@ def process_and_save_news(db: Session):
         ]
 
         articles.extend(transformed_github_releases)
-
+        stats["sources"] += 1
+        stats["fetched"] += len(transformed_github_releases)
         print(
         f"GitHub Releases: {len(transformed_github_releases)} "
         f"releases fetched."
@@ -86,6 +102,9 @@ def process_and_save_news(db: Session):
 
         articles.extend(transformed_cves)
 
+        stats["sources"] += 1
+        stats["fetched"] += len(transformed_cves)
+        
         print(
              f"NVD/CVE: {len(transformed_cves)} "
              f"vulnerabilities fetched."
@@ -104,7 +123,8 @@ def process_and_save_news(db: Session):
        ]
 
        articles.extend(transformed_kvkk_breaches)
-
+       stats["sources"] += 1
+       stats["fetched"] += len(transformed_kvkk_breaches)
        print(
           f"KVKK: {len(transformed_kvkk_breaches)} "
           f"data breach notifications fetched."
@@ -121,7 +141,8 @@ def process_and_save_news(db: Session):
       )
 
       articles.extend(donanimhaber_articles)
-
+      stats["sources"] += 1
+      stats["fetched"] += len(donanimhaber_articles)
       print(
         f"DonanımHaber: {len(donanimhaber_articles)} "
         f"articles fetched."
@@ -138,7 +159,8 @@ def process_and_save_news(db: Session):
        )
 
        articles.extend(shiftdelete_articles)
-
+       stats["sources"] += 1
+       stats["fetched"] += len(shiftdelete_articles)
        print(
           f"ShiftDelete.Net: {len(shiftdelete_articles)} "
           f"articles fetched."
@@ -146,21 +168,60 @@ def process_and_save_news(db: Session):
 
     except Exception as error:
        print(f"ShiftDelete.Net fetch failed: {error}")
+    try:
+        rss_articles = []
 
+        for source in RSS_SOURCES:
+         try:
+            rss_articles.extend(fetch_rss(source))
+
+         except Exception as error:
+            print(f"{source['name']} RSS failed: {error}")
+
+        articles.extend(rss_articles)
+        stats["sources"] += len(RSS_SOURCES)
+        stats["fetched"] += len(rss_articles)
+        print(
+         f"RSS Sources: {len(rss_articles)} "
+         f"articles fetched."
+        )
+
+    except Exception as error:
+      print(f"RSS fetch failed: {error}")
     saved_news = []
+    ai_enabled = True
     for article in articles:
         existing_news = get_news_by_url(db, article["url"])
 
         if existing_news:
-            print("Duplicate news, skipped.")
+            stats["duplicates"] += 1
             continue
 
         content = article["content"] or ""
         content_for_analysis = content[:5000]
-        analysis = analyze_news(content_for_analysis)
+
+        analysis = None
+
+        if ai_enabled:
+            try:
+              analysis = analyze_news(content_for_analysis)
+
+            except QuotaExceededError:
+              ai_enabled = False
+
+              print(
+            "\n"
+            "========================================\n"
+            "Groq daily quota exhausted.\n"
+            "AI analysis disabled for remaining articles.\n"
+            "========================================\n"
+             ) 
+ 
+              analysis = None
 
         if analysis:
             if analysis.get("is_relevant") is False:
+               stats["irrelevant"] += 1
                print(f"Irrelevant news, skipped: {article['title']}")
                continue
 
@@ -174,18 +235,35 @@ def process_and_save_news(db: Session):
                 article["category"] = "Security"
                 article["region"] = "turkey"
         else:
-            article["summary"] = None
-            article["category"] = None
-            article["importance_score"] = None
-            article["risk_level"] = None
-            article["affected_technologies"] = []
-            article["recommended_action"] = None
+           article["summary"] = article.get("summary")
 
+           # RSS veya diğer kaynaklardan gelen category varsa koru
+           article["category"] = article.get("category", "Other")
+
+           article["importance_score"] = article.get("importance_score")
+           article["risk_level"] = article.get("risk_level")
+           article["affected_technologies"] = article.get(
+            "affected_technologies", []
+           )
+           article["recommended_action"] = article.get(
+            "recommended_action"
+           )
+        
         news = save_news(db, article)
         create_notifications_for_news(
              db=db,
              news=news
         )
         saved_news.append(news)
-
+        stats["saved"] += 1
+        print("\n========================================")
+        print("        TechPulse AI Scheduler")
+        print("========================================")
+        print(f"Sources Scanned : {stats['sources']}")
+        print(f"Articles Fetched: {stats['fetched']}")
+        print(f"Saved           : {stats['saved']}")
+        print(f"Duplicates      : {stats['duplicates']}")
+        print(f"Irrelevant      : {stats['irrelevant']}")
+        print(f"AI Status       : {stats['ai_status']}")
+        print("========================================\n")
     return saved_news 

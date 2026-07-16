@@ -1,6 +1,6 @@
 import requests
 from app.core.config import NEWS_API_KEY
-
+from app.services.category_detector import detect_category
 BASE_URL = "https://newsapi.org/v2/top-headlines"
 
 def fetch_technology_news():
@@ -33,4 +33,8 @@ def transform_news(article):
         "url": article.get("url"),
         "image_url": article.get("urlToImage"),
         "published_at": article.get("publishedAt"),
+        "category": detect_category(
+    article["title"],
+    article.get("description", ""),
+),
     }

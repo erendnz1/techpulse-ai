@@ -34,4 +34,6 @@ def transform_github_release(release):
         "image_url": None,
         "author": release.get("author", {}).get("login"),
         "published_at": release.get("published_at"),
+        "category": "Developer Tools",
+        "region": "global",
     }

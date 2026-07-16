@@ -126,3 +126,34 @@ def get_personalized_news(
         News.importance_score.desc(),
         News.published_at.desc()
     ).offset(skip).limit(limit).all()
+
+from sqlalchemy import or_
+
+
+def get_security_news(
+    db: Session,
+    region: str | None = None,
+    skip: int = 0,
+    limit: int = 20,
+):
+    query = db.query(News).filter(
+        or_(
+            News.title.ilike("CVE-%"),
+            News.source == "KVKK",
+        )
+    )
+
+    if region:
+        query = query.filter(
+            News.region == region
+        )
+
+    return (
+        query.order_by(
+            News.importance_score.desc(),
+            News.published_at.desc(),
+        )
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )

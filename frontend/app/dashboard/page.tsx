@@ -12,7 +12,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { ThemeToggle } from "../theme-toggle";
+import { ThemeToggle } from "../../components/theme-toggle";
 
 type User = {
   id: number;
@@ -479,15 +479,14 @@ export default function DashboardPage() {
                     </p>
 
                     <span
-                      className={`h-3 w-3 rounded-full ${
-                        risk === "Critical"
+                      className={`h-3 w-3 rounded-full ${risk === "Critical"
                           ? "bg-purple-500"
                           : risk === "High"
                             ? "bg-red-500"
                             : risk === "Medium"
                               ? "bg-yellow-500"
                               : "bg-green-500"
-                      }`}
+                        }`}
                     />
                   </div>
 

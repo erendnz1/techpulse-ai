@@ -43,6 +43,7 @@ type Preferences = {
   regions: string[];
   minimum_importance_score: number;
   notification_enabled: boolean;
+  email_notification_enabled: boolean;
 };
 
 const defaultPreferences: Preferences = {
@@ -50,6 +51,7 @@ const defaultPreferences: Preferences = {
   regions: [],
   minimum_importance_score: 5,
   notification_enabled: true,
+  email_notification_enabled: false,
 };
 
 export default function PreferencesPage() {
@@ -74,7 +76,7 @@ export default function PreferencesPage() {
 
       try {
         const response = await fetch(
-          '${process.env.NEXT_PUBLIC_API_URL}/preferences/me',
+          `${process.env.NEXT_PUBLIC_API_URL}/preferences/me`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -158,7 +160,7 @@ export default function PreferencesPage() {
 
     try {
       const response = await fetch(
-        '${process.env.NEXT_PUBLIC_API_URL}/preferences/me',
+        `${process.env.NEXT_PUBLIC_API_URL}/preferences/me`,
         {
           method: preferencesExist ? "PUT" : "POST",
           headers: {
@@ -373,6 +375,52 @@ export default function PreferencesPage() {
         </section>
 
         {/* Notifications */}
+        {/* Email Notifications */}
+<section className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-white/[0.03]">
+  <div className="flex items-center justify-between gap-6">
+    <div className="flex items-start gap-3">
+      <div className="rounded-xl bg-emerald-500/10 p-2.5 text-emerald-500">
+        <Bell className="h-5 w-5" />
+      </div>
+
+      <div>
+        <h2 className="text-lg font-semibold text-gray-950 dark:text-white">
+          Email Notifications
+        </h2>
+
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          Receive important AI, Security and technology updates via email.
+        </p>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      role="switch"
+      aria-checked={preferences.email_notification_enabled}
+      onClick={() =>
+        setPreferences((current) => ({
+          ...current,
+          email_notification_enabled:
+            !current.email_notification_enabled,
+        }))
+      }
+      className={`relative h-7 w-12 flex-shrink-0 rounded-full transition ${
+        preferences.email_notification_enabled
+          ? "bg-emerald-500"
+          : "bg-gray-300 dark:bg-gray-700"
+      }`}
+    >
+      <span
+        className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+          preferences.email_notification_enabled
+            ? "translate-x-6"
+            : "translate-x-1"
+        }`}
+      />
+    </button>
+  </div>
+</section>
         <section className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-white/[0.03]">
           <div className="flex items-center justify-between gap-6">
             <div className="flex items-start gap-3">

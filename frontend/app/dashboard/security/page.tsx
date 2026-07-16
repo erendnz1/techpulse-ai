@@ -6,26 +6,71 @@ export default function SecurityPage() {
   const [loading, setLoading] = useState(true);
   const [selectedType, setSelectedType] = useState("all");
   const [selectedRegion, setSelectedRegion] = useState("all");
+ const PAGE_SIZE = 10;
+
+const [skip, setSkip] = useState(PAGE_SIZE);
+
+const [loadingMore, setLoadingMore] = useState(false);
+
+const [hasMore, setHasMore] = useState(true);
   useEffect(() => {
 const token = localStorage.getItem("access_token");
-fetch('${process.env.NEXT_PUBLIC_API_URL}/news', {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-})
-.then((res) => res.json())
-.then((data) => {
-  const securityItems = data.filter(
-  (item: any) =>
-    item.title?.toUpperCase().startsWith("CVE-") ||
-    item.source === "KVKK"
-);
 
-setSecurityAlerts(securityItems);
-  setLoading(false);
-});
+fetch(
+  `${process.env.NEXT_PUBLIC_API_URL}/news/security?skip=0&limit=10`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+)
+  .then((res) => res.json())
+  .then((data) => {
+    setSecurityAlerts(data);
+
+    setHasMore(data.length === PAGE_SIZE);
+
+    setLoading(false);
+  });
 }, []);
 const filteredSecurityAlerts = securityAlerts.filter((item) => {
+  const loadMore = async () => {
+  const token = localStorage.getItem("access_token");
+
+  if (!token) return;
+
+  try {
+    setLoadingMore(true);
+
+    const region =
+      selectedRegion === "all"
+        ? ""
+        : `&region=${selectedRegion}`;
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/news/security?skip=${skip}&limit=${PAGE_SIZE}${region}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    setSecurityAlerts((prev) => [...prev, ...data]);
+
+    setSkip((prev) => prev + PAGE_SIZE);
+
+    if (data.length < PAGE_SIZE) {
+      setHasMore(false);
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoadingMore(false);
+  }
+};
   const matchesType =
     selectedType === "all" ||
     (selectedType === "cve" &&
@@ -37,7 +82,43 @@ const filteredSecurityAlerts = securityAlerts.filter((item) => {
     item.region?.toLowerCase() === selectedRegion;
 
   return matchesType && matchesRegion;
-});
+});const loadMore = async () => {
+  const token = localStorage.getItem("access_token");
+
+  if (!token) return;
+
+  try {
+    setLoadingMore(true);
+
+    const region =
+      selectedRegion === "all"
+        ? ""
+        : `&region=${selectedRegion}`;
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/news/security?skip=${skip}&limit=${PAGE_SIZE}${region}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    setSecurityAlerts((prev) => [...prev, ...data]);
+
+    setSkip((prev) => prev + PAGE_SIZE);
+
+    if (data.length < PAGE_SIZE) {
+      setHasMore(false);
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoadingMore(false);
+  }
+};
   return (
     <div className="px-6 py-10 md:px-10">
       <h1 className="text-3xl font-bold">
@@ -198,6 +279,29 @@ const filteredSecurityAlerts = securityAlerts.filter((item) => {
 </div>
       </article>
     ))}
+  </div>
+)}
+{!loading && filteredSecurityAlerts.length > 0 && (
+  <div className="mt-10 flex justify-center">
+    {hasMore ? (
+      <button
+        onClick={loadMore}
+        disabled={loadingMore}
+        className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {loadingMore ? (
+          <>
+            Loading...
+          </>
+        ) : (
+          "Load More"
+        )}
+      </button>
+    ) : (
+      <p className="text-sm text-gray-500 dark:text-gray-400">
+        No more security alerts.
+      </p>
+    )}
   </div>
 )}
     </div>

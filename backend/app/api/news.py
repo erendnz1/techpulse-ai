@@ -12,7 +12,8 @@ from app.crud.news import (
     get_news_by_id,
     update_news,
     delete_news,
-    get_personalized_news
+    get_personalized_news,
+    get_security_news,
 )
 from app.schemas.news import (
     NewsCreate,
@@ -81,7 +82,19 @@ def get_all_news(
       skip=skip,
       limit=limit
     )
-
+@router.get("/security", response_model=list[NewsResponse])
+def get_security_news_endpoint(
+    region: str | None = None,
+    skip: int = Query(default=0, ge=0),
+    limit: int = Query(default=20, ge=1, le=100),
+    db: Session = Depends(get_db),
+):
+    return get_security_news(
+        db=db,
+        region=region,
+        skip=skip,
+        limit=limit,
+    )
 @router.get("/fetch")
 def fetch_news(db: Session = Depends(get_db)):
     saved_news = process_and_save_news(db)

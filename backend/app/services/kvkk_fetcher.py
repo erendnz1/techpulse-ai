@@ -60,4 +60,6 @@ def transform_kvkk_breach(breach):
         "author": "Kişisel Verileri Koruma Kurumu",
         "region": "turkey",
         "published_at": datetime.now(UTC),
+        "category": "Security",
+        "region": "turkey",
     }

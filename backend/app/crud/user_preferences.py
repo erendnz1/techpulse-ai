@@ -22,12 +22,13 @@ def create_user_preferences(
     preferences: UserPreferencesCreate
 ):
     db_preferences = UserPreferences(
-        user_id=user_id,
-        categories=preferences.categories,
-        regions=preferences.regions,
-        minimum_importance_score=preferences.minimum_importance_score,
-        notification_enabled=preferences.notification_enabled
-    )
+    user_id=user_id,
+    categories=preferences.categories,
+    regions=preferences.regions,
+    minimum_importance_score=preferences.minimum_importance_score,
+    notification_enabled=preferences.notification_enabled,
+    email_notification_enabled=preferences.email_notification_enabled,
+)
 
     db.add(db_preferences)
     db.commit()

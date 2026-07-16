@@ -1,6 +1,6 @@
 "use client";
 
-import { ThemeToggle } from "../theme-toggle";
+import { ThemeToggle } from "../../components/theme-toggle";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 

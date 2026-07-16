@@ -1,7 +1,7 @@
 import logging
 import time
 import json
-
+from app.core.exceptions import QuotaExceededError
 from groq import Groq
 
 from app.core.config import GROQ_API_KEY
@@ -26,6 +26,8 @@ ALLOWED_CATEGORIES = {
 
 
 def analyze_news(text: str) -> dict | None:
+    
+
     if not text:
         return None
 
@@ -226,14 +228,20 @@ News:
             error_message = str(e)
 
             if (
-                "RESOURCE_EXHAUSTED" in error_message
-                or "429" in error_message
+             "RESOURCE_EXHAUSTED" in error_message
+              or "429" in error_message
+              or "quota" in error_message.lower()
             ):
-                logger.error(
-                    "Groq daily quota exhausted. "
-                    "Skipping retries for this request."
-                )
-                return None
+              logger.error("Groq daily quota exhausted.")
+              raise QuotaExceededError()
+
+            logger.warning(f"Attempt: {attempt + 1}/3")
+            logger.warning(
+             f"Groq attempt {attempt + 1} failed: {e}"
+            )
+
+            if attempt < 2:
+             time.sleep(3)
 
             logger.warning(f"Attempt: {attempt + 1}/3")
             logger.warning(

@@ -2,12 +2,69 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
+import NotificationSkeleton from "@/components/skeletons/NotificationSkeleton";
 export default function NotificationsPage() {
   const router = useRouter();
 
+  const LIMIT = 20;
+
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchNotifications = async (loadMore = false) => {
+    const token = localStorage.getItem("access_token");
+
+    const currentSkip = loadMore ? skip : 0;
+
+    try {
+      if (loadMore) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/notifications/me?skip=${currentSkip}&limit=${LIMIT}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch notifications");
+      }
+
+      const data = await response.json();
+
+      if (loadMore) {
+        setNotifications((prev) => [...prev, ...data]);
+        setSkip(currentSkip + data.length);
+      } else {
+        setNotifications(data);
+        setSkip(data.length);
+      }
+
+      setHasMore(data.length === LIMIT);
+    } catch (error) {
+      console.error("Notification fetch error:", error);
+
+      if (!loadMore) {
+        setNotifications([]);
+      }
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
 
   const markAsRead = async (notificationId: number) => {
     const token = localStorage.getItem("access_token");
@@ -58,7 +115,7 @@ export default function NotificationsPage() {
 
     try {
       const response = await fetch(
-       `${process.env.NEXT_PUBLIC_API_URL}/notifications/read-all`,
+        `${process.env.NEXT_PUBLIC_API_URL}/notifications/read-all`,
         {
           method: "PATCH",
           headers: {
@@ -84,39 +141,8 @@ export default function NotificationsPage() {
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch notifications");
-        }
-
-        return res.json();
-      })
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setNotifications(data);
-        } else {
-          setNotifications([]);
-        }
-      })
-      .catch((error) => {
-        console.error("Notification fetch error:", error);
-        setNotifications([]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
   return (
-    <main className="min-h-screen bg-transparent p-10 text-slate-950 dark:text-white">
+        <main className="min-h-screen bg-transparent p-10 text-slate-950 dark:text-white">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-3xl font-bold">
           Notifications
@@ -144,12 +170,12 @@ export default function NotificationsPage() {
       )}
 
       {loading && (
-        <div className="mt-10 flex items-center gap-3 text-gray-500 dark:text-gray-400">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600 dark:border-gray-700 dark:border-t-blue-400" />
-
-          <span>Loading notifications...</span>
-        </div>
-      )}
+  <div className="mt-8 grid gap-4">
+    {Array.from({ length: 6 }).map((_, index) => (
+      <NotificationSkeleton key={index} />
+    ))}
+  </div>
+)}
 
       {!loading && notifications.length === 0 && (
         <div className="mt-8 rounded-2xl border border-gray-200 bg-white/70 p-8 text-center dark:border-gray-700 dark:bg-gray-800/60">
@@ -164,57 +190,71 @@ export default function NotificationsPage() {
       )}
 
       {!loading && notifications.length > 0 && (
-        <div className="mt-8 grid gap-4">
-          {notifications.map((notification) => (
-            <article
-              key={notification.id}
-              onClick={() => handleNotificationClick(notification)}
-              className={`cursor-pointer rounded-2xl border p-5 transition hover:-translate-y-0.5 hover:shadow-md ${
-                notification.is_read
-                  ? "border-gray-200 bg-white/60 dark:border-gray-700 dark:bg-gray-800/40"
-                  : "border-blue-300 bg-blue-50/70 shadow-sm dark:border-blue-500/30 dark:bg-blue-500/5"
-              }`}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex gap-3">
-                  {!notification.is_read && (
-                    <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-blue-500" />
-                  )}
-
-                  <div>
-                    <p className="font-medium text-gray-800 dark:text-gray-100">
-                      {notification.message}
-                    </p>
-
-                    {notification.created_at && (
-                      <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
-                        {new Date(
-                          notification.created_at
-                        ).toLocaleString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
+        <>
+          <div className="mt-8 grid gap-4">
+            {notifications.map((notification) => (
+              <article
+                key={notification.id}
+                onClick={() => handleNotificationClick(notification)}
+                className={`cursor-pointer rounded-2xl border p-5 transition hover:-translate-y-0.5 hover:shadow-md ${
+                  notification.is_read
+                    ? "border-gray-200 bg-white/60 dark:border-gray-700 dark:bg-gray-800/40"
+                    : "border-blue-300 bg-blue-50/70 shadow-sm dark:border-blue-500/30 dark:bg-blue-500/5"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex gap-3">
+                    {!notification.is_read && (
+                      <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-blue-500" />
                     )}
-                  </div>
-                </div>
 
-                <span
-                  className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
-                    notification.is_read
-                      ? "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400"
-                      : "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
-                  }`}
-                >
-                  {notification.is_read ? "Read" : "New"}
-                </span>
-              </div>
-            </article>
-          ))}
-        </div>
+                    <div>
+                      <p className="font-medium text-gray-800 dark:text-gray-100">
+                        {notification.message}
+                      </p>
+
+                      {notification.created_at && (
+                        <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
+                          {new Date(
+                            notification.created_at
+                          ).toLocaleString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <span
+                    className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
+                      notification.is_read
+                        ? "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400"
+                        : "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
+                    }`}
+                  >
+                    {notification.is_read ? "Read" : "New"}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {hasMore && (
+            <div className="mt-8 flex justify-center">
+              <button
+                onClick={() => fetchNotifications(true)}
+                disabled={loadingMore}
+                className="rounded-xl bg-blue-600 px-6 py-3 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loadingMore ? "Loading..." : "Load More"}
+              </button>
+            </div>
+          )}
+        </>
       )}
     </main>
   );

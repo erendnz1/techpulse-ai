@@ -43,11 +43,13 @@ def transform_cve(vulnerability):
     )
 
     return {
-        "title": cve_id,
-        "content": description,
-        "source": "NVD",
-        "url": f"https://nvd.nist.gov/vuln/detail/{cve_id}",
-        "image_url": None,
-        "author": "NVD",
-        "published_at": cve.get("published"),
-    }
+    "title": cve_id,
+    "content": description,
+    "source": "NVD",
+    "url": f"https://nvd.nist.gov/vuln/detail/{cve_id}",
+    "image_url": None,
+    "author": "NVD",
+    "category": "Security",
+    "region": "global",
+    "published_at": cve.get("published"),
+}

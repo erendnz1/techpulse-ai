@@ -1,7 +1,7 @@
 import requests
 import xml.etree.ElementTree as ET
 import re
-
+from app.services.category_detector import detect_category
 def fetch_shiftdelete_news():
     url = "https://shiftdelete.net/feed"
 
@@ -43,6 +43,11 @@ def parse_shiftdelete_news(xml_content):
             "image_url": image_url,
             "author": "ShiftDelete.Net",
             "published_at": published_at,
+          "category": detect_category(
+    title,
+    clean_content,
+),
+
         }
 
         articles.append(article)

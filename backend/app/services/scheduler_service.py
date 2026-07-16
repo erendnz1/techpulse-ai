@@ -5,6 +5,8 @@ from app.services.news_service import process_and_save_news
 
 
 def scheduled_news_fetch():
+    
+
     db = SessionLocal()
 
     try:

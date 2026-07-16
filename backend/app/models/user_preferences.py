@@ -34,6 +34,11 @@ class UserPreferences(Base):
     nullable=False,
     default=True
     )
+    email_notification_enabled = Column(
+    Boolean,
+    default=False,
+    nullable=False
+)
     user = relationship(
     "User",
     back_populates="preferences"
