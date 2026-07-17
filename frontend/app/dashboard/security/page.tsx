@@ -1,6 +1,7 @@
 
 "use client";
 import { useEffect, useState } from "react";
+import NewsCardSkeleton from "@/components/skeletons/NewsCardSkeleton";
 export default function SecurityPage() {
   const [securityAlerts, setSecurityAlerts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,48 +35,12 @@ fetch(
   });
 }, []);
 const filteredSecurityAlerts = securityAlerts.filter((item) => {
-  const loadMore = async () => {
-  const token = localStorage.getItem("access_token");
-
-  if (!token) return;
-
-  try {
-    setLoadingMore(true);
-
-    const region =
-      selectedRegion === "all"
-        ? ""
-        : `&region=${selectedRegion}`;
-
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/news/security?skip=${skip}&limit=${PAGE_SIZE}${region}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const data = await response.json();
-
-    setSecurityAlerts((prev) => [...prev, ...data]);
-
-    setSkip((prev) => prev + PAGE_SIZE);
-
-    if (data.length < PAGE_SIZE) {
-      setHasMore(false);
-    }
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setLoadingMore(false);
-  }
-};
   const matchesType =
     selectedType === "all" ||
     (selectedType === "cve" &&
       item.title?.toUpperCase().startsWith("CVE-")) ||
-    (selectedType === "breach" && item.source === "KVKK");
+    (selectedType === "breach" &&
+      item.source === "KVKK");
 
   const matchesRegion =
     selectedRegion === "all" ||
@@ -167,16 +132,31 @@ const filteredSecurityAlerts = securityAlerts.filter((item) => {
   ))}
 </div>
       {loading && (
-  <p className="mt-8 text-sm text-gray-400">
-    Loading security alerts...
-  </p>
+  <div className="mt-8 grid gap-5">
+    {Array.from({ length: 6 }).map((_, index) => (
+      <NewsCardSkeleton key={index} />
+    ))}
+  </div>
 )}
 {!loading && (
   <p className="mt-6 text-sm text-gray-400">
     {filteredSecurityAlerts.length} security alerts found
   </p>
 )}
-{!loading && (
+{!loading && filteredSecurityAlerts.length === 0 && (
+  <div className="mt-8 rounded-2xl border border-gray-200 bg-white/70 p-8 text-center dark:border-gray-700 dark:bg-gray-800/60">
+
+    <h3 className="text-lg font-semibold">
+      No security alerts found
+    </h3>
+
+    <p className="mt-2 text-gray-500 dark:text-gray-400">
+      There are currently no security alerts matching your selected filters.
+    </p>
+
+  </div>
+)}
+{!loading && filteredSecurityAlerts.length > 0 && (
   <div className="mt-8 grid gap-5">
     {filteredSecurityAlerts.map((item) => (
       <article

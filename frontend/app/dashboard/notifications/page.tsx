@@ -11,6 +11,7 @@ export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState("");
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
@@ -20,6 +21,7 @@ export default function NotificationsPage() {
     const currentSkip = loadMore ? skip : 0;
 
     try {
+      setError("");
       if (loadMore) {
         setLoadingMore(true);
       } else {
@@ -51,12 +53,15 @@ export default function NotificationsPage() {
 
       setHasMore(data.length === LIMIT);
     } catch (error) {
-      console.error("Notification fetch error:", error);
+  console.error("Notification fetch error:", error);
 
-      if (!loadMore) {
-        setNotifications([]);
-      }
-    } finally {
+  if (!loadMore) {
+    setNotifications([]);
+    setError(
+      "Unable to load notifications. Please try again."
+    );
+  }
+}finally {
       setLoading(false);
       setLoadingMore(false);
     }
@@ -174,6 +179,19 @@ export default function NotificationsPage() {
     {Array.from({ length: 6 }).map((_, index) => (
       <NotificationSkeleton key={index} />
     ))}
+  </div>
+)}
+{!loading && error && (
+  <div className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-6 text-center dark:border-red-500/20 dark:bg-red-500/10">
+
+    <h3 className="font-semibold text-red-700 dark:text-red-400">
+      Unable to load notifications
+    </h3>
+
+    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+      Please try again later.
+    </p>
+
   </div>
 )}
 

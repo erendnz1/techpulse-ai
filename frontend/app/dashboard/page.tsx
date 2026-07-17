@@ -278,6 +278,9 @@ export default function DashboardPage() {
             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               Technology updates tracked
             </p>
+            <p className="mt-1 text-xs text-gray-400">
+  Last updated just now
+</p>
           </div>
 
           <div
@@ -303,6 +306,9 @@ export default function DashboardPage() {
             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               Alerts waiting for your attention
             </p>
+            <p className="mt-1 text-xs text-gray-400">
+  Last updated just now
+</p>
           </div>
         </section>
       )}
@@ -446,6 +452,9 @@ export default function DashboardPage() {
                   <p className="mt-2 text-3xl font-bold tracking-tight">
                     {count}
                   </p>
+                  <p className="mt-2 text-xs text-gray-400">
+  Articles collected
+</p>
                 </div>
               )
             )}
@@ -493,6 +502,9 @@ export default function DashboardPage() {
                   <p className="mt-3 text-3xl font-bold tracking-tight">
                     {count}
                   </p>
+                  <p className="mt-2 text-xs text-gray-400">
+  Detected articles
+</p>
                 </div>
               )
             )}
@@ -521,7 +533,7 @@ export default function DashboardPage() {
           <button
             type="button"
             onClick={() =>
-              router.push("/dashboard/security-alerts")
+              router.push("/dashboard/security")
             }
             className="flex items-center gap-2 text-sm font-semibold text-red-600 transition hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
           >

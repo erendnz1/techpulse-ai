@@ -8,6 +8,11 @@ import {
   Loader2,
   Newspaper,
   Sparkles,
+  ShieldAlert,
+  Brain,
+  Cloud,
+  Code2,
+  Smartphone,
 } from "lucide-react";
 import NewsCardSkeleton from "@/components/skeletons/NewsCardSkeleton";
 type NewsItem = {
@@ -22,6 +27,7 @@ type NewsItem = {
   importance_score?: number | null;
   risk_level?: string | null;
   published_at?: string | null;
+  image_url?: string | null;
 };
 
 type FeedMode = "personalized" | "all";
@@ -121,7 +127,14 @@ const [hasMoreAllNews, setHasMoreAllNews] =
 
         if (allNewsResponse.ok) {
           const allNewsData = await allNewsResponse.json();
-
+          console.table(
+  allNewsData.map((item: NewsItem) => ({
+    id: item.id,
+    title: item.title,
+    image: item.image_url,
+  }))
+);
+console.log(allNewsData);
           setAllNews(
             Array.isArray(allNewsData)
               ? allNewsData
@@ -185,6 +198,65 @@ const [hasMoreAllNews, setHasMoreAllNews] =
         return "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300";
     }
   };
+  const getPlaceholder = (category?: string | null) => {
+  switch (category) {
+    case "AI":
+      return {
+        icon: Brain,
+        title: "AI Update",
+        subtitle: "Latest Artificial Intelligence News",
+        colors: "from-violet-600 via-purple-700 to-indigo-700",
+      };
+
+    case "Security":
+      return {
+        icon: ShieldAlert,
+        title: "Security Alert",
+        subtitle: "Latest Cybersecurity Updates",
+        colors: "from-red-600 via-red-700 to-orange-700",
+      };
+
+    case "Cloud":
+      return {
+        icon: Cloud,
+        title: "Cloud Update",
+        subtitle: "Cloud Infrastructure News",
+        colors: "from-sky-500 via-blue-600 to-cyan-700",
+      };
+
+    case "Developer Tools":
+      return {
+        icon: Code2,
+        title: "Developer Tools",
+        subtitle: "Frameworks, IDEs & Dev Tools",
+        colors: "from-slate-700 via-slate-800 to-gray-900",
+      };
+
+    case "Mobile":
+      return {
+        icon: Smartphone,
+        title: "Mobile Tech",
+        subtitle: "Android & iOS Updates",
+        colors: "from-emerald-600 via-teal-600 to-cyan-700",
+      };
+
+    case "Software":
+      return {
+        icon: Newspaper,
+        title: "Software Update",
+        subtitle: "Latest Software Technologies",
+        colors: "from-blue-600 via-blue-700 to-indigo-700",
+      };
+
+    default:
+      return {
+        icon: Newspaper,
+        title: "Technology News",
+        subtitle: "Powered by TechPulse AI",
+        colors: "from-blue-600 via-blue-700 to-indigo-700",
+      };
+  };
+};
 const loadMore = async () => {
   const token = localStorage.getItem("access_token");
 
@@ -235,10 +307,14 @@ const loadMore = async () => {
 
       const data = await response.json();
 
-      setAllNews((prev) => [
-        ...prev,
-        ...data,
-      ]);
+      setAllNews((prev) => {
+  const merged = [...prev, ...data];
+
+  return merged.filter(
+    (item, index, self) =>
+      index === self.findIndex((n) => n.id === item.id)
+  );
+});
 
       setAllNewsSkip(nextSkip + PAGE_SIZE);
 
@@ -430,14 +506,41 @@ const loadMore = async () => {
 
       {/* News cards */}
       {!loading && !error && filteredNews.length > 0 && (
-        <div className="mt-8 grid gap-5">
+        <div className="mt-8 grid gap-6 lg:grid-cols-2">
           {filteredNews.map((item) => (
             <article
               key={item.id}
               onClick={() => openNewsDetail(item.id)}
-              className="group cursor-pointer rounded-2xl border border-gray-200 bg-white/70 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/60"
+              className="group h-full cursor-pointer rounded-2xl border border-gray-200 bg-white/70 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/60"
             >
+              {(() => {
+  const placeholder = getPlaceholder(item.category);
+  const Icon = placeholder.icon;
+
+  return (
+    <div
+      className={`mb-5 flex h-64 flex-col items-center justify-center rounded-xl bg-gradient-to-br ${placeholder.colors} text-white`}
+    >
+      <Icon className="h-14 w-14 opacity-90" />
+
+      <h3 className="mt-4 text-3xl font-bold tracking-tight">
+  {placeholder.title}
+</h3>
+
+<p className="mt-2 text-base text-white/80">
+  {placeholder.subtitle}
+</p>
+
+<div className="mt-6 h-px w-24 bg-white/20" />
+
+<p className="mt-4 text-xs uppercase tracking-[0.25em] text-white/60">
+  TechPulse AI
+</p>
+    </div>
+  );
+})()}
               {/* Badges */}
+              
               <div className="mb-4 flex flex-wrap gap-2">
                 <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
                   {item.category || "Other"}
@@ -469,7 +572,7 @@ const loadMore = async () => {
 
               {/* Title */}
               <div className="flex items-start justify-between gap-4">
-                <h2 className="text-xl font-semibold leading-snug transition group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                <h2 className="text-xl  line-clamp-2 font-semibold leading-snug transition group-hover:text-blue-600 dark:group-hover:text-blue-400">
                   {item.title}
                 </h2>
 

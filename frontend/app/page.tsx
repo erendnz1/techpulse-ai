@@ -1,6 +1,9 @@
+"use client";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useRouter } from "next/navigation";
 import { FadeInSection } from "./fade-in-section";
 export default function Home() {
+  const router = useRouter();
   return (
     <main className="min-h-screen bg-white text-gray-900 transition-colors dark:bg-gray-900 dark:text-white">
       <nav className="flex items-center justify-between border-b border-gray-200 px-8 py-5 dark:border-gray-800">
@@ -62,12 +65,18 @@ export default function Home() {
             framework updates, and developer tools in one intelligent platform.
           </p>
           <div className="mt-10 flex items-center gap-4">
-            <a
-              href="#latest-news"
-              className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-blue-700 hover:shadow-lg"
-            >
-              Explore Latest News
-            </a>
+            <button
+  onClick={() => {
+    const token = localStorage.getItem("access_token");
+
+    router.push(
+      token ? "/dashboard/news" : "/login"
+    );
+  }}
+  className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-blue-700 hover:shadow-lg"
+>
+  Explore Latest News
+</button>
 
             <a
               href="/register"

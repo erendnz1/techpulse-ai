@@ -27,7 +27,7 @@ class NewsResponse(BaseModel):
     summary: str | None = None
     source: str
     region: str | None = None
-    region: str
+    
     url: str
     image_url: str | None = None
     author: str | None = None
