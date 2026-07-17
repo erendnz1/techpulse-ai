@@ -116,17 +116,50 @@ def get_personalized_news(
     regions: list[str],
     minimum_importance_score: int,
     skip: int = 0,
-    limit: int = 20
+    limit: int = 20,
 ):
-    return db.query(News).filter(
-        News.category.in_(categories),
-        News.region.in_(regions),
-        News.importance_score >= minimum_importance_score
-    ).order_by(
-        News.importance_score.desc(),
-        News.published_at.desc()
-    ).offset(skip).limit(limit).all()
+    query = (
+        db.query(News)
+        .filter(
+            News.region.in_(regions),
+            News.importance_score >= minimum_importance_score,
+        )
+        .order_by(
+            News.published_at.desc(),
+            News.importance_score.desc(),
+        )
+    )
 
+    # Kullanıcının kategori tercihi varsa uygula
+    if categories:
+        query = query.filter(News.category.in_(categories))
+
+    all_news = query.all()
+
+    selected = []
+    used_categories = set()
+
+    # Her kategoriden önce 1 haber al
+    for news in all_news:
+        if news.category not in used_categories:
+            selected.append(news)
+            used_categories.add(news.category)
+
+        if len(selected) >= limit:
+            break
+
+    # Limit dolmadıysa en güncel haberlerle tamamla
+    if len(selected) < limit:
+        selected_ids = {item.id for item in selected}
+
+        for news in all_news:
+            if news.id not in selected_ids:
+                selected.append(news)
+
+            if len(selected) >= limit:
+                break
+
+    return selected[skip:skip + limit]
 from sqlalchemy import or_
 
 
@@ -157,3 +190,63 @@ def get_security_news(
         .limit(limit)
         .all()
     )
+
+def get_dashboard_news(
+    db: Session,
+    categories: list[str],
+    regions: list[str],
+    minimum_importance_score: int,
+    limit: int = 5,
+):
+    query = (
+        db.query(News)
+        .filter(
+            News.region.in_(regions),
+            News.importance_score >= minimum_importance_score,
+
+            # Dashboard'da KVKK haberlerini gösterme
+            News.source != "KVKK",
+
+            # Kategorisiz ve Other haberleri gösterme
+            News.category.isnot(None),
+            News.category != "Other",
+
+            # AI analiz edilmemiş haberleri gösterme
+            News.summary.isnot(None),
+        )
+        .order_by(
+            News.importance_score.desc(),
+            News.published_at.desc(),
+        )
+    )
+
+    if categories:
+        query = query.filter(
+            News.category.in_(categories)
+        )
+
+    news_list = query.all()
+
+    selected = []
+    used_categories = set()
+
+    # Önce her kategoriden bir haber al
+    for news in news_list:
+        if news.category not in used_categories:
+            selected.append(news)
+            used_categories.add(news.category)
+
+        if len(selected) >= limit:
+            return selected
+
+    # Limit dolmadıysa kalan en önemli haberlerle tamamla
+    selected_ids = {item.id for item in selected}
+
+    for news in news_list:
+        if news.id not in selected_ids:
+            selected.append(news)
+
+        if len(selected) >= limit:
+            break
+
+    return selected

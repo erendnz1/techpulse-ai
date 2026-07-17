@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from app.dependencies.auth import get_current_user
 from app.models.user import User
 from app.crud.user_preferences import get_user_preferences
-
-
+from app.schemas.news import NewsResponse
+from app.models.news import News
 from app.database.session import get_db
 from app.crud.news import (
     create_news,
@@ -14,6 +14,7 @@ from app.crud.news import (
     delete_news,
     get_personalized_news,
     get_security_news,
+    get_dashboard_news,
 )
 from app.schemas.news import (
     NewsCreate,
@@ -60,7 +61,30 @@ def get_my_personalized_news(
     ) 
 
     return personalized_news
+@router.get("/dashboard", response_model=list[NewsResponse])
+def get_dashboard_news_endpoint(
+    limit: int = Query(default=5, ge=1, le=20),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    preferences = get_user_preferences(
+        db,
+        current_user.id,
+    )
 
+    if preferences is None:
+        raise HTTPException(
+            status_code=404,
+            detail="User preferences not found",
+        )
+
+    return get_dashboard_news(
+        db=db,
+        categories=preferences.categories,
+        regions=preferences.regions,
+        minimum_importance_score=preferences.minimum_importance_score,
+        limit=limit,
+    )
 @router.get("/", response_model=list[NewsResponse])
 def get_all_news(
     category: str | None = None,
@@ -168,3 +192,26 @@ def update_news_endpoint(
         )
 
     return updated_news
+
+@router.get(
+    "/releases",
+    response_model=list[NewsResponse]
+)
+def get_latest_releases(
+    skip: int = 0,
+    limit: int = 5,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    releases = (
+        db.query(News)
+        .filter(
+            News.source == "GitHub Releases"
+        )
+        .order_by(News.published_at.desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    return releases

@@ -6,7 +6,89 @@ from groq import Groq
 
 from app.core.config import GROQ_API_KEY
 
+def detect_category(text: str) -> str | None:
+    text = text.lower()
 
+    categories = {
+        "AI": [
+            "openai", "chatgpt", "gpt", "claude", "anthropic",
+            "gemini", "llm", "hugging face", "copilot",
+            "stable diffusion", "midjourney"
+        ],
+
+        "Cloud": [
+            "cloudflare", "aws", "amazon web services",
+            "azure", "google cloud", "gcp",
+            "kubernetes", "serverless",
+            "cdn", "cloud"
+        ],
+
+        "DevOps": [
+            "docker", "terraform", "jenkins",
+            "ansible", "github actions",
+            "gitlab ci", "ci/cd", "helm",
+            "argo cd"
+        ],
+
+        "Developer Tools": [
+            "vs code", "visual studio",
+            "jetbrains", "intellij",
+            "postman", "sdk"
+        ],
+
+        "Software": [
+            "react", "next.js", "angular",
+            "vue", "windows", "linux",
+            "macos", "postgresql",
+            "mysql", "chrome",
+            "firefox"
+        ],
+
+        "Mobile": [
+            "android", "ios",
+            "iphone", "ipad",
+            "play store", "app store"
+        ],
+
+        "Gaming": [
+            "steam", "xbox",
+            "playstation", "unity",
+            "unreal"
+        ],
+
+        "Business": [
+            "acquisition", "investment",
+            "funding", "earnings",
+            "revenue", "partnership",
+            "layoffs"
+        ],
+
+        "Security": [
+            "cve-",
+            "zero-day",
+            "ransomware",
+            "malware",
+            "exploit",
+            "data breach"
+        ]
+    }
+
+    scores = {}
+
+    for category, keywords in categories.items():
+        score = 0
+
+        for keyword in keywords:
+            if keyword in text:
+                score += 1
+
+        if score:
+            scores[category] = score
+
+    if not scores:
+        return None
+
+    return max(scores, key=scores.get)
 groq_client = Groq(api_key=GROQ_API_KEY)
 logger = logging.getLogger(__name__)
 
@@ -31,71 +113,177 @@ def analyze_news(text: str) -> dict | None:
     if not text:
         return None
 
+   
     prompt = f"""
-Analyze the following technology news, software release, developer article, or security vulnerability.
+You are an expert technology news analyst.
 
-Summarize the content in 2-3 sentences.
+Analyze the following news article.
 
-Choose exactly one category from this list:
+TASKS:
+
+1. Write a concise summary in 2-3 sentences.
+
+2. Choose EXACTLY ONE category from:
+
 - AI
 - Security
 - Cloud
 - DevOps
 - Software
--Developer Tools
-- Mobile 
+- Developer Tools
+- Mobile
 - Gaming
 - Business
 - Other
 
-Rate the importance of the content from 1 to 10:
-- 1-3: Low importance
-- 4-6: Medium importance
-- 7-8: High importance
-- 9-10: Critical importance
+CATEGORY RULES (VERY IMPORTANT):
 
-Choose exactly one risk level from this list:
-- Low
-- Medium
-- High
-- Critical
+AI
+- OpenAI
+- Anthropic
+- Google Gemini
+- ChatGPT
+- Claude
+- LLMs
+- Machine Learning
+- Artificial Intelligence
 
-For affected_technologies:
-- Identify all explicitly mentioned affected or relevant products, frameworks,
-  libraries, platforms, operating systems, services, tools, or technologies.
-- For security vulnerabilities, if a named product or technology is affected,
-  affected_technologies must not be empty.
-- Return affected_technologies as a JSON array of strings.
-- If no specific technology is affected or mentioned, return an empty array [].
+Security
+- CVE
+- Vulnerability
+- Malware
+- Ransomware
+- Data breach
+- Cyber attack
+- Security patch
+- Authentication
+- Encryption
 
-For recommended_action:
-- Provide a clear, concise, and actionable recommendation for software developers
-  or IT teams based on the actual content.
-- For security vulnerabilities with Medium, High, or Critical risk,
-  do not return "No immediate action required."
-- Instead, recommend an appropriate action such as applying a security patch,
-  upgrading the affected product, reviewing the vendor security advisory,
-  restricting access, investigating affected systems, or monitoring for updates.
-- If the content genuinely requires no specific action and the risk level is Low,
-  return "No immediate action required."
+Cloud
+- AWS
+- Azure
+- Google Cloud
+- Cloudflare
+- Kubernetes
+- Containers
+- Infrastructure
+- CDN
 
-Maintain logical consistency between risk_level and recommended_action.
-For is_relevant:
-- Return true if the content is relevant to software development, artificial intelligence,
-  cybersecurity, cloud computing, DevOps, developer tools, frameworks, libraries,
-  operating systems, enterprise technology, mobile technology, or important technology industry developments.
-- Return false for unrelated entertainment, movies, celebrities, sports, fossils,
-  general politics, or other content without meaningful technology relevance.
-- Return only a JSON boolean: true or false.
-Return only valid JSON in exactly this format:
+DevOps
+- Docker
+- CI/CD
+- Jenkins
+- GitHub Actions
+- Terraform
+- Monitoring
+- Deployment
+- Infrastructure automation
+
+Developer Tools
+- Visual Studio
+- VS Code
+- IntelliJ
+- JetBrains
+- Git
+- GitHub
+- npm
+- Programming frameworks
+- SDK
+- API
+
+Software
+- Windows
+- Linux
+- macOS
+- React
+- Next.js
+- Angular
+- Vue
+- Firefox
+- Chrome
+- PostgreSQL
+- MySQL
+- General software releases
+
+Mobile
+- Android
+- iOS
+- Smartphones
+- Mobile applications
+
+Gaming
+- Xbox
+- PlayStation
+- Steam
+- Unreal Engine
+- Unity
+- Game releases
+
+Business
+- Company acquisitions
+- Financial results
+- Investments
+- Layoffs
+- Partnerships
+- Market announcements
+
+IMPORTANT:
+
+Choose Security ONLY if the primary subject is cybersecurity or a security vulnerability.
+
+Do NOT classify news as Security simply because security is mentioned.
+
+Examples:
+
+Cloudflare launches new AI bot detection
+→ Cloud
+
+OpenAI releases GPT update
+→ AI
+
+VS Code 1.108 released
+→ Developer Tools
+
+React 20 RC announced
+→ Software
+
+Android 17 Beta
+→ Mobile
+
+Microsoft acquires company
+→ Business
+
+CVE-2026-12345
+→ Security
+
+3. Rate importance from 1-10.
+
+4. Risk level:
+Low
+Medium
+High
+Critical
+
+Only Security news should normally receive High or Critical risk.
+
+5. affected_technologies:
+Return a JSON array.
+
+6. recommended_action:
+Provide one actionable recommendation.
+
+7. is_relevant:
+Return true or false.
+
+Return ONLY valid JSON:
 
 {{
-    "summary": "A 2-3 sentence summary of the content.",
-    "category": "One category from the allowed list",
+    "summary": "...",
+    "category": "...",
     "importance_score": 1,
-    "risk_level": "Low",
-    "affected_technologies": ["Technology 1", "Technology 2"],
-    "recommended_action": "A clear and concise recommended action."
+    "risk_level": "...",
+    "affected_technologies": [],
+    "recommended_action": "...",
     "is_relevant": true
 }}
 
@@ -103,7 +291,6 @@ News:
 
 {text}
 """
-
     for attempt in range(3):
         logger.info(f"Starting attempt {attempt + 1}")
 
@@ -141,7 +328,12 @@ News:
                     return None
  
                 summary = result.get("summary")
-                category = result.get("category")
+                rule_category = detect_category(text)
+
+                if rule_category:
+                  category = rule_category
+                else:
+                  category = result.get("category", "Other")
                 importance_score = result.get("importance_score")
                 risk_level = result.get("risk_level")
                 affected_technologies = result.get(

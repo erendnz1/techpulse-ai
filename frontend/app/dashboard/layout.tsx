@@ -40,15 +40,16 @@ export default function DashboardLayout({
           },
         }
       )
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(
-              "Failed to fetch unread notification count"
-            );
-          }
+        .then(async (res) => {
+  if (!res.ok) {
+    console.log("Status:", res.status);
+    console.log("Response:", await res.text());
 
-          return res.json();
-        })
+    throw new Error(`Failed (${res.status})`);
+  }
+
+  return res.json();
+})
         .then((data) => {
           setUnreadCount(data.unread_count ?? 0);
         })

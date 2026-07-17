@@ -30,6 +30,7 @@ from app.services.notification_service import create_notifications_for_news
 from app.services.rss_fetcher import fetch_rss
 from app.services.rss_sources import RSS_SOURCES
 from app.core.exceptions import QuotaExceededError
+from app.services.ai_service import analyze_news, detect_category
 def process_and_save_news(db: Session):
     articles = []
     stats = {
@@ -197,16 +198,26 @@ def process_and_save_news(db: Session):
             stats["duplicates"] += 1
             continue
 
-        content = article["content"] or ""
-        content_for_analysis = content[:5000]
+        title = article.get("title", "")
+        content = article.get("content", "")
+
+        combined_text = f"""
+        Title:
+        {title}
+
+        Content:
+        {content}
+        """
+
+        content_for_analysis = combined_text[:5000]
 
         analysis = None
 
         if ai_enabled:
-            try:
-              analysis = analyze_news(content_for_analysis)
+           try:
+               analysis = analyze_news(content_for_analysis)
 
-            except QuotaExceededError:
+           except QuotaExceededError:
               ai_enabled = False
 
               print(
@@ -226,7 +237,12 @@ def process_and_save_news(db: Session):
                continue
 
             article["summary"] = analysis.get("summary")
-            article["category"] = analysis.get("category")
+            rule_category = detect_category(combined_text)
+
+            if rule_category:
+              article["category"] = rule_category
+            else:
+              article["category"] = analysis.get("category")
             article["importance_score"] = analysis.get("importance_score")
             article["risk_level"] = analysis.get("risk_level")
             article["affected_technologies"] = analysis.get("affected_technologies")
@@ -238,10 +254,11 @@ def process_and_save_news(db: Session):
            article["summary"] = article.get("summary")
 
            # RSS veya diğer kaynaklardan gelen category varsa koru
-           article["category"] = article.get("category", "Other")
+           article["category"] = (
+    article.get("category") or detect_category(combined_text) or "Other"
+)
 
            article["importance_score"] = article.get("importance_score")
-           article["risk_level"] = article.get("risk_level")
            article["affected_technologies"] = article.get(
             "affected_technologies", []
            )
@@ -250,6 +267,12 @@ def process_and_save_news(db: Session):
            )
         
         news = save_news(db, article)
+        print(
+    f"[NOTIFICATION] {article['title']} | "
+    f"Category={article.get('category')} | "
+    f"Importance={article.get('importance_score')} | "
+    f"Region={article.get('region')}"
+)
         create_notifications_for_news(
              db=db,
              news=news
