@@ -90,4 +90,66 @@ RSS_SOURCES = [
     "region": "Global",
     "url": "https://feeds.feedburner.com/TheHackersNews",
 },
+{
+    "name": "Visual Studio Blog",
+    "category": "Developer Tools",
+    "region": "Global",
+    "url": "https://devblogs.microsoft.com/visualstudio/feed/",
+},
+
+{
+    "name": "Visual Studio Code",
+    "category": "Developer Tools",
+    "region": "Global",
+    "url": "https://code.visualstudio.com/feed.xml",
+},
+
+{
+    "name": ".NET Blog",
+    "category": "Developer Tools",
+    "region": "Global",
+    "url": "https://devblogs.microsoft.com/dotnet/feed/",
+},
+
+{
+    "name": "Node.js",
+    "category": "Framework",
+    "region": "Global",
+    "url": "https://nodejs.org/en/feed/blog.xml",
+},
+
+{
+    "name": "Angular",
+    "category": "Framework",
+    "region": "Global",
+    "url": "https://blog.angular.dev/feed",
+},
+
+{
+    "name": "Flutter",
+    "category": "Mobile",
+    "region": "Global",
+    "url": "https://medium.com/feed/flutter",
+},
+
+{
+    "name": "Laravel",
+    "category": "Framework",
+    "region": "Global",
+    "url": "https://laravel-news.com/feed",
+},
+
+{
+    "name": "Spring",
+    "category": "Framework",
+    "region": "Global",
+    "url": "https://spring.io/blog.atom",
+},
+
+{
+    "name": "Python Software Foundation",
+    "category": "Framework",
+    "region": "Global",
+    "url": "https://pyfound.blogspot.com/feeds/posts/default",
+},
 ]

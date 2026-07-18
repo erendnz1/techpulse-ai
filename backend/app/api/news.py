@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.dependencies.auth import get_current_user
@@ -23,7 +24,7 @@ from app.schemas.news import (
 )
 from app.services.ai_service import analyze_news
 from app.services.news_service import process_and_save_news
-
+from app.crud.news import search_news
 
 router = APIRouter(
     prefix="/news",
@@ -61,6 +62,18 @@ def get_my_personalized_news(
     ) 
 
     return personalized_news
+@router.get("/search", response_model=list[NewsResponse])
+def search_news_endpoint(
+    q: str = Query(..., min_length=2),
+    limit: int = Query(5, ge=1, le=20),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return search_news(
+        db=db,
+        query=q,
+        limit=limit,
+    )
 @router.get("/dashboard", response_model=list[NewsResponse])
 def get_dashboard_news_endpoint(
     limit: int = Query(default=5, ge=1, le=20),
@@ -208,7 +221,10 @@ def get_latest_releases(
         .filter(
             News.source == "GitHub Releases"
         )
-        .order_by(News.published_at.desc())
+        .order_by(
+    News.importance_score.desc(),
+    News.published_at.desc(),
+)
         .offset(skip)
         .limit(limit)
         .all()

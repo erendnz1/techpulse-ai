@@ -96,14 +96,15 @@ logger = logging.getLogger(__name__)
 ALLOWED_CATEGORIES = {
     "AI",
     "Security",
+    "Framework",
+    "Developer Tools",
     "Cloud",
     "DevOps",
     "Software",
-    "Developer Tools",
     "Mobile",
     "Gaming",
     "Business",
-    "Other"
+    "Other",
 }
 
 
@@ -127,10 +128,11 @@ TASKS:
 
 - AI
 - Security
+- Framework
+- Developer Tools
 - Cloud
 - DevOps
 - Software
-- Developer Tools
 - Mobile
 - Gaming
 - Business
@@ -180,16 +182,42 @@ DevOps
 - Infrastructure automation
 
 Developer Tools
+
 - Visual Studio
 - VS Code
-- IntelliJ
-- JetBrains
+- IntelliJ IDEA
+- Rider
+- PyCharm
+- WebStorm
+- JetBrains IDEs
 - Git
 - GitHub
 - npm
-- Programming frameworks
+- pnpm
+- Yarn
 - SDK
 - API
+
+Framework
+
+- React
+- Next.js
+- Angular
+- Vue
+- Nuxt
+- Svelte
+- Node.js
+- Express
+- NestJS
+- Laravel
+- Symfony
+- Django
+- Flask
+- FastAPI
+- Spring
+- Spring Boot
+- ASP.NET
+- .NET
 
 Software
 - Windows
@@ -245,7 +273,7 @@ VS Code 1.108 released
 → Developer Tools
 
 React 20 RC announced
-→ Software
+→ Framework
 
 Android 17 Beta
 → Mobile
@@ -255,7 +283,23 @@ Microsoft acquires company
 
 CVE-2026-12345
 → Security
+Next.js 17 Released
+→ Framework
 
+Angular 21 Released
+→ Framework
+
+Laravel 13 Released
+→ Framework
+
+Spring Boot 4 Released
+→ Framework
+
+Visual Studio 2026 Released
+→ Developer Tools
+
+Visual Studio Code 1.112 Released
+→ Developer Tools
 3. Rate importance from 1-10.
 
 4. Risk level:

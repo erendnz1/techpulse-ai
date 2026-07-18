@@ -1,66 +1,116 @@
 "use client";
 
-import { Globe } from "lucide-react";
+import {
+  Globe,
+  GitBranch,
+  Newspaper,
+  Shield,
+  Cpu,
+  Cloud,
+} from "lucide-react";
 
-type TopSourcesProps = {
+import DashboardProgressCard from "./DashboardProgressCard";
+
+type Props = {
   sources?: Record<string, number>;
 };
 
-export default function TopSources({
-  sources,
-}: TopSourcesProps) {
-  if (!sources) return null;
+const getSourceConfig = (source: string) => {
+  const name = source.toLowerCase();
 
-  const items = Object.entries(sources)
+  if (name.includes("github")) {
+    return {
+      icon: GitBranch,
+      color: "bg-gray-700",
+      bgColor: "bg-gray-500/10",
+      iconColor: "text-gray-700 dark:text-gray-300",
+    };
+  }
+
+  if (
+    name.includes("nvd") ||
+    name.includes("cve") ||
+    name.includes("hacker")
+  ) {
+    return {
+      icon: Shield,
+      color: "bg-red-500",
+      bgColor: "bg-red-500/10",
+      iconColor: "text-red-500",
+    };
+  }
+
+  if (
+    name.includes("aws") ||
+    name.includes("cloud") ||
+    name.includes("azure")
+  ) {
+    return {
+      icon: Cloud,
+      color: "bg-cyan-500",
+      bgColor: "bg-cyan-500/10",
+      iconColor: "text-cyan-500",
+    };
+  }
+
+  if (
+    name.includes("openai") ||
+    name.includes("anthropic") ||
+    name.includes("hugging")
+  ) {
+    return {
+      icon: Cpu,
+      color: "bg-violet-500",
+      bgColor: "bg-violet-500/10",
+      iconColor: "text-violet-500",
+    };
+  }
+
+  if (
+    name.includes("news") ||
+    name.includes("dev.to") ||
+    name.includes("donanım") ||
+    name.includes("shift")
+  ) {
+    return {
+      icon: Newspaper,
+      color: "bg-emerald-500",
+      bgColor: "bg-emerald-500/10",
+      iconColor: "text-emerald-500",
+    };
+  }
+
+  return {
+    icon: Globe,
+    color: "bg-blue-500",
+    bgColor: "bg-blue-500/10",
+    iconColor: "text-blue-500",
+  };
+};
+
+export default function TopSources({ sources }: Props) {
+  const items = Object.entries(sources ?? {})
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 5);
+    .slice(0, 5)
+    .map(([label, value]) => {
+      const config = getSourceConfig(label);
 
-  const max = items[0]?.[1] ?? 1;
+      return {
+        label,
+        value,
+        icon: config.icon,
+        color: config.color,
+        bgColor: config.bgColor,
+        iconColor: config.iconColor,
+      };
+    });
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white/70 p-5 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
-
-      <div className="mb-5">
-        <h3 className="flex items-center gap-2 text-xl font-bold">
-          <Globe className="h-5 w-5 text-cyan-500" />
-          Top Sources
-        </h3>
-
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Most active providers
-        </p>
-      </div>
-
-      <div className="space-y-4">
-        {items.map(([source, count]) => (
-          <div key={source}>
-
-            <div className="mb-2 flex items-center justify-between">
-
-              <span className="text-sm font-medium">
-                {source}
-              </span>
-
-              <span className="text-sm text-gray-500">
-                {count}
-              </span>
-
-            </div>
-
-            <div className="h-2 rounded-full bg-gray-200 dark:bg-white/10">
-
-              <div
-                className="h-2 rounded-full bg-cyan-500 transition-all duration-700"
-                style={{
-                  width: `${(count / max) * 100}%`,
-                }}
-              />
-
-            </div>
-
-          </div>
-        ))}
-      </div>
-    </div>
+    <DashboardProgressCard
+      title="Top Sources"
+      subtitle="Most active news providers"
+      badge="TOP 5"
+      items={items}
+    />
   );
 }

@@ -46,7 +46,7 @@ export default function RecentSecurityAlerts() {
         if (!token) return;
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/news/security?skip=0&limit=5`,
+          `${process.env.NEXT_PUBLIC_API_URL}/news/security?skip=0&limit=3`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -70,111 +70,144 @@ export default function RecentSecurityAlerts() {
   }, []);
 
   return (
-    <div
-      className="
-        h-full
-        rounded-2xl
-        border
-        border-gray-200
-        bg-white/70
-        p-6
-        shadow-sm
-        backdrop-blur-xl
-        transition-all
-        duration-300
-        hover:-translate-y-1
-        hover:border-red-500/20
-        hover:shadow-xl
-        dark:border-white/10
-        dark:bg-white/5
-      "
-    >
-      {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h2 className="flex items-center gap-2 text-xl font-bold">
-            <ShieldAlert className="h-5 w-5 text-red-500" />
-            Recent Security Alerts
-          </h2>
+  <div
+    className="
+      h-full
+      rounded-2xl
+      border
+      border-gray-200
+      bg-white/70
+      p-6
+      shadow-sm
+      
+      transition-all
+      duration-300
+      hover:-translate-y-1
+      hover:border-red-500/20
+      hover:shadow-xl
+      dark:border-white/10
+      dark:bg-white/5
+    "
+  >
+    {/* Header */}
 
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Latest AI-detected vulnerabilities
-          </p>
+    <div className="mb-6 flex items-center justify-between">
+
+      <div>
+
+        <h2 className="flex items-center gap-2 text-xl font-bold">
+
+          <ShieldAlert className="h-5 w-5 text-red-500" />
+
+          Recent Security Alerts
+
+        </h2>
+
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          Latest AI-detected vulnerabilities
+        </p>
+
+      </div>
+
+      <Link
+        href="/dashboard/security"
+        className="group flex items-center gap-1 text-sm font-medium text-blue-500 transition-all hover:text-blue-600"
+      >
+        View All
+
+        <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+
+      </Link>
+
+    </div>
+
+    <div className="flex flex-col gap-3">
+
+      {alerts.map((item) => (
+
+        <div
+          key={item.id}
+          className="
+            rounded-xl
+            border
+            border-gray-200
+            bg-white/50
+            p-4
+            transition-all
+            duration-300
+            hover:-translate-y-0.5
+            hover:border-red-300
+            hover:bg-red-50/30
+            hover:shadow-md
+            dark:border-white/10
+            dark:bg-white/[0.03]
+          "
+        >
+
+          <div className="mb-3 flex items-center justify-between">
+
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${badgeStyles(
+                item.risk_level
+              )}`}
+            >
+              {item.risk_level ?? "Unknown"}
+            </span>
+
+            <span className="rounded-md bg-gray-100 px-2 py-1 text-xs text-gray-500 dark:bg-white/10">
+              {item.published_at?.split("T")[0]}
+            </span>
+
+          </div>
+
+          <div className="flex items-start gap-3">
+
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-red-500/10">
+
+              <TriangleAlert className="h-5 w-5 text-red-500" />
+
+            </div>
+
+            <div className="min-w-0 flex-1">
+
+              <p className="line-clamp-2 text-sm font-semibold">
+                {item.title}
+              </p>
+
+              {item.summary && (
+                <p className="mt-2 line-clamp-2 text-xs leading-5 text-gray-500 dark:text-gray-400">
+                  {item.summary}
+                </p>
+              )}
+
+            </div>
+
+          </div>
+
         </div>
 
-        <Link
-          href="/dashboard/security"
-          className="flex items-center gap-1 text-sm font-medium text-blue-500 transition hover:text-blue-600"
-        >
-          View All
-          <ChevronRight className="h-4 w-4" />
-        </Link>
-      </div>
+      ))}
 
-      <div className="space-y-4">
-        {alerts.map((item) => (
-          <div
-            key={item.id}
-            className="
-              rounded-xl
-              border
-              border-gray-200
-              p-4
-              transition-all
-              duration-300
-              hover:border-red-300
-              hover:shadow-md
-              dark:border-white/10
-            "
-          >
-            {/* Top */}
-            <div className="mb-3 flex items-center justify-between">
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${badgeStyles(
-                  item.risk_level
-                )}`}
-              >
-                {item.risk_level ?? "Unknown"}
-              </span>
+      {alerts.length === 0 && (
 
-              <span className="text-xs text-gray-500">
-                {item.published_at?.split("T")[0]}
-              </span>
-            </div>
+        <div className="rounded-xl border border-dashed border-gray-300 py-10 text-center dark:border-white/10">
 
-            {/* Title */}
-            <div className="flex items-start gap-3">
-              <TriangleAlert className="mt-0.5 h-5 w-5 text-red-500 flex-shrink-0" />
+          <ShieldAlert className="mx-auto mb-3 h-8 w-8 text-gray-400" />
 
-              <div className="min-w-0">
-                <p className="line-clamp-2 font-semibold">
-                  {item.title}
-                </p>
+          <p className="font-medium">
+            No security alerts found
+          </p>
 
-                {item.summary && (
-                  <p className="mt-2 line-clamp-2 text-sm text-gray-500 dark:text-gray-400">
-                    {item.summary}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
+          <p className="mt-1 text-sm text-gray-500">
+            Everything looks secure for now.
+          </p>
 
-        {alerts.length === 0 && (
-          <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center dark:border-white/10">
-            <ShieldAlert className="mx-auto mb-3 h-8 w-8 text-gray-400" />
+        </div>
 
-            <p className="font-medium">
-              No security alerts found
-            </p>
+      )}
 
-            <p className="mt-1 text-sm text-gray-500">
-              Everything looks secure for now.
-            </p>
-          </div>
-        )}
-      </div>
     </div>
-  );
+
+  </div>
+);
 }

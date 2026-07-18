@@ -191,6 +191,7 @@ def process_and_save_news(db: Session):
       print(f"RSS fetch failed: {error}")
     saved_news = []
     ai_enabled = True
+
     for article in articles:
         existing_news = get_news_by_url(db, article["url"])
 
@@ -202,91 +203,102 @@ def process_and_save_news(db: Session):
         content = article.get("content", "")
 
         combined_text = f"""
-        Title:
-        {title}
+Title:
+{title}
 
-        Content:
-        {content}
-        """
+Content:
+{content}
+"""
 
         content_for_analysis = combined_text[:5000]
 
         analysis = None
 
         if ai_enabled:
-           try:
-               analysis = analyze_news(content_for_analysis)
+            try:
+                analysis = analyze_news(content_for_analysis)
+                print("=" * 60)
+                print(article["title"])
+                print(analysis)
+                print("=" * 60)
+            except QuotaExceededError:
+                ai_enabled = False
+                stats["ai_status"] = "Quota Exhausted"
 
-           except QuotaExceededError:
-              ai_enabled = False
-
-              print(
-            "\n"
-            "========================================\n"
-            "Groq daily quota exhausted.\n"
-            "AI analysis disabled for remaining articles.\n"
-            "========================================\n"
-             ) 
- 
-              analysis = None
+                print(
+                    "\n"
+                    "========================================\n"
+                    "Groq daily quota exhausted.\n"
+                    "AI analysis disabled for remaining articles.\n"
+                    "========================================\n"
+                )
 
         if analysis:
             if analysis.get("is_relevant") is False:
-               stats["irrelevant"] += 1
-               print(f"Irrelevant news, skipped: {article['title']}")
-               continue
+                stats["irrelevant"] += 1
+                print(f"Irrelevant news skipped: {article['title']}")
+                continue
 
             article["summary"] = analysis.get("summary")
+
             rule_category = detect_category(combined_text)
 
-            if rule_category:
-              article["category"] = rule_category
-            else:
-              article["category"] = analysis.get("category")
+            article["category"] = (
+                rule_category
+                if rule_category
+                else analysis.get("category")
+            )
+
             article["importance_score"] = analysis.get("importance_score")
             article["risk_level"] = analysis.get("risk_level")
-            article["affected_technologies"] = analysis.get("affected_technologies")
-            article["recommended_action"] = analysis.get("recommended_action")
+            article["affected_technologies"] = analysis.get(
+                "affected_technologies"
+            )
+            article["recommended_action"] = analysis.get(
+                "recommended_action"
+            )
+
             if article.get("source") == "KVKK":
                 article["category"] = "Security"
                 article["region"] = "turkey"
+
         else:
-           article["summary"] = article.get("summary")
+            article["summary"] = article.get("summary")
 
-           # RSS veya diğer kaynaklardan gelen category varsa koru
-           article["category"] = (
-    article.get("category") or detect_category(combined_text) or "Other"
-)
+            article["category"] = (
+                article.get("category")
+                or detect_category(combined_text)
+                or "Other"
+            )
 
-           article["importance_score"] = article.get("importance_score")
-           article["affected_technologies"] = article.get(
-            "affected_technologies", []
-           )
-           article["recommended_action"] = article.get(
-            "recommended_action"
-           )
-        
+            article["importance_score"] = article.get("importance_score")
+            article["risk_level"] = article.get("risk_level")
+            article["affected_technologies"] = article.get(
+                "affected_technologies", []
+            )
+            article["recommended_action"] = article.get(
+                "recommended_action"
+            )
+
         news = save_news(db, article)
-        print(
-    f"[NOTIFICATION] {article['title']} | "
-    f"Category={article.get('category')} | "
-    f"Importance={article.get('importance_score')} | "
-    f"Region={article.get('region')}"
-)
+
         create_notifications_for_news(
-             db=db,
-             news=news
+            db=db,
+            news=news,
         )
+
         saved_news.append(news)
         stats["saved"] += 1
-        print("\n========================================")
-        print("        TechPulse AI Scheduler")
-        print("========================================")
-        print(f"Sources Scanned : {stats['sources']}")
-        print(f"Articles Fetched: {stats['fetched']}")
-        print(f"Saved           : {stats['saved']}")
-        print(f"Duplicates      : {stats['duplicates']}")
-        print(f"Irrelevant      : {stats['irrelevant']}")
-        print(f"AI Status       : {stats['ai_status']}")
-        print("========================================\n")
-    return saved_news 
+
+    print("\n========================================")
+    print("        TechPulse AI Scheduler")
+    print("========================================")
+    print(f"Sources Scanned : {stats['sources']}")
+    print(f"Articles Fetched: {stats['fetched']}")
+    print(f"Saved           : {stats['saved']}")
+    print(f"Duplicates      : {stats['duplicates']}")
+    print(f"Irrelevant      : {stats['irrelevant']}")
+    print(f"AI Status       : {stats['ai_status']}")
+    print("========================================\n")
+
+    return saved_news

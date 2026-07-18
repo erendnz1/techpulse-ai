@@ -41,15 +41,19 @@ export default function DashboardLayout({
         }
       )
         .then(async (res) => {
-  if (!res.ok) {
-    console.log("Status:", res.status);
-    console.log("Response:", await res.text());
+  if (res.status === 401) {
+    setUnreadCount(0);
+    return null;
+  }
 
+  if (!res.ok) {
+    console.error(await res.text());
     throw new Error(`Failed (${res.status})`);
   }
 
   return res.json();
 })
+
         .then((data) => {
           setUnreadCount(data.unread_count ?? 0);
         })

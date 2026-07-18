@@ -64,141 +64,369 @@ export default function InsightsPage() {
 
       <div className="mb-10">
 
-        <div className="flex items-center gap-3">
-          <Sparkles className="h-7 w-7 text-violet-500" />
+  <div className="flex items-center gap-4">
 
-          <div>
-            <h1 className="text-3xl font-bold">
-              AI Insights
-            </h1>
+    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-500/15">
+      <Sparkles className="h-7 w-7 text-violet-500" />
+    </div>
 
-            <p className="mt-1 text-gray-500 dark:text-gray-400">
-              AI-powered analysis of the latest technology news.
-            </p>
-          </div>
+    <div>
 
-        </div>
+      <h1 className="text-4xl font-bold tracking-tight">
+        AI Intelligence Center
+      </h1>
 
-      </div>
+      <p className="mt-2 max-w-2xl text-gray-500 dark:text-gray-400">
+        AI-powered analysis of software trends, technology ecosystems,
+        cloud activity and security intelligence collected from trusted
+        sources.
+      </p>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+    </div>
 
-        <div className="rounded-2xl border bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
-          <Newspaper className="mb-3 h-7 w-7 text-violet-500" />
+  </div>
 
-          <p className="text-sm text-gray-500">
-            AI Articles
-          </p>
+</div>
+<div className="mb-8 rounded-2xl border border-violet-500/20 bg-gradient-to-r from-violet-500/10 via-blue-500/5 to-transparent p-6">
 
-          <h2 className="mt-2 text-3xl font-bold">
-            {stats.ai_articles}
-          </h2>
-        </div>
+  <div className="mb-3 flex items-center gap-2">
 
-        <div className="rounded-2xl border bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
-          <Cloud className="mb-3 h-7 w-7 text-blue-500" />
+    <Sparkles className="h-5 w-5 text-violet-500" />
 
-          <p className="text-sm text-gray-500">
-            Cloud Updates
-          </p>
+    <h2 className="text-xl font-semibold">
+      Today's AI Executive Summary
+    </h2>
 
-          <h2 className="mt-2 text-3xl font-bold">
-            {stats.cloud_articles}
-          </h2>
-        </div>
+  </div>
 
-        <div className="rounded-2xl border bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
-          <ShieldAlert className="mb-3 h-7 w-7 text-red-500" />
+  <p className="leading-8 text-gray-600 dark:text-gray-300">
 
-          <p className="text-sm text-gray-500">
-            Critical Alerts
-          </p>
+    TechPulse AI analyzed
 
-          <h2 className="mt-2 text-3xl font-bold">
-            {stats.critical_alerts}
-          </h2>
-        </div>
+    <span className="font-semibold text-violet-500">
+      {" "}{stats.total_news}{" "}
+    </span>
 
-        <div className="rounded-2xl border bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
-          <Database className="mb-3 h-7 w-7 text-emerald-500" />
+    technology articles today.
 
-          <p className="text-sm text-gray-500">
-            Total News
-          </p>
+    Framework technologies remain the most active ecosystem while cloud
+    platforms continue to grow steadily.
 
-          <h2 className="mt-2 text-3xl font-bold">
-            {stats.total_news}
-          </h2>
-        </div>
+    Security monitoring detected
 
-      </div>
+    <span className="font-semibold text-red-500">
+      {" "}{stats.critical_alerts}{" "}
+    </span>
+
+    critical vulnerabilities requiring attention.
+
+  </p>
+
+</div>
+
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+
+  {/* AI Articles */}
+
+  <div className="group rounded-2xl border border-gray-200 bg-white/70 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/40 hover:shadow-lg dark:border-white/10 dark:bg-white/5">
+
+    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/10 transition-transform duration-300 group-hover:scale-110">
+      <Newspaper className="h-6 w-6 text-violet-500" />
+    </div>
+
+    <p className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-500">
+      AI Articles
+    </p>
+
+    <h2 className="mt-2 text-3xl font-bold">
+      {stats.ai_articles}
+    </h2>
+
+    <p className="mt-2 text-sm text-gray-500">
+      AI analyzed news
+    </p>
+
+  </div>
+
+  {/* Cloud */}
+
+  <div className="group rounded-2xl border border-gray-200 bg-white/70 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-lg dark:border-white/10 dark:bg-white/5">
+
+    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 transition-transform duration-300 group-hover:scale-110">
+      <Cloud className="h-6 w-6 text-blue-500" />
+    </div>
+
+    <p className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-500">
+      Cloud Updates
+    </p>
+
+    <h2 className="mt-2 text-3xl font-bold">
+      {stats.cloud_articles}
+    </h2>
+
+    <p className="mt-2 text-sm text-gray-500">
+      Latest cloud ecosystem
+    </p>
+
+  </div>
+
+  {/* Critical */}
+
+  <div className="group rounded-2xl border border-gray-200 bg-white/70 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-500/40 hover:shadow-lg dark:border-white/10 dark:bg-white/5">
+
+    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-red-500/10 transition-transform duration-300 group-hover:scale-110">
+      <ShieldAlert className="h-6 w-6 text-red-500" />
+    </div>
+
+    <p className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-500">
+      Critical Alerts
+    </p>
+
+    <h2 className="mt-2 text-3xl font-bold">
+      {stats.critical_alerts}
+    </h2>
+
+    <p className="mt-2 text-sm text-gray-500">
+      Require attention
+    </p>
+
+  </div>
+
+  {/* Total */}
+
+  <div className="group rounded-2xl border border-gray-200 bg-white/70 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40 hover:shadow-lg dark:border-white/10 dark:bg-white/5">
+
+    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 transition-transform duration-300 group-hover:scale-110">
+      <Database className="h-6 w-6 text-emerald-500" />
+    </div>
+
+    <p className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-500">
+      Total News
+    </p>
+
+    <h2 className="mt-2 text-3xl font-bold">
+      {stats.total_news}
+    </h2>
+
+    <p className="mt-2 text-sm text-gray-500">
+      Articles collected
+    </p>
+
+  </div>
+
+</div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-2">
 
-        <div className="rounded-2xl border bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
+  {/* AI Analysis */}
 
-          <h2 className="mb-6 text-xl font-semibold">
-            AI Analysis
-          </h2>
+  <div className="rounded-2xl border border-gray-200 bg-white/70 p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
 
-          <div className="space-y-4 text-sm leading-7 text-gray-600 dark:text-gray-300">
+    <div className="mb-6 flex items-center gap-2">
 
-            <p>
-              🤖 <strong>{stats.ai_articles}</strong> AI-related articles have been analyzed.
-            </p>
+      <Sparkles className="h-5 w-5 text-violet-500"/>
 
-            <p>
-              ☁ <strong>{stats.cloud_articles}</strong> cloud technology updates have been detected.
-            </p>
+      <h2 className="text-xl font-semibold">
+        AI Analysis
+      </h2>
 
-            <p>
-              🛡 Currently there are{" "}
-              <strong>{stats.critical_alerts}</strong> critical security alerts.
-            </p>
+    </div>
 
-            <p>
-              📈 The most active category is{" "}
-              <strong>{stats.top_category}</strong>.
-            </p>
+    <div className="space-y-4">
 
-            <p>
-              🌐 The most active source is{" "}
-              <strong>{stats.top_source}</strong>.
-            </p>
+      <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 transition hover:border-violet-500/40">
 
-          </div>
+        <div className="mb-2 flex items-center gap-2">
+
+          🤖
+
+          <span className="font-semibold">
+            AI Articles
+          </span>
 
         </div>
 
-        <div className="rounded-2xl border bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
+        <p className="text-sm text-gray-600 dark:text-gray-300">
 
-          <h2 className="mb-6 text-xl font-semibold">
-            AI Summary
-          </h2>
+          <strong>{stats.ai_articles}</strong> AI-related articles were
+          analyzed successfully.
 
-          <div className="space-y-4 text-sm leading-7 text-gray-600 dark:text-gray-300">
-
-            <p>
-              Software technology continues to dominate today's news ecosystem.
-            </p>
-
-            <p>
-              AI and Cloud remain among the fastest-growing technology categories.
-            </p>
-
-            <p>
-              Security monitoring indicates that the number of critical vulnerabilities is currently manageable.
-            </p>
-
-            <p>
-              TechPulse AI continuously monitors multiple trusted technology sources and provides AI-assisted insights to help developers quickly identify important updates.
-            </p>
-
-          </div>
-
-        </div>
+        </p>
 
       </div>
+
+      <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4 transition hover:border-blue-500/40">
+
+        <div className="mb-2 flex items-center gap-2">
+
+          ☁
+
+          <span className="font-semibold">
+            Cloud Activity
+          </span>
+
+        </div>
+
+        <p className="text-sm text-gray-600 dark:text-gray-300">
+
+          <strong>{stats.cloud_articles}</strong> cloud ecosystem updates
+          were detected.
+
+        </p>
+
+      </div>
+
+      <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4 transition hover:border-red-500/40">
+
+        <div className="mb-2 flex items-center gap-2">
+
+          🛡
+
+          <span className="font-semibold">
+            Security Monitoring
+          </span>
+
+        </div>
+
+        <p className="text-sm text-gray-600 dark:text-gray-300">
+
+          There are currently
+
+          <strong> {stats.critical_alerts} </strong>
+
+          critical security alerts requiring attention.
+
+        </p>
+
+      </div>
+
+      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 transition hover:border-emerald-500/40">
+
+        <div className="mb-2 flex items-center gap-2">
+
+          📈
+
+          <span className="font-semibold">
+            Ecosystem Activity
+          </span>
+
+        </div>
+
+        <p className="text-sm text-gray-600 dark:text-gray-300">
+
+          <strong>{stats.top_category}</strong> is currently the most active
+          technology category while
+
+          <strong> {stats.top_source}</strong>
+
+          contributes the highest number of articles.
+
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  {/* AI Summary */}
+
+  <div className="rounded-2xl border border-gray-200 bg-white/70 p-6 shadow-sm dark:border-white/10 dark:bg-white/5">
+
+    <div className="mb-6 flex items-center gap-2">
+
+      <Sparkles className="h-5 w-5 text-violet-500"/>
+
+      <h2 className="text-xl font-semibold">
+
+        Today's AI Summary
+
+      </h2>
+
+    </div>
+
+    <div className="space-y-5">
+
+      <div className="flex gap-3">
+
+        <span className="mt-1 text-lg">
+          📌
+        </span>
+
+        <p className="text-sm leading-7 text-gray-600 dark:text-gray-300">
+
+          Framework technologies continue to dominate the software ecosystem.
+
+        </p>
+
+      </div>
+
+      <div className="flex gap-3">
+
+        <span className="mt-1 text-lg">
+          ☁
+        </span>
+
+        <p className="text-sm leading-7 text-gray-600 dark:text-gray-300">
+
+          Cloud platforms remain one of today's fastest-growing categories.
+
+        </p>
+
+      </div>
+
+      <div className="flex gap-3">
+
+        <span className="mt-1 text-lg">
+          🛡
+        </span>
+
+        <p className="text-sm leading-7 text-gray-600 dark:text-gray-300">
+
+          Critical security activity remains at a manageable level.
+
+        </p>
+
+      </div>
+
+      <div className="flex gap-3">
+
+        <span className="mt-1 text-lg">
+          🌍
+        </span>
+
+        <p className="text-sm leading-7 text-gray-600 dark:text-gray-300">
+
+          TechPulse AI continuously monitors trusted technology sources and
+          generates AI-powered insights for software teams.
+
+        </p>
+
+      </div>
+
+      <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4">
+
+        <h3 className="mb-2 font-semibold text-blue-600 dark:text-blue-400">
+
+          💡 AI Recommendation
+
+        </h3>
+
+        <p className="text-sm leading-7 text-gray-600 dark:text-gray-300">
+
+          Monitor <strong>{stats.top_category}</strong> updates,
+          review security advisories regularly and keep following
+          trusted technology sources.
+
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 
     </main>
   );

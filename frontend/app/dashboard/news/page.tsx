@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   Globe2,
@@ -31,10 +31,10 @@ type NewsItem = {
 };
 
 type FeedMode = "personalized" | "all";
-
+const PAGE_SIZE = 10;
 export default function NewsPage() {
   const router = useRouter();
-
+ const searchParams = useSearchParams();
   const [personalizedNews, setPersonalizedNews] = useState<NewsItem[]>([]);
   const [allNews, setAllNews] = useState<NewsItem[]>([]);
 
@@ -42,11 +42,13 @@ export default function NewsPage() {
     useState<FeedMode>("personalized");
 
   const [selectedRegion, setSelectedRegion] = useState("all");
-
+  const [selectedCategory, setSelectedCategory] = useState("all");
+const [searchTerm, setSearchTerm] = useState(
+  searchParams.get("q") ?? ""
+);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
- const PAGE_SIZE = 10;
 
 const [personalizedSkip, setPersonalizedSkip] = useState(0);
 const [allNewsSkip, setAllNewsSkip] = useState(0);
@@ -58,8 +60,13 @@ const [hasMorePersonalized, setHasMorePersonalized] =
 
 const [hasMoreAllNews, setHasMoreAllNews] =
   useState(true);
+
+  useEffect(() => {
+  setSearchTerm(searchParams.get("q") ?? "");
+}, [searchParams]);
   useEffect(() => {
     const loadNews = async () => {
+     
       const token = localStorage.getItem("access_token");
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -127,13 +134,7 @@ const [hasMoreAllNews, setHasMoreAllNews] =
 
         if (allNewsResponse.ok) {
           const allNewsData = await allNewsResponse.json();
-          console.table(
-  allNewsData.map((item: NewsItem) => ({
-    id: item.id,
-    title: item.title,
-    image: item.image_url,
-  }))
-);
+          
 console.log(allNewsData);
           setAllNews(
             Array.isArray(allNewsData)
@@ -168,16 +169,32 @@ console.log(allNewsData);
       : allNews;
 
   const filteredNews = currentNews
-    .filter(
-      (item) =>
-        !item.title?.toUpperCase().startsWith("CVE-")
-    )
-    .filter(
-      (item) =>
-        selectedRegion === "all" ||
-        item.region?.toLowerCase() === selectedRegion
-    );
+  .filter(
+    (item) =>
+      !item.title?.toUpperCase().startsWith("CVE-")
+  )
+  .filter(
+    (item) =>
+      selectedRegion === "all" ||
+      item.region?.toLowerCase() === selectedRegion
+  )
+  .filter(
+    (item) =>
+      selectedCategory === "all" ||
+      item.category === selectedCategory
+  )
+ .filter((item) => {
+  if (!searchTerm.trim()) return true;
 
+  const q = searchTerm.toLowerCase();
+
+  return (
+    item.title?.toLowerCase().includes(q) ||
+    item.summary?.toLowerCase().includes(q) ||
+    item.source?.toLowerCase().includes(q) ||
+    item.category?.toLowerCase().includes(q)
+  );
+})
   const getRiskClasses = (
     riskLevel: string | null | undefined
   ) => {
@@ -247,6 +264,13 @@ console.log(allNewsData);
         subtitle: "Latest Software Technologies",
         colors: "from-blue-600 via-blue-700 to-indigo-700",
       };
+      case "Framework":
+  return {
+    icon: Code2,
+    title: "Framework Update",
+    subtitle: "Latest Framework Releases",
+    colors: "from-indigo-600 via-violet-700 to-purple-700",
+  };
 
     default:
       return {
@@ -347,7 +371,7 @@ const loadMore = async () => {
       </div>
 
       {/* Feed tabs */}
-      <div className="mt-8 inline-flex rounded-2xl border border-gray-200 bg-white/70 p-1.5 shadow-sm dark:border-gray-700 dark:bg-gray-800/60">
+      <div className="mt-8 inline-flex rounded-2xl border border-gray-200 bg-gray-800 p-1.5 shadow-sm dark:border-gray-700 dark:bg-gray-800/60">
         <button
           type="button"
           onClick={() => {
@@ -406,36 +430,141 @@ const loadMore = async () => {
         </div>
       </div>
 
-      {/* Region filters */}
-      <div className="mt-6 flex flex-wrap gap-3">
-        {[
-          { label: "All Regions", value: "all" },
-          { label: "Global", value: "global" },
-          { label: "Türkiye", value: "turkey" },
-        ].map((region) => (
-          <button
-            key={region.value}
-            type="button"
-            onClick={() =>
-              setSelectedRegion(region.value)
-            }
-            className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
-              selectedRegion === region.value
-                ? "bg-blue-600 text-white"
-                : "border border-gray-200 bg-white/70 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-300 dark:hover:bg-gray-800"
-            }`}
-          >
-            {region.label}
-          </button>
-        ))}
-      </div>
+      
+{/* Search */}
+<div className="mt-6">
+  <input
+    type="text"
+    placeholder="Search news..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="w-full rounded-xl border border-gray-200 bg-white/70 px-4 py-3 text-sm outline-none transition focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800/60"
+  />
+</div>
+<div className="mt-5 grid gap-3 md:grid-cols-4">
 
+  <select
+    value={selectedCategory}
+    onChange={(e) => setSelectedCategory(e.target.value)}
+    className="
+h-12
+rounded-xl
+border
+border-gray-200
+bg-white
+px-4
+text-sm
+font-medium
+text-gray-700
+shadow-sm
+outline-none
+transition
+focus:border-blue-500
+focus:ring-2
+focus:ring-blue-500/20
+dark:border-gray-700
+dark:bg-gray-800
+dark:text-white
+appearance-none
+"
+  >
+    <option value="all">All Categories</option>
+    <option value="AI">AI</option>
+    <option value="Security">Security</option>
+    <option value="Framework">Framework</option>
+    <option value="Developer Tools">Developer Tools</option>
+    <option value="Cloud">Cloud</option>
+    <option value="DevOps">DevOps</option>
+    <option value="Software">Software</option>
+    <option value="Mobile">Mobile</option>
+    <option value="Business">Business</option>
+    <option value="Gaming">Gaming</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <select
+    value={selectedRegion}
+    onChange={(e) => setSelectedRegion(e.target.value)}
+    className="
+h-12
+w-full
+rounded-xl
+border
+border-gray-700
+bg-gray-800/60
+px-4
+text-sm
+font-medium
+text-white
+outline-none
+transition
+focus:border-blue-500
+focus:ring-2
+focus:ring-blue-500/20
+"
+  >
+    <option value="all">All Regions</option>
+    <option value="global">Global</option>
+    <option value="turkey">Türkiye</option>
+  </select>
+
+  <select
+    className="
+h-12
+w-full
+rounded-xl
+border
+border-gray-700
+bg-gray-800/60
+px-4
+text-sm
+font-medium
+text-white
+outline-none
+transition
+focus:border-blue-500
+focus:ring-2
+focus:ring-blue-500/20
+"
+  >
+    <option>All Risk Levels</option>
+    <option>Critical</option>
+    <option>High</option>
+    <option>Medium</option>
+    <option>Low</option>
+  </select>
+
+  <select
+    className="
+h-12
+w-full
+rounded-xl
+border
+border-gray-700
+bg-gray-800/60
+px-4
+text-sm
+font-medium
+text-white
+outline-none
+transition
+focus:border-blue-500
+focus:ring-2
+focus:ring-blue-500/20
+"
+  >
+    <option>Newest First</option>
+    <option>Oldest First</option>
+    <option>Highest Importance</option>
+  </select>
+
+</div>
       {/* Result count */}
       {!loading && (
         <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-gray-400">
           <span>
-            {filteredNews.length} articles found
-          </span>
+  Showing {filteredNews.length} article{filteredNews.length !== 1 ? "s" : ""}
+</span>
 
           {selectedFeed === "personalized" && (
             <>

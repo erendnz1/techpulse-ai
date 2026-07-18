@@ -15,11 +15,42 @@ type AISummaryProps = {
   stats?: DashboardStats;
 };
 
-export default function AISummary({
-  stats,
-}: AISummaryProps) {
+const items = (stats?: DashboardStats) => [
+  {
+    label: "AI Articles",
+    value: stats?.ai_articles ?? 0,
+    icon: "🤖",
+    color: "bg-violet-500/10 text-violet-400",
+  },
+  {
+    label: "Cloud Updates",
+    value: stats?.cloud_articles ?? 0,
+    icon: "☁",
+    color: "bg-blue-500/10 text-blue-400",
+  },
+  {
+    label: "Critical Alerts",
+    value: stats?.critical_alerts ?? 0,
+    icon: "🛡",
+    color: "bg-red-500/10 text-red-400",
+  },
+  {
+    label: "Top Category",
+    value: stats?.top_category ?? "-",
+    icon: "🏆",
+    color: "bg-emerald-500/10 text-emerald-400",
+  },
+  {
+    label: "Top Source",
+    value: stats?.top_source ?? "-",
+    icon: "🌐",
+    color: "bg-amber-500/10 text-amber-400",
+  },
+];
+
+export default function AISummary({ stats }: AISummaryProps) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white/70 p-5 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
+    <div className="rounded-2xl border border-gray-200 bg-white/70 p-5 shadow-sm transition-all duration-300 hover:shadow-md dark:border-white/10 dark:bg-white/5">
 
       <div className="mb-4 flex items-center gap-2">
         <Sparkles className="h-5 w-5 text-violet-500" />
@@ -30,44 +61,36 @@ export default function AISummary({
       </div>
 
       <p className="text-sm leading-6 text-gray-600 dark:text-gray-300">
-        Live insights generated from the latest technology news.
+        AI-powered analysis of technology trends, security risks and ecosystem activity.
       </p>
 
-      <div className="mt-4 space-y-3">
+      <div className="mt-5 space-y-3">
 
-        <div className="flex items-center justify-between rounded-lg bg-violet-500/10 px-3 py-2 text-sm">
-          <span>🤖 AI Articles</span>
-          <strong>{stats?.ai_articles ?? 0}</strong>
-        </div>
+        {items(stats).map((item) => (
+          <div
+            key={item.label}
+            className={`group flex items-center justify-between rounded-xl px-3 py-2.5 text-sm transition-all duration-200 hover:scale-[1.02] ${item.color}`}
+          >
+            <span className="flex items-center gap-2 font-medium">
+              <span>{item.icon}</span>
+              {item.label}
+            </span>
 
-        <div className="flex items-center justify-between rounded-lg bg-blue-500/10 px-3 py-2 text-sm">
-          <span>☁ Cloud Updates</span>
-          <strong>{stats?.cloud_articles ?? 0}</strong>
-        </div>
-
-        <div className="flex items-center justify-between rounded-lg bg-red-500/10 px-3 py-2 text-sm">
-          <span>🛡 Critical Alerts</span>
-          <strong>{stats?.critical_alerts ?? 0}</strong>
-        </div>
-
-        <div className="flex items-center justify-between rounded-lg bg-emerald-500/10 px-3 py-2 text-sm">
-          <span>🏆 Top Category</span>
-          <strong>{stats?.top_category ?? "-"}</strong>
-        </div>
-
-        <div className="flex items-center justify-between rounded-lg bg-amber-500/10 px-3 py-2 text-sm">
-          <span>🌐 Top Source</span>
-          <strong>{stats?.top_source ?? "-"}</strong>
-        </div>
+            <span className="rounded-md bg-black/10 px-2 py-1 text-sm font-bold dark:bg-white/10">
+              {item.value}
+            </span>
+          </div>
+        ))}
 
       </div>
 
       <Link
         href="/dashboard/insights"
-        className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-blue-500 hover:text-blue-600"
+        className="group mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-500 transition-colors hover:text-blue-600"
       >
         View detailed analysis
-        <ArrowRight className="h-4 w-4" />
+
+        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
       </Link>
 
     </div>

@@ -3,6 +3,7 @@
 import { Bell, CalendarDays, Search } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 type DashboardHeaderProps = {
   username?: string;
   unreadCount?: number;
@@ -18,6 +19,66 @@ export default function DashboardHeader({
     year: "numeric",
   });
 const router = useRouter();
+const [query, setQuery] = useState("");
+const [results, setResults] = useState<any[]>([]);
+const [loadingSearch, setLoadingSearch] = useState(false);
+
+const searchRef = useRef<HTMLDivElement>(null);
+useEffect(() => {
+  function handleClickOutside(e: MouseEvent) {
+    if (
+      searchRef.current &&
+      !searchRef.current.contains(e.target as Node)
+    ) {
+      setResults([]);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () =>
+    document.removeEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+}, []);
+useEffect(() => {
+  if (query.trim().length < 2) {
+    setResults([]);
+    return;
+  }
+
+  const timeout = setTimeout(async () => {
+    try {
+      setLoadingSearch(true);
+
+      const token = localStorage.getItem("access_token");
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/news/search?q=${encodeURIComponent(
+          query
+        )}&limit=5`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error();
+      }
+
+      setResults(await res.json());
+    } catch {
+      setResults([]);
+    } finally {
+      setLoadingSearch(false);
+    }
+  }, 300);
+
+  return () => clearTimeout(timeout);
+}, [query]);
   return (
     <header className="mb-10">
       <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
@@ -38,8 +99,8 @@ const router = useRouter();
 
           <p className="mt-3 max-w-2xl text-gray-500 dark:text-gray-400">
             Here's what's happening in the technology world today.
-            Stay updated with AI, Security, Cloud, Developer Tools
-            and Software news.
+            Stay updated with AI, Security, Cloud, Developer Tools , Framework updates, and Software news.
+            
           </p>
         </div>
 
@@ -47,14 +108,82 @@ const router = useRouter();
         <div className="flex flex-col gap-4 xl:items-end">
 
           {/* Search */}
-          <div className="relative w-full xl:w-[340px]">
+          <div
+  ref={searchRef}
+  className="relative w-full xl:w-[340px]"
+>
             <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
 
             <input
-              type="text"
-              placeholder="Search technologies..."
-              className="h-12 w-full rounded-2xl border border-gray-200 bg-white pl-12 pr-4 text-sm outline-none transition focus:border-blue-500 dark:border-gray-700 dark:bg-gray-900"
-            />
+  value={query}
+  onChange={(e) => setQuery(e.target.value)}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" && query.trim()) {
+      router.push(
+        `/dashboard/news?q=${encodeURIComponent(query)}`
+      );
+      setResults([]);
+    }
+  }}
+  type="text"
+  placeholder="Search technologies..."
+  className="h-12 w-full rounded-2xl border border-gray-200 bg-white pl-12 pr-4 text-sm outline-none transition focus:border-blue-500 dark:border-gray-700 dark:bg-gray-900"
+/>
+{(loadingSearch || results.length > 0 || query.length >= 2) && (
+  <div className="absolute left-0 right-0 top-14 z-50 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-900">
+
+    {loadingSearch && (
+      <div className="px-4 py-3 text-sm text-gray-500">
+        Searching...
+      </div>
+    )}
+
+    {!loadingSearch &&
+      results.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => {
+            router.push(`/dashboard/news/${item.id}`);
+            setResults([]);
+            setQuery("");
+          }}
+          className="flex w-full flex-col border-b border-gray-100 px-4 py-3 text-left transition hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800"
+        >
+          <span className="line-clamp-1 font-medium">
+            {item.title}
+          </span>
+
+          <span className="mt-1 text-xs text-gray-500">
+            {item.category} • {item.source}
+          </span>
+        </button>
+      ))}
+
+    {!loadingSearch &&
+      query.length >= 2 &&
+      results.length === 0 && (
+        <div className="px-4 py-3 text-sm text-gray-500">
+          No results found.
+        </div>
+      )}
+
+    {!loadingSearch &&
+      results.length > 0 && (
+        <button
+          onClick={() => {
+            router.push(
+              `/dashboard/news?q=${encodeURIComponent(query)}`
+            );
+            setResults([]);
+          }}
+          className="w-full bg-gray-50 px-4 py-3 text-center text-sm font-medium text-blue-600 transition hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
+        >
+          View all results →
+        </button>
+      )}
+
+  </div>
+)}
           </div>
 
           {/* Actions */}

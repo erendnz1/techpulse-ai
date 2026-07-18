@@ -40,13 +40,29 @@ def create_notifications_for_news(
         ):
             continue
 
-        # Minimum importance score check
-        if (
-            news.importance_score is None
-            or news.importance_score
-            < preference.minimum_importance_score
-        ):
-            continue
+        # Determine whether the news is important enough
+        important_categories = {
+    "AI",
+    "Security",
+    "Framework",
+    "Developer Tools",
+    "Cloud",
+    "DevOps",
+        }
+
+        minimum_score = preference.minimum_importance_score or 0
+
+        if news.importance_score is not None:
+           is_important = (
+           news.importance_score >= minimum_score
+         )
+        else:
+           is_important = (
+           news.category in important_categories
+        )
+
+        if not is_important:
+         continue
 
         # Prevent duplicate notification
         if notification_exists(
@@ -67,14 +83,24 @@ def create_notifications_for_news(
             news_id=news.id,
             message=message,
         )
+        should_send_email = False
 
+        if news.importance_score is not None:
+          should_send_email = (
+           news.importance_score >= 8
+           or news.risk_level in ["High", "Critical"]
+        )
+        else:
+          should_send_email = news.category in {
+        "AI",
+        "Security",
+        "Framework",
+        "Developer Tools",
+        }
         # Send email only for important news
         if (
             preference.email_notification_enabled
-            and (
-                news.importance_score >= 8
-                or news.risk_level in ["High", "Critical"]
-            )
+            and should_send_email
         ):
 
             user = (
@@ -92,7 +118,7 @@ def create_notifications_for_news(
                 "Cloud": "☁️",
                 "DevOps": "⚙️",
                 "Developer Tools": "🛠️",
-                "Framework Updates": "📦",
+                "Framework": "📦",
                 "Software": "💻",
                 "Mobile": "📱",
                 "Business": "📈",
@@ -134,12 +160,20 @@ Technology Intelligence Platform
 
 <p>
 <strong>Importance Score</strong><br>
-⭐ {news.importance_score}/10
+⭐ {
+    f"{news.importance_score}/10"
+    if news.importance_score is not None
+    else "Not analyzed"
+}
 </p>
 
 <p>
 <strong>Risk Level</strong><br>
-🔴 {news.risk_level}
+{
+    news.risk_level
+    if news.risk_level
+    else "Not analyzed"
+}
 </p>
 
 <p>

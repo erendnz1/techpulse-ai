@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import desc
+from sqlalchemy import desc, nullslast
 from app.models.news import News
 from app.schemas.news import NewsCreate
 
-
+from sqlalchemy import or_
 def create_news(db: Session, news: NewsCreate):
     db_news = News(
         title=news.title,
@@ -32,7 +32,9 @@ def get_news(
     limit: int = 20,
 ):
     query = db.query(News)
-
+    query = query.filter(
+    News.summary.isnot(None)
+    )
     if category:
         query = query.filter(News.category == category)
 
@@ -54,11 +56,15 @@ def get_news(
             News.source.ilike(source)
         )
  
-    return query.order_by(
-        desc(News.importance_score),
-        desc(News.published_at)
-    ).offset(skip).limit(limit).all()
-
+    return (
+    query.order_by(
+        desc(News.published_at),
+        nullslast(desc(News.importance_score)),
+    )
+    .offset(skip)
+    .limit(limit)
+    .all()
+)
 
 def get_news_by_id(db: Session, news_id: int):
     return db.query(News).filter(News.id == news_id).first()
@@ -107,7 +113,8 @@ def save_news(db: Session, news_data: dict):
     db.add(news)
     db.commit()
     db.refresh(news)
-
+    print(f"Saved ID: {news.id}")
+    print(f"Saved Summary: {news.summary}")
     return news
 
 def get_personalized_news(
@@ -125,8 +132,9 @@ def get_personalized_news(
             News.importance_score >= minimum_importance_score,
         )
         .order_by(
-            News.published_at.desc(),
             News.importance_score.desc(),
+            News.published_at.desc(),
+            
         )
     )
 
@@ -199,26 +207,30 @@ def get_dashboard_news(
     limit: int = 5,
 ):
     query = (
-        db.query(News)
-        .filter(
+    db.query(News)
+    .filter(
+        or_(
             News.region.in_(regions),
-            News.importance_score >= minimum_importance_score,
+            News.region.is_(None),
+        ),
 
-            # Dashboard'da KVKK haberlerini gösterme
-            News.source != "KVKK",
+        News.importance_score >= minimum_importance_score,
 
-            # Kategorisiz ve Other haberleri gösterme
-            News.category.isnot(None),
-            News.category != "Other",
+        # Dashboard'da KVKK haberlerini gösterme
+        News.source != "KVKK",
 
-            # AI analiz edilmemiş haberleri gösterme
-            News.summary.isnot(None),
-        )
-        .order_by(
-            News.importance_score.desc(),
-            News.published_at.desc(),
-        )
+        # Kategorisiz ve Other haberleri gösterme
+        News.category.isnot(None),
+        News.category != "Other",
+
+        # AI analiz edilmiş haberleri göster
+        News.summary.isnot(None),
     )
+    .order_by(
+        News.published_at.desc(),
+        News.importance_score.desc(),
+    )
+)
 
     if categories:
         query = query.filter(
@@ -250,3 +262,29 @@ def get_dashboard_news(
             break
 
     return selected
+
+from sqlalchemy import or_
+from app.models.news import News
+
+
+def search_news(
+    db,
+    query: str,
+    limit: int = 5,
+):
+    search = f"%{query}%"
+
+    return (
+        db.query(News)
+        .filter(
+            or_(
+                News.title.ilike(search),
+                News.summary.ilike(search),
+                News.source.ilike(search),
+                News.category.ilike(search),
+            )
+        )
+        .order_by(News.published_at.desc())
+        .limit(limit)
+        .all()
+    )

@@ -15,11 +15,13 @@ import {
 const categories = [
   "AI",
   "Security",
+  "Framework",
+  "Developer Tools",
   "Cloud",
   "DevOps",
-  "Developer Tools",
   "Software",
   "Mobile",
+  "Gaming",
   "Business",
 ];
 
