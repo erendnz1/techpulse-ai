@@ -43,6 +43,7 @@ export default function NewsPage() {
 
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedRisk, setSelectedRisk] = useState("all");
 const [searchTerm, setSearchTerm] = useState(
   searchParams.get("q") ?? ""
 );
@@ -182,7 +183,13 @@ console.log(allNewsData);
     (item) =>
       selectedCategory === "all" ||
       item.category === selectedCategory
+      
   )
+  .filter(
+  (item) =>
+    selectedRisk === "all" ||
+    item.risk_level?.toLowerCase() === selectedRisk
+)
  .filter((item) => {
   if (!searchTerm.trim()) return true;
 
@@ -448,24 +455,20 @@ const loadMore = async () => {
     onChange={(e) => setSelectedCategory(e.target.value)}
     className="
 h-12
+w-full
 rounded-xl
 border
-border-gray-200
-bg-white
+border-gray-700
+bg-gray-800/60
 px-4
 text-sm
 font-medium
-text-gray-700
-shadow-sm
+text-white
 outline-none
 transition
 focus:border-blue-500
 focus:ring-2
 focus:ring-blue-500/20
-dark:border-gray-700
-dark:bg-gray-800
-dark:text-white
-appearance-none
 "
   >
     <option value="all">All Categories</option>
@@ -509,7 +512,9 @@ focus:ring-blue-500/20
   </select>
 
   <select
-    className="
+  value={selectedRisk}
+  onChange={(e) => setSelectedRisk(e.target.value)}
+  className="
 h-12
 w-full
 rounded-xl
@@ -526,12 +531,12 @@ focus:border-blue-500
 focus:ring-2
 focus:ring-blue-500/20
 "
-  >
-    <option>All Risk Levels</option>
-    <option>Critical</option>
-    <option>High</option>
-    <option>Medium</option>
-    <option>Low</option>
+>
+    <option value="all">All Risk Levels</option>
+<option value="critical">Critical</option>
+<option value="high">High</option>
+<option value="medium">Medium</option>
+<option value="low">Low</option>
   </select>
 
   <select
