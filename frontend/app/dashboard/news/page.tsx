@@ -44,6 +44,7 @@ export default function NewsPage() {
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedRisk, setSelectedRisk] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
 const [searchTerm, setSearchTerm] = useState(
   searchParams.get("q") ?? ""
 );
@@ -201,7 +202,45 @@ console.log(allNewsData);
     item.source?.toLowerCase().includes(q) ||
     item.category?.toLowerCase().includes(q)
   );
-})
+}); const sortedNews = [...filteredNews].sort((a, b) => {
+  switch (sortBy) {
+    case "oldest":
+      return (
+        new Date(a.published_at ?? "").getTime() -
+        new Date(b.published_at ?? "").getTime()
+      );
+
+    case "importance":
+      return (
+        (b.importance_score ?? 0) -
+        (a.importance_score ?? 0)
+      );
+
+    case "risk": {
+      const order = {
+        critical: 4,
+        high: 3,
+        medium: 2,
+        low: 1,
+      };
+
+      return (
+        (order[
+          b.risk_level?.toLowerCase() as keyof typeof order
+        ] ?? 0) -
+        (order[
+          a.risk_level?.toLowerCase() as keyof typeof order
+        ] ?? 0)
+      );
+    }
+
+    default:
+      return (
+        new Date(b.published_at ?? "").getTime() -
+        new Date(a.published_at ?? "").getTime()
+      );
+  }
+});
   const getRiskClasses = (
     riskLevel: string | null | undefined
   ) => {
@@ -540,7 +579,9 @@ focus:ring-blue-500/20
   </select>
 
   <select
-    className="
+  value={sortBy}
+  onChange={(e) => setSortBy(e.target.value)}
+  className="
 h-12
 w-full
 rounded-xl
@@ -557,11 +598,12 @@ focus:border-blue-500
 focus:ring-2
 focus:ring-blue-500/20
 "
-  >
-    <option>Newest First</option>
-    <option>Oldest First</option>
-    <option>Highest Importance</option>
-  </select>
+>
+  <option value="newest">Newest First</option>
+  <option value="oldest">Oldest First</option>
+  <option value="importance">Highest Importance</option>
+  <option value="risk">Highest Risk</option>
+</select>
 
 </div>
       {/* Result count */}
@@ -641,7 +683,7 @@ focus:ring-blue-500/20
       {/* News cards */}
       {!loading && !error && filteredNews.length > 0 && (
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          {filteredNews.map((item) => (
+          {sortedNews.map((item) => (
             <article
               key={item.id}
               onClick={() => openNewsDetail(item.id)}
