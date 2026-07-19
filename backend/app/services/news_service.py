@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from app.services.news_fetcher import fetch_technology_news
 from app.services.ai_service import analyze_news
 from app.crud.news import get_news_by_url, save_news

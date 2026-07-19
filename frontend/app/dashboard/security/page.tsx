@@ -14,26 +14,28 @@ const [skip, setSkip] = useState(PAGE_SIZE);
 const [loadingMore, setLoadingMore] = useState(false);
 
 const [hasMore, setHasMore] = useState(true);
-  useEffect(() => {
-const token = localStorage.getItem("access_token");
+useEffect(() => {
+  const token = localStorage.getItem("access_token");
+  const regionParam = selectedRegion === "all" ? "" : `&region=${selectedRegion}`;
 
-fetch(
-  `${process.env.NEXT_PUBLIC_API_URL}/news/security?skip=0&limit=10`,
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-)
-  .then((res) => res.json())
-  .then((data) => {
-    setSecurityAlerts(data);
+  setLoading(true);
+  fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/news/security?skip=0&limit=10${regionParam}`,  // ← buraya ekle
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      setSkip(PAGE_SIZE);
+      setSecurityAlerts(data);
+      setHasMore(data.length === PAGE_SIZE);
+      setLoading(false);
+    });
+}, [selectedRegion]);
 
-    setHasMore(data.length === PAGE_SIZE);
-
-    setLoading(false);
-  });
-}, []);
 const filteredSecurityAlerts = securityAlerts.filter((item) => {
   const matchesType =
     selectedType === "all" ||

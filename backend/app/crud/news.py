@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import desc, nullslast
+from sqlalchemy import desc, func, nullslast
 from app.models.news import News
 from app.schemas.news import NewsCreate
 
@@ -125,24 +125,72 @@ def get_personalized_news(
     skip: int = 0,
     limit: int = 20,
 ):
-    query = (
-        db.query(News)
-        .filter(
+    print("\n========== PERSONALIZED NEWS DEBUG ==========")
+    print("Categories:", categories)
+    print("Regions:", regions)
+    print("Minimum Importance:", minimum_importance_score)
+
+    current_score = minimum_importance_score
+    all_news = []
+
+    while current_score >= 6:
+        query = (
+          db.query(News)
+          .filter(
             News.region.in_(regions),
-            News.importance_score >= minimum_importance_score,
-        )
-        .order_by(
+            News.importance_score >= current_score,
+          )
+          .order_by(
             News.importance_score.desc(),
             News.published_at.desc(),
-            
-        )
-    )
+           )
+          )
 
+        if categories:
+           query = query.filter(News.category.in_(categories))
+
+        all_news = query.all()
+
+        if all_news:
+           print(f"Found {len(all_news)} articles with importance >= {current_score}")
+           break
+
+        current_score -= 1
+
+    print("After region + importance filter:", query.count())
+    debug_news = query.all()
+
+    print("\nArticles after region + importance:")
+    for news in debug_news:
+       print(
+        f"Title: {news.title}\n"
+        f"Category: {news.category}\n"
+        f"Region: {news.region}\n"
+        f"Importance: {news.importance_score}\n"
+    )
     # Kullanıcının kategori tercihi varsa uygula
     if categories:
         query = query.filter(News.category.in_(categories))
 
+    print("After category filter:", query.count())
+
     all_news = query.all()
+
+    print("Total query results:", len(all_news))
+
+    if all_news:
+        print("\nFirst matching articles:")
+        for news in all_news[:5]:
+            print(
+                f"- {news.title} | "
+                f"Category={news.category} | "
+                f"Region={news.region} | "
+                f"Importance={news.importance_score}"
+            )
+    else:
+        print("No articles matched the filters.")
+
+    print("=============================================\n")
 
     selected = []
     used_categories = set()
@@ -167,7 +215,7 @@ def get_personalized_news(
             if len(selected) >= limit:
                 break
 
-    return selected[skip:skip + limit]
+    return selected[skip : skip + limit]
 from sqlalchemy import or_
 
 
@@ -185,14 +233,13 @@ def get_security_news(
     )
 
     if region:
-        query = query.filter(
-            News.region == region
-        )
+        query = query.filter(func.lower(News.region) == region.lower())
 
     return (
         query.order_by(
-            News.importance_score.desc(),
             News.published_at.desc(),
+            News.importance_score.desc(),
+            
         )
         .offset(skip)
         .limit(limit)
