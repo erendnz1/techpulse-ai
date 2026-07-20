@@ -145,18 +145,33 @@ export default function NewsDetailPage() {
   return (
     <main className="min-h-screen bg-transparent px-6 py-10 text-slate-950 dark:text-white md:px-10">
       <div className="mx-auto max-w-5xl">
-        {/* Back button */}
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="mb-7 flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to notifications
-        </button>
+        <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
+
+  <button
+    type="button"
+    onClick={() => router.back()}
+    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition hover:border-blue-500 hover:text-blue-600 dark:border-white/10 dark:bg-white/[0.03] dark:text-gray-300"
+  >
+    <ArrowLeft className="h-4 w-4" />
+    Back
+  </button>
+
+  <a
+    href={news.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+  >
+    Read Original
+    <ArrowUpRight className="h-4 w-4" />
+  </a>
+
+</div>
 
         {/* Main article */}
-        <article className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
+        <article className="overflow-hidden relative rounded-3xl border border-gray-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
+        <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-blue-600/10 blur-3xl" />
+<div className="absolute left-0 top-20 h-60 w-60 rounded-full bg-indigo-500/10 blur-3xl" />
           {news.image_url && (
             <div className="relative h-64 overflow-hidden border-b border-gray-200 dark:border-white/10 md:h-80">
               <img
@@ -208,52 +223,73 @@ export default function NewsDetailPage() {
             </div>
 
             {/* Title */}
-            <h1 className="mt-6 text-3xl font-bold leading-tight tracking-tight text-gray-950 dark:text-white md:text-4xl">
-              {news.title}
-            </h1>
+           <h1 className="mt-8 max-w-4xl text-5xl font-black leading-tight tracking-tight text-gray-950 dark:text-white">
+  {news.title}
+</h1>
 
             {/* Metadata */}
-            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
-              <span className="flex items-center gap-2">
-                <Newspaper className="h-4 w-4" />
-                {news.source}
-              </span>
-
-              {news.published_at && (
-                <span className="flex items-center gap-2">
-                  <CalendarDays className="h-4 w-4" />
-
-                  {new Date(news.published_at).toLocaleString(
-                    "en-US",
-                    {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    }
-                  )}
-                </span>
-              )}
-            </div>
 
             {/* AI Summary */}
-            <section className="mt-9 rounded-2xl border border-blue-500/20 bg-blue-500/[0.06] p-6">
-              <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-                <Sparkles className="h-5 w-5" />
+           {/* AI Summary */}
+<section className="relative mt-10 overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-indigo-500/5 to-purple-500/10 p-8">
 
-                <h2 className="font-semibold">
-                  AI Summary
-                </h2>
-              </div>
+  {/* Glow */}
+  <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-blue-500/20 blur-3xl" />
 
-              <p className="mt-4 leading-7 text-gray-700 dark:text-gray-300">
-                {news.summary || "AI summary is not available for this article."}
-              </p>
-            </section>
+  <div className="absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-indigo-500/20 blur-3xl" />
+
+  <div className="relative">
+
+    <div className="flex items-center gap-3">
+
+      <div className="rounded-2xl bg-blue-600 p-3 text-white shadow-lg">
+        <Sparkles className="h-6 w-6" />
+      </div>
+
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400">
+          TechPulse AI
+        </p>
+
+        <h2 className="text-2xl font-bold">
+          AI Generated Summary
+        </h2>
+      </div>
+
+    </div>
+
+    <div className="mt-8 rounded-2xl border border-white/10 bg-white/50 p-6 backdrop-blur-xl dark:bg-white/[0.03]">
+
+      <p className="text-[17px] leading-8 text-gray-700 dark:text-gray-300">
+        {news.summary || "AI summary is not available for this article."}
+      </p>
+
+    </div>
+
+    <div className="mt-6 flex items-center justify-between">
+
+      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+
+        <Bot className="h-4 w-4" />
+
+        Generated automatically by TechPulse AI
+
+      </div>
+
+      {news.importance_score !== null && (
+        <div className="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white">
+          Importance {news.importance_score}/10
+        </div>
+      )}
+
+    </div>
+
+  </div>
+
+</section>
 
             {/* Analysis grid */}
-            <div className="mt-6 grid gap-6 md:grid-cols-2">
+            <div className="mt-6 grid gap-6 lg:grid-cols-3">
               {/* Affected technologies */}
               <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6 dark:border-white/10 dark:bg-white/[0.03]">
                 <div className="flex items-center gap-2 text-gray-900 dark:text-white">
@@ -286,6 +322,59 @@ export default function NewsDetailPage() {
               </section>
 
               {/* Recommended action */}
+              {/* Risk Analysis */}
+<section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6 dark:border-white/10 dark:bg-white/[0.03]">
+
+  <div className="flex items-center gap-2">
+    <ShieldAlert className="h-5 w-5 text-red-500" />
+
+    <h2 className="font-semibold">
+      Risk Analysis
+    </h2>
+  </div>
+
+  <div className="mt-5">
+
+    <div className="mb-3 flex items-center justify-between">
+
+      <span className="text-sm text-gray-500">
+        Risk Level
+      </span>
+
+      <span
+        className={`rounded-full px-3 py-1 text-xs font-semibold ${getRiskClasses(
+          news.risk_level
+        )}`}
+      >
+        {news.risk_level ?? "Unknown"}
+      </span>
+
+    </div>
+
+    <div className="h-3 overflow-hidden rounded-full bg-gray-200 dark:bg-white/10">
+
+      <div
+        className={`h-full rounded-full transition-all ${
+          news.risk_level?.toLowerCase() === "critical"
+            ? "w-full bg-red-600"
+            : news.risk_level?.toLowerCase() === "high"
+            ? "w-4/5 bg-orange-500"
+            : news.risk_level?.toLowerCase() === "medium"
+            ? "w-3/5 bg-yellow-500"
+            : "w-2/5 bg-emerald-500"
+        }`}
+      />
+
+    </div>
+
+    <p className="mt-5 text-sm leading-6 text-gray-500 dark:text-gray-400">
+      This score is generated by TechPulse AI based on exploitability,
+      affected technologies and the potential business impact.
+    </p>
+
+  </div>
+
+</section>
               <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6 dark:border-white/10 dark:bg-white/[0.03]">
                 <div className="flex items-center gap-2 text-gray-900 dark:text-white">
                   <Lightbulb className="h-5 w-5 text-amber-500" />
@@ -304,19 +393,33 @@ export default function NewsDetailPage() {
 
             {/* Original content */}
             {news.content && (
-              <section className="mt-6 rounded-2xl border border-gray-200 p-6 dark:border-white/10">
-                <div className="flex items-center gap-2">
-                  <Bot className="h-5 w-5 text-blue-500" />
+              <section className="mt-8 rounded-2xl border border-blue-500/20 bg-blue-500/[0.04] p-6">
 
-                  <h2 className="font-semibold text-gray-950 dark:text-white">
-                    Article Content
-                  </h2>
-                </div>
+  <div className="flex items-center gap-2">
+    <Newspaper className="h-5 w-5 text-blue-500" />
 
-                <p className="mt-4 whitespace-pre-line leading-7 text-gray-600 dark:text-gray-300">
-                  {news.content}
-                </p>
-              </section>
+    <h2 className="font-semibold">
+      Original Article
+    </h2>
+  </div>
+
+  <p className="mt-4 leading-7 text-gray-600 dark:text-gray-300">
+    This analysis was generated from the original article published by{" "}
+    <span className="font-semibold">{news.source}</span>.
+    For complete technical details and the full context, read the original publication.
+  </p>
+
+  <a
+    href={news.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+  >
+    Read Original Article
+    <ArrowUpRight className="h-4 w-4" />
+  </a>
+
+</section>
             )}
 
             {/* Original source button */}
@@ -334,6 +437,17 @@ export default function NewsDetailPage() {
           </div>
         </article>
       </div>
+      <div className="mt-6 flex flex-wrap gap-4 text-xs text-gray-500">
+
+  <span className="rounded-full bg-white/10 px-3 py-1">
+    AI Confidence: High
+  </span>
+
+  <span className="rounded-full bg-white/10 px-3 py-1">
+    Generated automatically
+  </span>
+
+</div>
     </main>
   );
 }

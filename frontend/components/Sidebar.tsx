@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import {
   Settings,
   User,
   X,
-  Cpu,
+  
   LogOut,
 } from "lucide-react";
 
@@ -133,28 +133,28 @@ useEffect(() => {
           lg:flex-shrink-0
         `}
       >
-        {/* Mobile Header */}
-        <div className="flex items-center justify-between border-b border-gray-200 p-6 lg:hidden dark:border-gray-700">
+       {/* Mobile Header */}
+<div className="flex items-center justify-between border-b border-gray-200 p-6 lg:hidden dark:border-gray-700">
 
   <div className="flex items-center gap-3">
-
-    <div className="rounded-xl bg-blue-600 p-2 text-white shadow-lg shadow-blue-600/30">
-      <Cpu size={20} />
-    </div>
+    <Image
+      src="/logo.png"
+      alt="TechPulse AI"
+      width={56}
+      height={56}
+      priority
+    />
 
     <div>
       <h2 className="text-lg font-bold">
         TechPulse
-        <span className="text-blue-600">
-          {" "}AI
-        </span>
+        <span className="text-blue-600"> AI</span>
       </h2>
 
-      <p className="text-xs text-gray-500 dark:text-gray-400">
-        Technology Intelligence
+      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
+        Technology Intelligence Platform
       </p>
     </div>
-
   </div>
 
   <button
@@ -165,32 +165,34 @@ useEffect(() => {
   </button>
 
 </div>
-
         {/* Desktop Logo */}
-        <div className="hidden border-b border-gray-200 p-6 dark:border-gray-700 lg:block">
+<div className="hidden border-b border-gray-200 p-6 dark:border-gray-700 lg:block">
 
   <div className="flex items-center gap-3">
 
-    <div className="rounded-xl bg-blue-600 p-2 text-white shadow-lg shadow-blue-600/30">
-      <Cpu size={22} />
-    </div>
+    <Image
+      src="/logo.png"
+      alt="TechPulse AI"
+      width={60}
+      height={60}
+      priority
+      className="rounded-xl"
+    />
 
     <div>
-
       <h2 className="text-xl font-bold tracking-tight">
         TechPulse
-        <span className="text-blue-600">
-          {" "}AI
-        </span>
+        <span className="text-blue-600"> AI</span>
       </h2>
 
-      <p className="text-xs text-gray-500 dark:text-gray-400">
-        Technology Intelligence
+      <p className="text-xs font-medium tracking-wide text-gray-500 dark:text-gray-400">
+        Technology Intelligence Platform
       </p>
-
     </div>
 
-  </div>
+  
+
+</div>
 
 </div>
         <nav className="flex flex-1 flex-col px-4 py-5">

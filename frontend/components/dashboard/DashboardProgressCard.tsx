@@ -1,6 +1,7 @@
 "use client";
 
 import { LucideIcon } from "lucide-react";
+import { ReactNode } from "react";
 
 type Item = {
   label: string;
@@ -16,6 +17,7 @@ type Props = {
   subtitle: string;
   badge?: string;
   items: Item[];
+  footer?: ReactNode;
 };
 
 export default function DashboardProgressCard({
@@ -23,6 +25,7 @@ export default function DashboardProgressCard({
   subtitle,
   badge,
   items,
+  footer,
 }: Props) {
   const max = Math.max(...items.map((i) => i.value), 1);
 
@@ -57,7 +60,7 @@ export default function DashboardProgressCard({
 
       <div className="space-y-3">
 
-        {items.map((item) => {
+  {items.map((item) => {
           const Icon = item.icon;
 
           return (
@@ -107,7 +110,11 @@ export default function DashboardProgressCard({
         })}
 
       </div>
-
+   {footer && (
+  <div className="mt-6 border-t border-gray-200 pt-4 dark:border-white/10">
+    {footer}
+  </div>
+)}
     </div>
   );
 }

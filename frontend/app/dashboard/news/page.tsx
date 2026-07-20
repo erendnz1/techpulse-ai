@@ -11,8 +11,12 @@ import {
   ShieldAlert,
   Brain,
   Cloud,
-  Code2,
+  Terminal,
+  AppWindow,
+  Blocks,
   Smartphone,
+  Briefcase,
+  Gamepad2,
 } from "lucide-react";
 import NewsCardSkeleton from "@/components/skeletons/NewsCardSkeleton";
 type NewsItem = {
@@ -84,6 +88,26 @@ const [hasMoreAllNews, setHasMoreAllNews] =
       }
 
       try {
+        const params = new URLSearchParams();
+
+params.append("skip", "0");
+params.append("limit", PAGE_SIZE.toString());
+
+if (selectedCategory !== "all") {
+  params.append("category", selectedCategory);
+}
+
+if (selectedRegion !== "all") {
+  params.append("region", selectedRegion);
+}
+
+if (selectedRisk !== "all") {
+  params.append("risk_level", selectedRisk);
+}
+
+if (searchTerm.trim()) {
+  params.append("search", searchTerm);
+}
         setLoading(true);
         setError("");
 
@@ -100,11 +124,15 @@ const [hasMoreAllNews, setHasMoreAllNews] =
             }
           ),
 
-          fetch(`${apiUrl}/news?skip=0&limit=${PAGE_SIZE}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
+          fetch(
+  `${apiUrl}/news?${params.toString()}`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+),
+         
         ]);
 
         if (personalizedResponse.status === 401) {
@@ -161,48 +189,24 @@ console.log(allNewsData);
         setLoading(false);
       }
     };
-
     loadNews();
-  }, [router]);
+    }, [
+  router,
+  selectedFeed,
+  selectedCategory,
+  selectedRegion,
+  selectedRisk,
+  searchTerm,
+]);
 
   const currentNews =
     selectedFeed === "personalized"
       ? personalizedNews
       : allNews;
 
-  const filteredNews = currentNews
-  .filter(
-    (item) =>
-      !item.title?.toUpperCase().startsWith("CVE-")
-  )
-  .filter(
-    (item) =>
-      selectedRegion === "all" ||
-      item.region?.toLowerCase() === selectedRegion
-  )
-  .filter(
-    (item) =>
-      selectedCategory === "all" ||
-      item.category === selectedCategory
-      
-  )
-  .filter(
-  (item) =>
-    selectedRisk === "all" ||
-    item.risk_level?.toLowerCase() === selectedRisk
-)
- .filter((item) => {
-  if (!searchTerm.trim()) return true;
-
-  const q = searchTerm.toLowerCase();
-
-  return (
-    item.title?.toLowerCase().includes(q) ||
-    item.summary?.toLowerCase().includes(q) ||
-    item.source?.toLowerCase().includes(q) ||
-    item.category?.toLowerCase().includes(q)
-  );
-}); const sortedNews = [...filteredNews].sort((a, b) => {
+  const filteredNews = currentNews.filter(
+  (item) => !item.title?.toUpperCase().startsWith("CVE-")
+); const sortedNews = [...filteredNews].sort((a, b) => {
   switch (sortBy) {
     case "oldest":
       return (
@@ -265,67 +269,91 @@ console.log(allNewsData);
   switch (category) {
     case "AI":
       return {
-        icon: Brain,
-        title: "AI Update",
-        subtitle: "Latest Artificial Intelligence News",
-        colors: "from-violet-600 via-purple-700 to-indigo-700",
-      };
+    icon: Brain,
+    label: "AI",
+    colors:
+        "from-violet-600 via-fuchsia-600 to-indigo-700",
+    glow:
+        "bg-violet-500/30",
+};
 
     case "Security":
       return {
-        icon: ShieldAlert,
-        title: "Security Alert",
-        subtitle: "Latest Cybersecurity Updates",
-        colors: "from-red-600 via-red-700 to-orange-700",
-      };
+    icon: ShieldAlert,
+    label: "Security",
+    colors:
+        "from-red-700 via-red-600 to-orange-600",
+    glow:
+        "bg-red-500/30",
+};
 
     case "Cloud":
       return {
         icon: Cloud,
-        title: "Cloud Update",
-        subtitle: "Cloud Infrastructure News",
+        label: "Cloud",
         colors: "from-sky-500 via-blue-600 to-cyan-700",
+        glow: "bg-sky-500/30",
       };
 
     case "Developer Tools":
       return {
-        icon: Code2,
-        title: "Developer Tools",
-        subtitle: "Frameworks, IDEs & Dev Tools",
+        icon: Terminal,
+        label: "Developer Tools",
         colors: "from-slate-700 via-slate-800 to-gray-900",
+        glow: "bg-slate-500/30",
       };
 
     case "Mobile":
       return {
         icon: Smartphone,
-        title: "Mobile Tech",
-        subtitle: "Android & iOS Updates",
+        label: "Mobile",
         colors: "from-emerald-600 via-teal-600 to-cyan-700",
+        glow: "bg-emerald-500/30",
       };
+
 
     case "Software":
       return {
-        icon: Newspaper,
-        title: "Software Update",
-        subtitle: "Latest Software Technologies",
+        icon: AppWindow,
+        label: "Software",
         colors: "from-blue-600 via-blue-700 to-indigo-700",
+        glow: "bg-blue-500/30",
       };
-      case "Framework":
-  return {
-    icon: Code2,
-    title: "Framework Update",
-    subtitle: "Latest Framework Releases",
-    colors: "from-indigo-600 via-violet-700 to-purple-700",
-  };
+
+    case "Framework":
+      return {
+        icon: Blocks,
+        label: "Framework",
+        colors: "from-indigo-600 via-violet-700 to-purple-700",
+        glow: "bg-indigo-500/30",
+      };
+
+
+    case "Business":
+      return {
+        icon: Briefcase,
+        label: "Business",
+        colors: "from-amber-600 via-orange-700 to-yellow-700",
+        glow: "bg-amber-500/30",
+      };
+
+    case "Gaming":
+      return {
+        icon: Gamepad2,
+        title: "Gaming Update",
+        subtitle: "Latest Gaming News",
+        colors: "from-pink-600 via-rose-700 to-fuchsia-700",
+        glow: "bg-pink-500/30",
+      };
 
     default:
       return {
         icon: Newspaper,
-        title: "Technology News",
-        subtitle: "Powered by TechPulse AI",
+        label: "Technology",
         colors: "from-blue-600 via-blue-700 to-indigo-700",
+        glow: "bg-blue-500/30",
       };
-  };
+  }
 };
 const loadMore = async () => {
   const token = localStorage.getItem("access_token");
@@ -364,16 +392,37 @@ const loadMore = async () => {
         setHasMorePersonalized(false);
       }
     } else {
-      const nextSkip = allNewsSkip;
+  const nextSkip = allNewsSkip;
 
-      const response = await fetch(
-        `${apiUrl}/news?skip=${nextSkip}&limit=${PAGE_SIZE}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  const params = new URLSearchParams();
+
+  params.append("skip", nextSkip.toString());
+  params.append("limit", PAGE_SIZE.toString());
+
+  if (selectedCategory !== "all") {
+    params.append("category", selectedCategory);
+  }
+
+  if (selectedRegion !== "all") {
+    params.append("region", selectedRegion);
+  }
+
+  if (selectedRisk !== "all") {
+    params.append("risk_level", selectedRisk);
+  }
+
+  if (searchTerm.trim()) {
+    params.append("search", searchTerm);
+  }
+
+  const response = await fetch(
+    `${apiUrl}/news?${params.toString()}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
       const data = await response.json();
 
@@ -695,23 +744,49 @@ focus:ring-blue-500/20
 
   return (
     <div
-      className={`mb-5 flex h-64 flex-col items-center justify-center rounded-xl bg-gradient-to-br ${placeholder.colors} text-white`}
+      className={`relative mb-5 h-64 overflow-hidden rounded-2xl bg-gradient-to-br ${placeholder.colors}`}
     >
-      <Icon className="h-14 w-14 opacity-90" />
+      {/* Glow */}
+      <div
+        className={`absolute -left-16 -top-16 h-56 w-56 rounded-full blur-3xl ${placeholder.glow}`}
+      />
 
-      <h3 className="mt-4 text-3xl font-bold tracking-tight">
-  {placeholder.title}
-</h3>
+      <div
+        className={`absolute -right-16 bottom-0 h-56 w-56 rounded-full blur-3xl ${placeholder.glow}`}
+      />
 
-<p className="mt-2 text-base text-white/80">
-  {placeholder.subtitle}
-</p>
+      {/* Grid Pattern */}
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px)
+          `,
+          backgroundSize: "28px 28px",
+        }}
+      />
 
-<div className="mt-6 h-px w-24 bg-white/20" />
+      {/* Top badge */}
+      <div className="absolute right-5 top-5 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md">
+        {placeholder.label}
+      </div>
 
-<p className="mt-4 text-xs uppercase tracking-[0.25em] text-white/60">
-  TechPulse AI
-</p>
+      {/* Center */}
+      <div className="relative flex h-full flex-col items-center justify-center">
+
+        <div className="rounded-full border border-white/20 bg-white/10 p-6 backdrop-blur-md">
+          <Icon className="h-14 w-14 text-white drop-shadow-xl" />
+        </div>
+
+        <div className="mt-8 text-xs uppercase tracking-[0.35em] text-white/70">
+          TechPulse AI
+        </div>
+
+      </div>
+
+      {/* Bottom gradient */}
+      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/20 to-transparent" />
     </div>
   );
 })()}

@@ -1,5 +1,6 @@
 
 "use client";
+import { ShieldAlert, Lock, Info } from "lucide-react";
 import { useEffect, useState } from "react";
 import NewsCardSkeleton from "@/components/skeletons/NewsCardSkeleton";
 export default function SecurityPage() {
@@ -38,11 +39,14 @@ useEffect(() => {
 
 const filteredSecurityAlerts = securityAlerts.filter((item) => {
   const matchesType =
-    selectedType === "all" ||
-    (selectedType === "cve" &&
-      item.title?.toUpperCase().startsWith("CVE-")) ||
-    (selectedType === "breach" &&
-      item.source === "KVKK");
+  selectedType === "all" ||
+  (selectedType === "cve" &&
+    item.title?.toUpperCase().startsWith("CVE-")) ||
+  (selectedType === "breach" &&
+    item.source === "KVKK") ||
+  (selectedType === "advisory" &&
+    item.source !== "KVKK" &&
+    !item.title?.toUpperCase().startsWith("CVE-"));  
 
   const matchesRegion =
     selectedRegion === "all" ||
@@ -100,6 +104,7 @@ const filteredSecurityAlerts = securityAlerts.filter((item) => {
     { label: "All", value: "all" },
     { label: "CVE Vulnerabilities", value: "cve" },
     { label: "Data Breaches", value: "breach" },
+    { label: "Security Advisories", value: "advisory" },
   ].map((type) => (
     <button
       key={type.value}
@@ -160,107 +165,144 @@ const filteredSecurityAlerts = securityAlerts.filter((item) => {
 )}
 {!loading && filteredSecurityAlerts.length > 0 && (
   <div className="mt-8 grid gap-5">
-    {filteredSecurityAlerts.map((item) => (
-      <article
-        key={item.id}
-        className="rounded-2xl border border-gray-200 bg-white/70 p-6 shadow-sm transition hover:-translate-y-1 hover:border-red-500/50 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/60"
-      >
-        <div className="mb-4 flex flex-wrap gap-2">
-          <span
-  className={`rounded-full px-3 py-1 text-xs font-medium ${
-    item.source === "KVKK"
-      ? "bg-purple-100 text-purple-700 dark:bg-purple-500/10 dark:text-purple-400"
-      : "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400"
-  }`}
->
-  {item.source === "KVKK" ? "Data Breach" : "CVE Vulnerability"}
-</span>
-<span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
-  {item.region === "turkey" ? "Türkiye" : "Global"}
-</span>
-          
+    {filteredSecurityAlerts.map((item) => {
+      const isBreach = item.source === "KVKK";
+      const isCve = item.title?.toUpperCase().startsWith("CVE-");
 
-          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
-            Importance {item.importance_score || 0}/10
-          </span>
+      const meta = isBreach
+        ? {
+            icon: Lock,
+            label: "Data Breach",
+            colors: "from-purple-600 via-purple-700 to-fuchsia-700",
+          }
+        : isCve
+        ? {
+            icon: ShieldAlert,
+            label: "CVE Vulnerability",
+            colors: "from-red-600 via-red-700 to-orange-700",
+          }
+        : {
+            icon: Info,
+            label: "Security Advisory",
+            colors: "from-blue-600 via-blue-700 to-cyan-700",
+          };
 
-          <span
-            className={`rounded-full px-3 py-1 text-xs font-medium ${
-              item.risk_level === "Critical"
-                ? "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400"
-                : item.risk_level === "High"
-                ? "bg-orange-100 text-orange-700 dark:bg-orange-500/10 dark:text-orange-400"
-                : item.risk_level === "Medium"
-                ? "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
-                : "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400"
-            }`}
+      const Icon = meta.icon;
+
+      return (
+        <article
+          key={item.id}
+          className="overflow-hidden rounded-2xl border border-gray-200 bg-white/70 shadow-sm transition hover:-translate-y-1 hover:border-red-500/50 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/60"
+        >
+          <div
+            className={`flex items-center gap-3 bg-gradient-to-br px-6 py-4 text-white ${meta.colors}`}
           >
-            {item.risk_level || "Low"} Risk
-          </span>
-        </div>
+            <Icon className="h-6 w-6 shrink-0" />
+            <span className="text-sm font-semibold uppercase tracking-wide">
+              {meta.label}
+            </span>
+          </div>
 
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-          {item.title}
-        </h2>
+          <div className="p-6">
+            <div className="mb-4 flex flex-wrap gap-2">
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-medium ${
+                  item.source === "KVKK"
+                    ? "bg-purple-100 text-purple-700 dark:bg-purple-500/10 dark:text-purple-400"
+                    : item.title?.toUpperCase().startsWith("CVE-")
+                    ? "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400"
+                    : "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
+                }`}
+              >
+                {item.source === "KVKK"
+                  ? "Data Breach"
+                  : item.title?.toUpperCase().startsWith("CVE-")
+                  ? "CVE Vulnerability"
+                  : "Security Advisory"}
+              </span>
 
-        <p className="mt-3 leading-7 text-gray-600 dark:text-gray-300">
-          {item.summary || "No summary available."}
-        </p>
-        {item.affected_technologies && (
-  <div className="mt-5">
-    <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
-      Affected Technologies
-    </p>
+              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
+                Importance {item.importance_score || 0}/10
+              </span>
 
-    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-      {item.affected_technologies}
-    </p>
-  </div>
-)}
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-medium ${
+                  item.risk_level === "Critical"
+                    ? "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400"
+                    : item.risk_level === "High"
+                    ? "bg-orange-100 text-orange-700 dark:bg-orange-500/10 dark:text-orange-400"
+                    : item.risk_level === "Medium"
+                    ? "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
+                    : "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400"
+                }`}
+              >
+                {item.risk_level || "Low"} Risk
+              </span>
+            </div>
 
-{item.recommended_action && (
-  <div className="mt-5 rounded-xl border border-orange-200 bg-orange-50/70 p-4 dark:border-orange-500/20 dark:bg-orange-500/5">
-    <p className="text-sm font-medium text-orange-700 dark:text-orange-400">
-      Recommended Action
-    </p>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              {item.title}
+            </h2>
 
-    <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-300">
-      {item.recommended_action}
-    </p>
-  </div>
-)}
+            <p className="mt-3 leading-7 text-gray-600 dark:text-gray-300">
+              {item.summary || "No summary available."}
+            </p>
 
-<div className="mt-5 flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-700">
-  <div className="flex flex-col gap-1">
-    <span className="text-sm text-gray-500 dark:text-gray-400">
-      Source: {item.source || "Unknown"}
-    </span>
+            {item.affected_technologies && (
+              <div className="mt-5">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                  Affected Technologies
+                </p>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  {item.affected_technologies}
+                </p>
+              </div>
+            )}
 
-    {item.published_at && (
-      <span className="text-xs text-gray-400 dark:text-gray-500">
-        Published:{" "}
-        {new Date(item.published_at).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        })}
-      </span>
-    )}
-  </div>
+            {item.recommended_action && (
+              <div className="mt-5 rounded-xl border border-orange-200 bg-orange-50/70 p-4 dark:border-orange-500/20 dark:bg-orange-500/5">
+                <p className="text-sm font-medium text-orange-700 dark:text-orange-400">
+                  Recommended Action
+                </p>
+                <p className="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-300">
+                  {item.recommended_action}
+                </p>
+              </div>
+            )}
 
-  {item.url && (
-    <a
-      href={item.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-sm font-medium text-red-600 transition hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-    >
-      View vulnerability →
-    </a>
-  )}
-</div>
-      </article>
-    ))}
+            <div className="mt-5 flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-700">
+              <div className="flex flex-col gap-1">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Source: {item.source || "Unknown"}
+                </span>
+
+                {item.published_at && (
+                  <span className="text-xs text-gray-400 dark:text-gray-500">
+                    Published:{" "}
+                    {new Date(item.published_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                )}
+              </div>
+
+              {item.url && (
+                <a
+                  href={item.url}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="text-sm font-medium text-red-600 transition hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+>
+  View vulnerability →
+</a>
+              )}
+            </div>
+          </div>
+        </article>
+      );
+    })}
   </div>
 )}
 {!loading && filteredSecurityAlerts.length > 0 && (

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   Globe,
   GitBranch,
@@ -108,9 +109,17 @@ export default function TopSources({ sources }: Props) {
   return (
     <DashboardProgressCard
       title="Top Sources"
-      subtitle="Most active news providers"
-      badge="TOP 5"
+      subtitle="Most active technology news providers"
+      badge={`${Object.keys(sources ?? {}).length} Sources`}
       items={items}
+      footer={
+        <Link
+          href="/dashboard/sources"
+          className="flex items-center justify-center rounded-lg py-2 text-sm font-semibold text-blue-600 transition-all duration-300 hover:text-blue-500 dark:text-blue-400"
+        >
+          View All Sources →
+        </Link>
+      }
     />
   );
 }

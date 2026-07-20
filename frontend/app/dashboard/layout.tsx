@@ -55,8 +55,8 @@ export default function DashboardLayout({
 })
 
         .then((data) => {
-          setUnreadCount(data.unread_count ?? 0);
-        })
+  setUnreadCount(data?.unread_count ?? 0);
+})
         .catch((error) => {
           console.error(
             "Unread notification count error:",
