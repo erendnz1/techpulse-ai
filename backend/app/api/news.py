@@ -23,7 +23,10 @@ from app.schemas.news import (
     NewsUpdate,
 )
 from app.services.ai_service import analyze_news
-from app.services.news_service import process_and_save_news
+from app.services.news_service import (
+    process_and_save_news,
+    reanalyze_pending_news,
+)
 from app.crud.news import search_news
 
 router = APIRouter(
@@ -99,25 +102,28 @@ def get_dashboard_news_endpoint(
         limit=limit,
     )
 @router.get("/", response_model=list[NewsResponse])
+@router.get("/", response_model=list[NewsResponse])
 def get_all_news(
     category: str | None = None,
     region: str | None = None,
     minimum_importance_score: int | None = None,
     risk_level: str | None = None,
     source: str | None = None,
+    search: str | None = None,
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=20, ge=1, le=100),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     return get_news(
-      db,
-      category=category,
-      region=region,
-      minimum_importance_score=minimum_importance_score,
-      risk_level=risk_level,
-      source=source,
-      skip=skip,
-      limit=limit
+        db=db,
+        category=category,
+        region=region,
+        minimum_importance_score=minimum_importance_score,
+        risk_level=risk_level,
+        source=source,
+        search=search,
+        skip=skip,
+        limit=limit,
     )
 @router.get("/security", response_model=list[NewsResponse])
 def get_security_news_endpoint(
@@ -140,7 +146,15 @@ def fetch_news(db: Session = Depends(get_db)):
         "message": "News fetched successfully.",
         "saved_count": len(saved_news)
     }
+@router.post("/reanalyze")
+def reanalyze_news(
+    db: Session = Depends(get_db),
+):
+    reanalyze_pending_news(db)
 
+    return {
+        "message": "Pending news reanalysis completed."
+    }
 @router.get("/test-ai")
 def test_ai():
     sample_text = """

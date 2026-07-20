@@ -21,6 +21,12 @@ def create_news(db: Session, news: NewsCreate):
 
     return db_news
 
+from sqlalchemy import desc, nullslast
+from sqlalchemy.orm import Session
+
+from app.models.news import News
+from sqlalchemy import desc, nullslast, or_
+
 def get_news(
     db: Session,
     category: str | None = None,
@@ -28,43 +34,77 @@ def get_news(
     minimum_importance_score: int | None = None,
     risk_level: str | None = None,
     source: str | None = None,
+    search: str | None = None,
     skip: int = 0,
     limit: int = 20,
 ):
     query = db.query(News)
-    query = query.filter(
-    News.summary.isnot(None)
-    )
-    if category:
+
+    # Only AI analyzed news
+    query = query.filter(News.summary.isnot(None))
+
+    # Category
+    if (
+        category
+        and category.lower() != "all"
+        and category != "All Categories"
+    ):
         query = query.filter(News.category == category)
 
-    if region:
+    # Region
+    if (
+        region
+        and region.lower() != "all"
+        and region != "All Regions"
+    ):
         query = query.filter(News.region == region)
 
+    # Importance
     if minimum_importance_score is not None:
         query = query.filter(
             News.importance_score >= minimum_importance_score
         )
 
-    if risk_level:
+    # Risk
+    if (
+        risk_level
+        and risk_level.lower() != "all"
+        and risk_level != "All Risk Levels"
+    ):
         query = query.filter(
             News.risk_level.ilike(risk_level)
         )
 
-    if source:
+    # Source
+    if (
+        source
+        and source.lower() != "all"
+        and source != "All Sources"
+    ):
         query = query.filter(
             News.source.ilike(source)
         )
- 
+
+    # Search
+    if search and search.strip():
+        query = query.filter(
+            or_(
+                News.title.ilike(f"%{search}%"),
+                News.summary.ilike(f"%{search}%"),
+                News.source.ilike(f"%{search}%"),
+                News.category.ilike(f"%{search}%"),
+            )
+        )
+
     return (
-    query.order_by(
-        desc(News.published_at),
-        nullslast(desc(News.importance_score)),
+        query.order_by(
+            desc(News.published_at),
+            nullslast(desc(News.importance_score)),
+        )
+        .offset(skip)
+        .limit(limit)
+        .all()
     )
-    .offset(skip)
-    .limit(limit)
-    .all()
-)
 
 def get_news_by_id(db: Session, news_id: int):
     return db.query(News).filter(News.id == news_id).first()
@@ -133,7 +173,7 @@ def get_personalized_news(
     current_score = minimum_importance_score
     all_news = []
 
-    while current_score >= 6:
+    while current_score >= min(minimum_importance_score, 6):
         query = (
           db.query(News)
           .filter(
@@ -225,12 +265,7 @@ def get_security_news(
     skip: int = 0,
     limit: int = 20,
 ):
-    query = db.query(News).filter(
-        or_(
-            News.title.ilike("CVE-%"),
-            News.source == "KVKK",
-        )
-    )
+    query = db.query(News).filter(News.category == "Security")
 
     if region:
         query = query.filter(func.lower(News.region) == region.lower())
@@ -310,10 +345,8 @@ def get_dashboard_news(
 
     return selected
 
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from app.models.news import News
-
-
 def search_news(
     db,
     query: str,

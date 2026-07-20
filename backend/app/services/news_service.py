@@ -1,3 +1,4 @@
+from app.models.news import News
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from app.services.news_fetcher import fetch_technology_news
@@ -32,6 +33,7 @@ from app.services.rss_fetcher import fetch_rss
 from app.services.rss_sources import RSS_SOURCES
 from app.core.exceptions import QuotaExceededError
 from app.services.ai_service import analyze_news, detect_category
+
 def process_and_save_news(db: Session):
     articles = []
     stats = {
@@ -174,12 +176,12 @@ def process_and_save_news(db: Session):
         rss_articles = []
 
         for source in RSS_SOURCES:
-         try:
-            rss_articles.extend(fetch_rss(source))
+          try:
+           rss_articles.extend(fetch_rss(source, limit=3))
 
-         except Exception as error:
-            print(f"{source['name']} RSS failed: {error}")
-
+          except Exception as error:
+           print(f"{source['name']} RSS failed: {error}")
+ 
         articles.extend(rss_articles)
         stats["sources"] += len(RSS_SOURCES)
         stats["fetched"] += len(rss_articles)
@@ -203,6 +205,26 @@ def process_and_save_news(db: Session):
         title = article.get("title", "")
         content = article.get("content", "")
 
+        # Başlıksız haberleri alma
+        if not title:
+          continue
+
+    # Çok kısa içerikleri AI'a gönderme
+        if len(content) < 120:
+          print(f"Skipped (content too short): {title}")
+          continue
+
+    # Aynı başlığa sahip haber varsa tekrar işleme
+        duplicate_title = (
+          db.query(News)
+          .filter(News.title == title)
+          .first()
+    )
+
+        if duplicate_title:
+          stats["duplicates"] += 1
+          continue
+
         combined_text = f"""
 Title:
 {title}
@@ -211,7 +233,7 @@ Content:
 {content}
 """
 
-        content_for_analysis = combined_text[:5000]
+        content_for_analysis = combined_text[:3000]
 
         analysis = None
 
@@ -303,3 +325,63 @@ Content:
     print("========================================\n")
 
     return saved_news
+
+def reanalyze_pending_news(db: Session):
+    pending_news = (
+    db.query(News)
+    .filter(
+        News.summary.is_(None),
+        News.content.isnot(None),
+    )
+    .order_by(News.published_at.desc())
+    .limit(20)
+    .all()
+)
+
+    if not pending_news:
+        print("No pending news to analyze.")
+        return
+
+    print(f"Reanalyzing {len(pending_news)} pending articles...")
+
+    for news in pending_news:
+        combined_text = f"""
+Title:
+{news.title}
+
+Content:
+{news.content or ""}
+"""
+
+        analysis = analyze_news(combined_text[:3000])
+
+        if not analysis:
+          continue
+
+        rule_category = detect_category(combined_text)
+
+        news.summary = analysis.get("summary")
+
+        news.category = (
+           rule_category
+           if rule_category
+           else analysis.get("category")
+        )
+
+        news.importance_score = analysis.get("importance_score")
+        news.risk_level = analysis.get("risk_level")
+        news.affected_technologies = analysis.get(
+          "affected_technologies"
+        )
+        news.recommended_action = analysis.get(
+         "recommended_action"
+        )
+
+        db.commit()
+
+        create_notifications_for_news(
+         db=db,
+          news=news,
+     )
+
+    print(f"✓ Updated: {news.title}")
