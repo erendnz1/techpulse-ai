@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Users,
-  Newspaper,
-  Bell,
-  ShieldAlert,
-  RefreshCcw,
-} from "lucide-react";
+import { toast } from "sonner";
+
+import PlatformHealth from "./components/PlatformHealth";
+import QuickActions from "./components/QuickActions";
+import Hero from "./components/Hero";
+import StatsCards from "./components/StatsCards";
+import RecentActivity from "./components/RecentActivity";
+import CategoryChart from "./components/charts/CategoryChart";
+import RiskChart from "./components/charts/RiskChart";
+import NewsTrendChart from "./components/charts/NewsTrendChart";
 
 interface Stats {
   total_users: number;
@@ -20,41 +23,76 @@ interface Stats {
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
 
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
+  async function loadStats() {
+    try {
+      const token = localStorage.getItem("access_token");
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/stats`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then(setStats);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/stats`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to load stats.");
+      }
+
+      const data = await res.json();
+      setStats(data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load dashboard statistics.");
+    }
+  }
+
+  useEffect(() => {
+    loadStats();
   }, []);
 
   async function fetchNews() {
     const token = localStorage.getItem("access_token");
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/fetch`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const loadingToast = toast.loading("Fetching latest news...");
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/fetch`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Fetch failed.");
       }
-    );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    alert(
-      `${data.saved_count} new articles fetched.`
-    );
+      toast.dismiss(loadingToast);
+
+      toast.success(
+        `${data.saved_count} new articles fetched successfully.`
+      );
+
+      await loadStats();
+    } catch (error) {
+      toast.dismiss(loadingToast);
+
+      toast.error("Failed to fetch latest news.");
+
+      console.error(error);
+    }
   }
 
   if (!stats) {
     return (
-      <div className="p-8">
+      <div className="p-8 text-slate-300">
         Loading...
       </div>
     );
@@ -62,94 +100,24 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8 p-8">
+      <Hero />
 
-      <div>
-        <h1 className="text-3xl font-bold">
-          Admin Dashboard
-        </h1>
+      <StatsCards stats={stats} />
 
-        <p className="mt-2 text-gray-500">
-          Platform Management
-        </p>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <CategoryChart />
+        <RiskChart />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <NewsTrendChart />
 
-        <StatCard
-          title="Users"
-          value={stats.total_users}
-          icon={<Users size={26} />}
-        />
+      <div className="grid gap-6 lg:grid-cols-2">
+        <PlatformHealth />
 
-        <StatCard
-          title="News"
-          value={stats.total_news}
-          icon={<Newspaper size={26} />}
-        />
-
-        <StatCard
-          title="Notifications"
-          value={stats.total_notifications}
-          icon={<Bell size={26} />}
-        />
-
-        <StatCard
-          title="Critical Alerts"
-          value={stats.critical_alerts}
-          icon={<ShieldAlert size={26} />}
-        />
-
+        <QuickActions onFetch={fetchNews} />
       </div>
 
-      <div className="rounded-2xl border bg-white p-6 shadow-sm">
-
-        <h2 className="mb-5 text-xl font-semibold">
-          Quick Actions
-        </h2>
-
-        <button
-          onClick={fetchNews}
-          className="flex items-center gap-3 rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
-        >
-          <RefreshCcw size={18} />
-
-          Fetch Latest News
-        </button>
-
-      </div>
-
-    </div>
-  );
-}
-
-function StatCard({
-  title,
-  value,
-  icon,
-}: {
-  title: string;
-  value: number;
-  icon: React.ReactNode;
-}) {
-  return (
-    <div className="rounded-2xl border bg-white p-6 shadow-sm">
-
-      <div className="mb-5 flex items-center justify-between">
-
-        <div className="rounded-xl bg-blue-100 p-3 text-blue-600">
-          {icon}
-        </div>
-
-      </div>
-
-      <p className="text-sm text-gray-500">
-        {title}
-      </p>
-
-      <h2 className="mt-2 text-3xl font-bold">
-        {value}
-      </h2>
-
+      <RecentActivity />
     </div>
   );
 }

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
+
 import "./globals.css";
 import { ThemeProvider } from "./theme-provider";
 import { SmoothScroll } from "./smooth-scroll";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -18,12 +21,9 @@ export const metadata: Metadata = {
     default: "TechPulse AI",
     template: "%s | TechPulse AI",
   },
-
   description:
     "AI-powered technology intelligence platform for software updates, security alerts and developer news.",
-
   applicationName: "TechPulse AI",
-
   keywords: [
     "AI",
     "Technology",
@@ -47,11 +47,19 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-  <ThemeProvider>
-   <SmoothScroll />
-    {children}
-  </ThemeProvider>
-</body>
+        <ThemeProvider>
+          <SmoothScroll />
+
+          {children}
+
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            expand
+          />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
