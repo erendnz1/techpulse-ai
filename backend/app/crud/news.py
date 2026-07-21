@@ -57,7 +57,9 @@ def get_news(
         and region.lower() != "all"
         and region != "All Regions"
     ):
-        query = query.filter(News.region == region)
+        query = query.filter(
+    func.lower(News.region) == region.lower()
+)
 
     # Importance
     if minimum_importance_score is not None:
@@ -148,13 +150,20 @@ def get_news_by_url(db: Session, url: str):
     return db.query(News).filter(News.url == url).first()
 
 def save_news(db: Session, news_data: dict):
+
+    # Normalize region
+    if news_data.get("region"):
+        news_data["region"] = news_data["region"].lower()
+
     news = News(**news_data)
 
     db.add(news)
     db.commit()
     db.refresh(news)
+
     print(f"Saved ID: {news.id}")
     print(f"Saved Summary: {news.summary}")
+
     return news
 
 def get_personalized_news(

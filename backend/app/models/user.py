@@ -28,7 +28,15 @@ class User(Base):
     )
 
     preferences = relationship(
-        "UserPreferences",
-        back_populates="user",
-        uselist=False,
-    )
+    "UserPreferences",
+    back_populates="user",
+    uselist=False,
+    cascade="all, delete-orphan",
+    single_parent=True,
+)
+
+    notifications = relationship(
+    "Notification",
+    back_populates="user",
+    cascade="all, delete-orphan",
+)

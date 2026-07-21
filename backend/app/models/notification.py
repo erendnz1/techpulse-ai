@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.sql import func
-
+from sqlalchemy.orm import relationship
 from app.database.base import Base
 
 class Notification(Base):
@@ -15,4 +15,8 @@ class Notification(Base):
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False
+    )
+    user = relationship(
+        "User",
+        back_populates="notifications",
     )

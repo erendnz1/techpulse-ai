@@ -33,12 +33,19 @@ def create_notifications_for_news(
         ):
             continue
 
-        # Region preference check
+        # Region preference check (case-insensitive)
+        news_region = (news.region or "").lower()
+
+        user_regions = [
+         region.lower()
+         for region in preference.regions
+        ]
+
         if (
-            not preference.regions
-            or news.region not in preference.regions
+         not preference.regions
+         or news_region not in user_regions
         ):
-            continue
+         continue
 
         # Determine whether the news is important enough
         important_categories = {

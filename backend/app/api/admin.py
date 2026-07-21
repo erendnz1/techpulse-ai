@@ -6,7 +6,7 @@ from app.database.session import get_db
 from app.dependencies.auth import admin_required
 import os
 import tempfile
-
+from app.dependencies.auth import get_current_user
 from fastapi.responses import FileResponse
 
 from app.services.report_service import generate_admin_report
@@ -217,3 +217,28 @@ def download_admin_report(
         media_type="application/pdf",
         filename="TechPulseAI_Report.pdf",
     )
+
+@router.delete("/users/{user_id}")
+def delete_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if user.role == "admin":
+        raise HTTPException(
+            status_code=400,
+            detail="Admin users cannot be deleted"
+        )
+
+    db.delete(user)
+    db.commit()
+
+    return {"message": "User deleted successfully"}

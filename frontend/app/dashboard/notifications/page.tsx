@@ -210,55 +210,67 @@ export default function NotificationsPage() {
       {!loading && notifications.length > 0 && (
         <>
           <div className="mt-8 grid gap-4">
-            {notifications.map((notification) => (
-              <article
-                key={notification.id}
-                onClick={() => handleNotificationClick(notification)}
-                className={`cursor-pointer rounded-2xl border p-5 transition hover:-translate-y-0.5 hover:shadow-md ${
-                  notification.is_read
-                    ? "border-gray-200 bg-white/60 dark:border-gray-700 dark:bg-gray-800/40"
-                    : "border-blue-300 bg-blue-50/70 shadow-sm dark:border-blue-500/30 dark:bg-blue-500/5"
-                }`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex gap-3">
-                    {!notification.is_read && (
-                      <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-blue-500" />
-                    )}
+            {notifications.map((notification) => {
+  const isSecurity = notification.message.includes("Security");
 
-                    <div>
-                      <p className="font-medium text-gray-800 dark:text-gray-100">
-                        {notification.message}
-                      </p>
+  return (
+    <article
+      key={notification.id}
+      onClick={() => handleNotificationClick(notification)}
+      className={`cursor-pointer rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-0.5 ${
+        notification.is_read
+          ? "border-gray-200 bg-white/60 dark:border-gray-700 dark:bg-gray-800/40"
+          : isSecurity
+          ? "border-red-500/40 bg-red-500/10 hover:bg-red-500/15 hover:shadow-[0_0_35px_rgba(239,68,68,0.18)]"
+          : "border-blue-300 bg-blue-50/70 shadow-sm dark:border-blue-500/30 dark:bg-blue-500/5"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex gap-3">
+          {!notification.is_read && (
+            <span
+              className={`mt-2 h-2.5 w-2.5 shrink-0 rounded-full ${
+                isSecurity ? "bg-red-500" : "bg-blue-500"
+              }`}
+            />
+          )}
 
-                      {notification.created_at && (
-                        <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
-                          {new Date(
-                            notification.created_at
-                          ).toLocaleString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+          <div>
+            <p className="font-medium text-gray-800 dark:text-gray-100">
+              {notification.message}
+            </p>
 
-                  <span
-                    className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
-                      notification.is_read
-                        ? "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400"
-                        : "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
-                    }`}
-                  >
-                    {notification.is_read ? "Read" : "New"}
-                  </span>
-                </div>
-              </article>
-            ))}
+            {notification.created_at && (
+              <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
+                {new Date(notification.created_at).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <span
+          className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
+            notification.is_read
+              ? "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400"
+              : isSecurity
+              ? "bg-red-500/20 text-red-300"
+              : "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
+          }`}
+        >
+          {notification.is_read ? "Read" : "New"}
+        </span>
+      </div>
+    </article>
+  );
+})}
+                
+          
           </div>
 
           {hasMore && (
