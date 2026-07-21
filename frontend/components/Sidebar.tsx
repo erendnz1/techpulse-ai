@@ -31,6 +31,7 @@ export default function Sidebar({
    const [user, setUser] = useState<{
   username: string;
   email: string;
+  role: string;
 } | null>(null);
   const navItems = [
     {
@@ -64,7 +65,23 @@ export default function Sidebar({
   icon: User,
 },
   ];
-
+const adminItems = [
+  {
+    href: "/dashboard/admin",
+    label: "Overview",
+    icon: LayoutDashboard,
+  },
+  {
+    href: "/dashboard/admin/users",
+    label: "Users",
+    icon: User,
+  },
+  {
+    href: "/dashboard/admin/news",
+    label: "News Manager",
+    icon: Newspaper,
+  },
+];
   const handleLinkClick = () => {
     if (window.innerWidth < 1024) {
       closeMenu();
@@ -168,7 +185,7 @@ useEffect(() => {
         {/* Desktop Logo */}
 <div className="hidden border-b border-gray-200 p-6 dark:border-gray-700 lg:block">
 
-  <div className="flex items-center gap-3">
+  <div className="flex min-w-0 items-center gap-3">
 
     <Image
       src="/logo.png"
@@ -179,8 +196,8 @@ useEffect(() => {
       className="rounded-xl"
     />
 
-    <div>
-      <h2 className="text-xl font-bold tracking-tight">
+    <div className="min-w-0">
+      <h2 className="truncate text-lg font-bold">
         TechPulse
         <span className="text-blue-600"> AI</span>
       </h2>
@@ -195,7 +212,7 @@ useEffect(() => {
 </div>
 
 </div>
-        <nav className="flex flex-1 flex-col px-4 py-5">
+        <nav className="flex flex-1 flex-col gap-2 px-4 py-5">
           {navItems.map((item) => {
             const Icon = item.icon;
 
@@ -243,6 +260,43 @@ ${
               </Link>
             );
           })}
+          {user?.role === "admin" && (
+  <>
+    <div className="mt-6 mb-2 px-4">
+      <p className="text-xs font-bold uppercase tracking-widest text-gray-400">
+        Admin
+      </p>
+    </div>
+
+    {adminItems.map((item) => {
+      const Icon = item.icon;
+      const active = pathname === item.href;
+
+      return (
+        <Link
+          key={item.href}
+          href={item.href}
+          onClick={handleLinkClick}
+          className={`group flex items-center gap-3 rounded-xl border px-4 py-3 text-sm font-medium transition-all duration-300 hover:-translate-x-1 hover:scale-[1.02]
+          ${
+            active
+              ? "border-purple-600 bg-purple-600 text-white shadow-lg shadow-purple-600/20"
+              : "border-transparent text-gray-600 hover:border-purple-200 hover:bg-gray-100 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-800"
+          }`}
+        >
+          <Icon
+            size={18}
+            className={`transition-transform duration-300 ${
+              active ? "scale-110" : "group-hover:scale-110"
+            }`}
+          />
+
+          <span>{item.label}</span>
+        </Link>
+      );
+    })}
+  </>
+)}
           <div className="flex-1" />
         </nav>
         <div className="mt-4 border-t border-gray-200 p-5 dark:border-gray-700">
@@ -265,6 +319,11 @@ ${
       <p className="text-xs text-gray-500 dark:text-gray-400">
         {user.email}
       </p>
+      {user.role === "admin" && (
+  <span className="mt-2 inline-flex rounded-full bg-purple-100 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-purple-700">
+    Administrator
+  </span>
+)}
     </>
   ) : (
     <>

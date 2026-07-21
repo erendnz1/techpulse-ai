@@ -98,8 +98,12 @@ export default function DashboardPage() {
         setStats(await statsResponse.json());
 
         if (newsResponse.ok) {
-          setPersonalizedNews(await newsResponse.json());
-        }
+  const data = await newsResponse.json();
+
+  console.log("Dashboard API:", data);
+
+  setPersonalizedNews(data);
+}
       } catch (err) {
         setError(
           err instanceof Error
@@ -123,7 +127,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-w-0 flex-1 px-6 py-10 md:px-10">
+    <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 md:px-8 lg:px-10">
 
       <DashboardHeader
         username={user?.username ?? "User"}
@@ -141,7 +145,7 @@ export default function DashboardPage() {
       {/* Row 1 */}
       <div className="mt-8 grid gap-6 xl:grid-cols-3">
 
-        <div className="xl:col-span-2">
+        <div className="min-w-0 xl:col-span-2">
           <LatestNews news={personalizedNews} />
         </div>
 

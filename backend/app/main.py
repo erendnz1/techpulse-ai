@@ -15,7 +15,7 @@ from app.api.user_preferences import router as preferences_router
 from app.services.scheduler_service import scheduler
 from app.api.notifications import router as notifications_router
 from app.api.dashboard import router as dashboard_router
-
+from app.api.admin import router as admin_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
@@ -78,3 +78,4 @@ app.include_router(news_router)
 app.include_router(preferences_router) 
 app.include_router(notifications_router)
 app.include_router(dashboard_router)
+app.include_router(admin_router)

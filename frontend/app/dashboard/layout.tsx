@@ -101,9 +101,9 @@ export default function DashboardLayout({
               onMenuClick={openMenu}
             />
 
-            <div className="flex-1">
-              {children}
-            </div>
+            <div className="flex-1 px-4 py-4 sm:px-6 lg:px-8">
+  {children}
+</div>
 
           </div>
 

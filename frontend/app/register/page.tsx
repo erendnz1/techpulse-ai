@@ -44,7 +44,13 @@ export default function RegisterPage() {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white px-4 transition-colors dark:bg-gray-900">
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.12),transparent_45%)] dark:bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.18),transparent_45%)]" />
+      <>
+  <div className="pointer-events-none absolute -left-32 top-0 h-[450px] w-[450px] rounded-full bg-cyan-500/15 blur-[140px]" />
+
+  <div className="pointer-events-none absolute -bottom-32 -right-32 h-[450px] w-[450px] rounded-full bg-violet-500/15 blur-[140px]" />
+
+  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.10),transparent_45%)] dark:bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.18),transparent_45%)]" />
+</>
 
       <a
         href="/"
@@ -55,14 +61,19 @@ export default function RegisterPage() {
       <div className="absolute right-8 top-5 z-10">
         <ThemeToggle />
       </div>
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-lg dark:border-gray-800 dark:bg-gray-900">
+      <div className="relative z-10 w-full max-w-md">
+
+  {/* Card Glow */}
+  <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-cyan-500/20 blur-3xl dark:bg-cyan-500/20" />
+
+  <div className="rounded-2xl border border-gray-200 bg-white/95 p-8 shadow-2xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
         <form onSubmit={handleRegister}>
-          <h1 className="text-center text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-center text-3xl font-bold text-gray-900 dark:text-white">
             Create your account
           </h1>
 
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-            Join TechPulse AI and personalize your technology feed.
+            Create your TechPulse AI account to monitor software news, AI developments and security alerts.
           </p>
           <div className="mt-8">
             <label
@@ -185,6 +196,7 @@ export default function RegisterPage() {
         </form>
       </div>
 
+      </div>
     </main>
   );
 }

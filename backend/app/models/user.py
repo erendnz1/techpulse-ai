@@ -16,11 +16,15 @@ class User(Base):
 
     password = Column(String(255), nullable=False)
 
+    # YENİ
+    role = Column(String(20), nullable=False, default="user")
+
     is_active = Column(Boolean, default=True)
+
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    
+
     preferences = relationship(
-    "UserPreferences",
-    back_populates="user",
-    uselist=False
+        "UserPreferences",
+        back_populates="user",
+        uselist=False,
     )

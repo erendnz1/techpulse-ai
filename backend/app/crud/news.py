@@ -175,16 +175,19 @@ def get_personalized_news(
 
     while current_score >= min(minimum_importance_score, 6):
         query = (
-          db.query(News)
-          .filter(
+    db.query(News)
+    .filter(
+        or_(
             News.region.in_(regions),
-            News.importance_score >= current_score,
-          )
-          .order_by(
-            News.importance_score.desc(),
-            News.published_at.desc(),
-           )
-          )
+            News.region.is_(None),
+        ),
+        News.importance_score >= current_score,
+    )
+    .order_by(
+    News.published_at.desc(),
+    News.importance_score.desc(),
+)
+)
 
         if categories:
            query = query.filter(News.category.in_(categories))
@@ -232,30 +235,7 @@ def get_personalized_news(
 
     print("=============================================\n")
 
-    selected = []
-    used_categories = set()
-
-    # Her kategoriden önce 1 haber al
-    for news in all_news:
-        if news.category not in used_categories:
-            selected.append(news)
-            used_categories.add(news.category)
-
-        if len(selected) >= limit:
-            break
-
-    # Limit dolmadıysa en güncel haberlerle tamamla
-    if len(selected) < limit:
-        selected_ids = {item.id for item in selected}
-
-        for news in all_news:
-            if news.id not in selected_ids:
-                selected.append(news)
-
-            if len(selected) >= limit:
-                break
-
-    return selected[skip : skip + limit]
+    return all_news[skip : skip + limit]
 from sqlalchemy import or_
 
 
@@ -288,62 +268,14 @@ def get_dashboard_news(
     minimum_importance_score: int,
     limit: int = 5,
 ):
-    query = (
-    db.query(News)
-    .filter(
-        or_(
-            News.region.in_(regions),
-            News.region.is_(None),
-        ),
-
-        News.importance_score >= minimum_importance_score,
-
-        # Dashboard'da KVKK haberlerini gösterme
-        News.source != "KVKK",
-
-        # Kategorisiz ve Other haberleri gösterme
-        News.category.isnot(None),
-        News.category != "Other",
-
-        # AI analiz edilmiş haberleri göster
-        News.summary.isnot(None),
+    return get_personalized_news(
+        db=db,
+        categories=categories,
+        regions=regions,
+        minimum_importance_score=minimum_importance_score,
+        skip=0,
+        limit=limit,
     )
-    .order_by(
-        News.published_at.desc(),
-        News.importance_score.desc(),
-    )
-)
-
-    if categories:
-        query = query.filter(
-            News.category.in_(categories)
-        )
-
-    news_list = query.all()
-
-    selected = []
-    used_categories = set()
-
-    # Önce her kategoriden bir haber al
-    for news in news_list:
-        if news.category not in used_categories:
-            selected.append(news)
-            used_categories.add(news.category)
-
-        if len(selected) >= limit:
-            return selected
-
-    # Limit dolmadıysa kalan en önemli haberlerle tamamla
-    selected_ids = {item.id for item in selected}
-
-    for news in news_list:
-        if news.id not in selected_ids:
-            selected.append(news)
-
-        if len(selected) >= limit:
-            break
-
-    return selected
 
 from sqlalchemy import or_, func
 from app.models.news import News

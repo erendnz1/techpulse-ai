@@ -147,9 +147,16 @@ if (searchTerm.trim()) {
         }
 
         if (personalizedResponse.ok) {
-          const personalizedData =
-            await personalizedResponse.json();
+          
+          const personalizedData = await personalizedResponse.json();
 
+          console.log("INITIAL PERSONALIZED:", personalizedData);
+
+          setPersonalizedNews(
+            Array.isArray(personalizedData)
+             ? personalizedData
+              : []
+            );
           setPersonalizedNews(
             Array.isArray(personalizedData)
               ? personalizedData
@@ -204,20 +211,65 @@ console.log(allNewsData);
       ? personalizedNews
       : allNews;
 
-  const filteredNews = currentNews.filter(
-  (item) => !item.title?.toUpperCase().startsWith("CVE-")
-); const sortedNews = [...filteredNews].sort((a, b) => {
+  const filteredNews = currentNews.filter((item) => {
+  // All News'ta CVE'leri gizle
+  if (
+    selectedFeed === "all" &&
+    item.title?.toUpperCase().startsWith("CVE-")
+  ) {
+    return false;
+  }
+
+  // Search
+  if (
+    searchTerm.trim() &&
+    !(
+      item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.summary?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  ) {
+    return false;
+  }
+
+  // Category
+  if (
+    selectedCategory !== "all" &&
+    item.category !== selectedCategory
+  ) {
+    return false;
+  }
+
+  // Region
+  if (
+    selectedRegion !== "all" &&
+    item.region?.toLowerCase() !== selectedRegion.toLowerCase()
+  ) {
+    return false;
+  }
+
+  // Risk
+  if (
+    selectedRisk !== "all" &&
+    item.risk_level?.toLowerCase() !== selectedRisk.toLowerCase()
+  ) {
+    return false;
+  }
+
+  return true;
+}); const sortedNews = (() => {
   switch (sortBy) {
     case "oldest":
-      return (
-        new Date(a.published_at ?? "").getTime() -
-        new Date(b.published_at ?? "").getTime()
+      return [...filteredNews].sort(
+        (a, b) =>
+          new Date(a.published_at ?? "").getTime() -
+          new Date(b.published_at ?? "").getTime()
       );
 
     case "importance":
-      return (
-        (b.importance_score ?? 0) -
-        (a.importance_score ?? 0)
+      return [...filteredNews].sort(
+        (a, b) =>
+          (b.importance_score ?? 0) -
+          (a.importance_score ?? 0)
       );
 
     case "risk": {
@@ -228,23 +280,23 @@ console.log(allNewsData);
         low: 1,
       };
 
-      return (
-        (order[
-          b.risk_level?.toLowerCase() as keyof typeof order
-        ] ?? 0) -
-        (order[
-          a.risk_level?.toLowerCase() as keyof typeof order
-        ] ?? 0)
+      return [...filteredNews].sort(
+        (a, b) =>
+          (order[
+            b.risk_level?.toLowerCase() as keyof typeof order
+          ] ?? 0) -
+          (order[
+            a.risk_level?.toLowerCase() as keyof typeof order
+          ] ?? 0)
       );
     }
 
+    case "newest":
     default:
-      return (
-        new Date(b.published_at ?? "").getTime() -
-        new Date(a.published_at ?? "").getTime()
-      );
+      // API'nin döndürdüğü sıralamayı koru
+      return filteredNews;
   }
-});
+})();
   const getRiskClasses = (
     riskLevel: string | null | undefined
   ) => {
@@ -380,7 +432,7 @@ const loadMore = async () => {
       );
 
       const data = await response.json();
-
+      console.log("Personalized API:", data);
       setPersonalizedNews((prev) => [
         ...prev,
         ...data,
@@ -452,21 +504,21 @@ const loadMore = async () => {
   };
 
   return (
-    <main className="min-h-screen bg-transparent p-6 text-slate-950 dark:text-white md:p-10">
+    <main className="min-h-screen bg-transparent px-4 py-6 text-slate-950 dark:text-white sm:px-6 md:px-8 lg:px-10">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold">
+        <h1 className="text-2xl font-bold sm:text-3xl">
           News
         </h1>
 
-        <p className="mt-3 text-gray-500 dark:text-gray-400">
+        <p className="mt-3 max-w-2xl text-sm text-gray-500 dark:text-gray-400 sm:text-base">
           Explore AI-analyzed technology news and personalized
           updates based on your interests.
         </p>
       </div>
 
       {/* Feed tabs */}
-      <div className="mt-8 inline-flex rounded-2xl border border-gray-200 bg-gray-800 p-1.5 shadow-sm dark:border-gray-700 dark:bg-gray-800/60">
+      <div className="mt-8 mt-8 flex w-full flex-col gap-3 sm:inline-flex sm:w-auto sm:flex-row rounded-2xl border rounded-2xl border border-gray-200 bg-gray-800 p-1.5 shadow-sm dark:border-gray-700 dark:bg-gray-800/60">
         <button
           type="button"
           onClick={() => {
@@ -479,7 +531,7 @@ const loadMore = async () => {
               : "text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           }`}
         >
-          <Sparkles className="h-4 w-4" />
+          <Sparkles className=" flex flex-1 items-center justify-center h-4 w-4" />
           For You
         </button>
 
@@ -495,7 +547,7 @@ const loadMore = async () => {
               : "text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           }`}
         >
-          <Newspaper className="h-4 w-4" />
+          <Newspaper className="flex flex-1 items-center justify-center h-4 w-4" />
           All News
         </button>
       </div>
@@ -536,7 +588,7 @@ const loadMore = async () => {
     className="w-full rounded-xl border border-gray-200 bg-white/70 px-4 py-3 text-sm outline-none transition focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800/60"
   />
 </div>
-<div className="mt-5 grid gap-3 md:grid-cols-4">
+<div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
 
   <select
     value={selectedCategory}
@@ -647,7 +699,8 @@ focus:border-blue-500
 focus:ring-2
 focus:ring-blue-500/20
 "
->
+> 
+<option value="newest">Recommend</option>
   <option value="newest">Newest First</option>
   <option value="oldest">Oldest First</option>
   <option value="importance">Highest Importance</option>
@@ -744,7 +797,7 @@ focus:ring-blue-500/20
 
   return (
     <div
-      className={`relative mb-5 h-64 overflow-hidden rounded-2xl bg-gradient-to-br ${placeholder.colors}`}
+      className={`relative mb-5 h-52 sm:h-64 overflow-hidden rounded-2xl bg-gradient-to-br ${placeholder.colors}`}
     >
       {/* Glow */}
       <div
@@ -823,7 +876,7 @@ focus:ring-blue-500/20
 
               {/* Title */}
               <div className="flex items-start justify-between gap-4">
-                <h2 className="text-xl  line-clamp-2 font-semibold leading-snug transition group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                <h2 className="text-lg sm:text-xl  line-clamp-2 font-semibold leading-snug transition group-hover:text-blue-600 dark:group-hover:text-blue-400">
                   {item.title}
                 </h2>
 
@@ -891,7 +944,7 @@ focus:ring-blue-500/20
         <button
           onClick={loadMore}
           disabled={loadingMore}
-          className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-xl bg-blue-600 px-6 py-3 sm:w-auto text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loadingMore ? (
             <span className="flex items-center gap-2">

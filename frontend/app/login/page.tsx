@@ -109,7 +109,12 @@ export default function LoginPage() {
         <ThemeToggle />
       </div>
 
-      <div className="relative z-10 w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-lg dark:border-gray-800 dark:bg-gray-900">
+      <div className="relative z-10 w-full max-w-md">
+
+  {/* Card Glow */}
+  <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-blue-500/20 blur-3xl dark:bg-cyan-500/20" />
+
+  <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
         <h1 className="text-center text-2xl font-bold text-gray-900 dark:text-white">
           Welcome back
         </h1>
@@ -240,6 +245,7 @@ export default function LoginPage() {
             </a>
           </p>
         </form>
+      </div>
       </div>
     </main>
   );

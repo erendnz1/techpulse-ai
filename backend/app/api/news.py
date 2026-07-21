@@ -28,7 +28,7 @@ from app.services.news_service import (
     reanalyze_pending_news,
 )
 from app.crud.news import search_news
-
+from app.services.news_service import process_and_save_news
 router = APIRouter(
     prefix="/news",
     tags=["News"]
