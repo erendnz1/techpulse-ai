@@ -1,4 +1,4 @@
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from app.database.session import SessionLocal
 from app.services.news_service import (
@@ -8,7 +8,7 @@ from app.services.news_service import (
 from app.services.cleanup_service import cleanup_old_news
 
 from datetime import datetime, timedelta
-scheduler = BackgroundScheduler()
+scheduler = AsyncIOScheduler()
 
 
 def scheduled_news_fetch():
