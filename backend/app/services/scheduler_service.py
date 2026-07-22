@@ -99,3 +99,13 @@ scheduler.add_job(
     id="cleanup_job",
     replace_existing=True,
 )
+
+print("🔥 Scheduler jobs registered")
+
+for job in scheduler.get_jobs():
+    print(
+        "JOB REGISTERED:",
+        job.id,
+        "NEXT:",
+        job.next_run_time
+    )
