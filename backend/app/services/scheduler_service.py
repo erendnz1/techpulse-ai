@@ -73,7 +73,7 @@ def scheduled_cleanup():
 scheduler.add_job(
     scheduled_news_fetch,
     trigger="interval",
-    hours=2,
+    minutes=5,
     id="news_fetch_job",
     replace_existing=True,
 )
