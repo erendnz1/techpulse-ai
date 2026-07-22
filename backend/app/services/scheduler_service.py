@@ -69,16 +69,21 @@ def scheduled_cleanup():
         db.close()
 
 
-# News fetch every 2 hours
+scheduler.add_job(
+    scheduled_news_fetch,
+    trigger="date",
+    run_date=datetime.now() + timedelta(seconds=10),
+    id="startup_fetch_job",
+    replace_existing=True,
+)
+
 scheduler.add_job(
     scheduled_news_fetch,
     trigger="interval",
     minutes=5,
     id="news_fetch_job",
     replace_existing=True,
-    next_run_time=datetime.now() + timedelta(seconds=10),
 )
-
 
 # AI analysis every 4 hours
 scheduler.add_job(
