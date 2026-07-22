@@ -7,7 +7,7 @@ from app.services.news_service import (
 )
 from app.services.cleanup_service import cleanup_old_news
 
-
+from datetime import datetime, timedelta
 scheduler = BackgroundScheduler()
 
 
@@ -76,6 +76,7 @@ scheduler.add_job(
     minutes=5,
     id="news_fetch_job",
     replace_existing=True,
+    next_run_time=datetime.now() + timedelta(seconds=10),
 )
 
 
