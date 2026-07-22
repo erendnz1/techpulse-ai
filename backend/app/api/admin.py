@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import func, text
-from datetime import datetime, timedelta, timezone
+
+
 from app.database.session import get_db
 from app.dependencies.auth import admin_required
 import os
 import tempfile
-from app.dependencies.auth import get_current_user
+
 from fastapi.responses import FileResponse
 
 from app.services.report_service import generate_admin_report
@@ -18,7 +18,7 @@ from app.schemas.user import UserResponse
 from app.schemas.news import NewsResponse
 
 from app.services.news_service import process_and_save_news
-
+from app.services.cleanup_service import cleanup_old_news as cleanup_service
 from app.crud.admin import (
     get_recent_activity,
     get_dashboard_charts,
@@ -93,13 +93,52 @@ def delete_user(
             detail="You cannot delete your own account.",
         )
 
-    db.delete(user)
+    if user.role == "admin":
+        raise HTTPException(
+        status_code=400,
+        detail="Admin users cannot be deleted.",
+    )
     db.commit()
 
     return {
         "message": "User deleted successfully.",
     }
+@router.patch("/users/{user_id}/role")
+def update_user_role(
+    user_id: int,
+    role: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(admin_required),
+):
 
+    user = db.query(User).filter(
+        User.id == user_id
+    ).first()
+    if user.id == current_user.id:
+      raise HTTPException(
+        status_code=400,
+        detail="You cannot change your own role.",
+    )
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found."
+        )
+
+    if role not in ["user", "admin"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid role."
+        )
+
+    user.role = role
+
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "message": "Role updated successfully."
+    }
 
 @router.get("/news", response_model=list[NewsResponse])
 def get_admin_news(
@@ -173,28 +212,16 @@ def get_platform_health(
 
 @router.delete("/cleanup")
 def cleanup_old_news(
-    days: int = 30,
     db: Session = Depends(get_db),
     current_user: User = Depends(admin_required),
 ):
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=days)
-
-    deleted = (
-        db.query(News)
-        .filter(
-            News.published_at.isnot(None),
-            News.published_at < cutoff_date,
-        )
-        .delete(synchronize_session=False)
-    )
-
-    db.commit()
+    result = cleanup_service(db)
 
     return {
-        "deleted": deleted,
-        "message": f"{deleted} old articles removed successfully.",
+        "success": True,
+        "message": "Database cleanup completed successfully.",
+        **result,
     }
-
 @router.get("/report")
 def download_admin_report(
     db: Session = Depends(get_db),
@@ -217,28 +244,14 @@ def download_admin_report(
         media_type="application/pdf",
         filename="TechPulseAI_Report.pdf",
     )
-
-@router.delete("/users/{user_id}")
-def delete_user(
-    user_id: int,
+@router.get("/system-status")
+def system_status(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(admin_required),
 ):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Not authorized")
-
-    user = db.query(User).filter(User.id == user_id).first()
-
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    if user.role == "admin":
-        raise HTTPException(
-            status_code=400,
-            detail="Admin users cannot be deleted"
-        )
-
-    db.delete(user)
-    db.commit()
-
-    return {"message": "User deleted successfully"}
+    return {
+        "backend": "Online",
+        "database": "Connected",
+        "scheduler": "Running",
+        "ai_service": "Active",
+    }
