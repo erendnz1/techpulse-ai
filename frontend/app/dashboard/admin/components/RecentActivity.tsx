@@ -20,11 +20,7 @@ export default function RecentActivity() {
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showAll, setShowAll] = useState(false);
 
-  const displayedActivities = showAll
-    ? activities
-    : activities.slice(0, 5);
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -40,30 +36,51 @@ export default function RecentActivity() {
           }
         );
 
+
         if (!response.ok) {
-          throw new Error("Failed to fetch activities.");
+          throw new Error(
+            "Failed to fetch activities."
+          );
         }
 
+
         const data = await response.json();
+
         setActivities(data);
+
+
       } catch (err) {
+
         console.error(err);
-        setError("Failed to load recent activity.");
+
+        setError(
+          "Failed to load recent activity."
+        );
+
       } finally {
+
         setLoading(false);
+
       }
     };
 
+
     fetchActivities();
+
   }, []);
 
+
+
   const getIcon = (type: string) => {
+
     switch (type) {
+
       case "news":
         return {
           icon: Newspaper,
           color: "text-emerald-400",
         };
+
 
       case "notification":
         return {
@@ -71,55 +88,77 @@ export default function RecentActivity() {
           color: "text-amber-400",
         };
 
+
       case "user":
         return {
           icon: UserPlus,
           color: "text-blue-400",
         };
 
+
       default:
         return {
           icon: ShieldAlert,
           color: "text-red-400",
         };
+
     }
   };
 
+
+
   const getBadge = (type: string) => {
+
     switch (type) {
+
       case "news":
         return "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
+
 
       case "notification":
         return "bg-amber-500/15 text-amber-400 border-amber-500/30";
 
+
       case "user":
         return "bg-blue-500/15 text-blue-400 border-blue-500/30";
 
+
       default:
         return "bg-red-500/15 text-red-400 border-red-500/30";
+
     }
   };
 
+
+
   if (loading) {
     return (
-      <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-6 backdrop-blur-xl">
-        <p className="text-slate-400">Loading...</p>
+      <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-5 backdrop-blur-xl">
+        <p className="text-slate-400">
+          Loading...
+        </p>
       </div>
     );
   }
+
+
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-red-500 bg-slate-800/60 p-6 backdrop-blur-xl">
-        <p className="text-red-400">{error}</p>
+      <div className="rounded-2xl border border-red-500 bg-slate-800/60 p-5 backdrop-blur-xl">
+        <p className="text-red-400">
+          {error}
+        </p>
       </div>
     );
   }
 
+
+
   if (activities.length === 0) {
     return (
-      <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-10 text-center backdrop-blur-xl">
+      <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-8 text-center backdrop-blur-xl">
+
         <Activity
           size={42}
           className="mx-auto mb-4 text-slate-500"
@@ -132,14 +171,37 @@ export default function RecentActivity() {
         <p className="mt-2 text-sm text-slate-400">
           Recent platform events will appear here.
         </p>
+
       </div>
     );
   }
 
-  return (
-    <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-5 backdrop-blur-xl">
 
-      <div className="mb-6 flex items-center justify-between">
+
+  return (
+    <div
+      className="
+        rounded-2xl
+        border
+        border-slate-700
+        bg-slate-800/60
+        p-4
+        sm:p-5
+        backdrop-blur-xl
+      "
+    >
+
+      <div
+        className="
+          mb-5
+          flex
+          flex-col
+          gap-3
+          sm:flex-row
+          sm:items-center
+          sm:justify-between
+        "
+      >
 
         <div className="flex items-center gap-3">
 
@@ -150,101 +212,183 @@ export default function RecentActivity() {
             />
           </div>
 
+
           <div>
+
             <h2 className="text-lg font-semibold text-white">
               Recent Activity
             </h2>
 
+
             <p className="text-sm text-slate-400">
               Latest platform events
             </p>
+
           </div>
 
         </div>
 
-        <span className="rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-400">
-          {showAll
-            ? `${activities.length} Events`
-            : `${displayedActivities.length}/${activities.length}`}
+
+        <span
+          className="
+            w-fit
+            rounded-full
+            border
+            border-slate-700
+            px-3
+            py-1
+            text-xs
+            text-slate-400
+          "
+        >
+          {activities.length} Events
         </span>
 
       </div>
 
-      <div className="relative">
 
-        <div className="absolute bottom-0 left-5 top-0 w-px bg-slate-700" />
 
-        <div className="space-y-5">
+      <div className="relative max-h-[380px] overflow-y-auto pr-1 sm:pr-2">
 
-          {displayedActivities.map((item, index) => {
-            const { icon: Icon, color } = getIcon(item.type);
+        <div className="absolute bottom-0 left-[18px] top-0 w-px bg-slate-700" />
+
+
+        <div className="space-y-4">
+
+          {activities.map((item,index)=>{
+
+            const {
+              icon:Icon,
+              color
+            } = getIcon(item.type);
+
 
             return (
+
               <div
                 key={`${item.type}-${index}`}
-                className="relative flex gap-4"
+                className="relative flex gap-3"
               >
 
-                <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900 shadow-lg shadow-slate-950">
+                <div
+                  className="
+                    relative
+                    z-10
+                    flex
+                    h-9
+                    w-9
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-full
+                    border
+                    border-slate-700
+                    bg-slate-900
+                  "
+                >
+
                   <Icon
-                    size={18}
+                    size={16}
                     className={color}
                   />
+
                 </div>
 
-                <div className="flex-1 rounded-xl border border-slate-700 bg-slate-900/40 p-3 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-500 hover:bg-slate-900/70">
 
-                  <div className="flex items-start justify-between gap-4">
 
-                    <div>
+                <div
+                  className="
+                    min-w-0
+                    flex-1
+                    rounded-xl
+                    border
+                    border-slate-700
+                    bg-slate-900/40
+                    p-3
+                    transition-all
+                    duration-300
+                    hover:-translate-y-0.5
+                    hover:border-indigo-500
+                  "
+                >
 
-                      <h3 className="text-sm font-semibold text-white">
+                  <div
+                    className="
+                      flex
+                      flex-col
+                      gap-2
+                      sm:flex-row
+                      sm:items-start
+                      sm:justify-between
+                    "
+                  >
+
+                    <div className="min-w-0">
+
+                      <h3
+                        className="
+                          line-clamp-2
+                          text-sm
+                          font-semibold
+                          text-white
+                        "
+                      >
                         {item.title}
                       </h3>
 
-                      <div className="mt-2">
 
-                        <span
-                          className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${getBadge(
-                            item.type
-                          )}`}
-                        >
-                          {item.type}
-                        </span>
+                      <span
+                        className={`
+                          mt-2
+                          inline-flex
+                          rounded-full
+                          border
+                          px-2
+                          py-0.5
+                          text-[10px]
+                          font-semibold
+                          uppercase
+                          tracking-wide
+                          ${getBadge(item.type)}
+                        `}
+                      >
+                        {item.type}
+                      </span>
 
-                      </div>
 
                     </div>
 
-                    <span className="whitespace-nowrap text-xs text-slate-500">
+
+                    <span
+                      className="
+                        shrink-0
+                        text-xs
+                        text-slate-500
+                      "
+                    >
                       {formatDistanceToNow(
                         new Date(item.created_at),
                         {
-                          addSuffix: true,
+                          addSuffix:true,
                         }
                       )}
                     </span>
+
 
                   </div>
 
                 </div>
 
+
               </div>
+
             );
+
           })}
 
         </div>
 
       </div>
-
-      {activities.length > 5 && (
-        <button
-          onClick={() => setShowAll(!showAll)}
-          className="mt-6 w-full rounded-xl border border-slate-700 bg-slate-900/40 py-2 text-sm font-medium text-slate-300 transition hover:border-indigo-500 hover:bg-slate-800 hover:text-white"
-        >
-          {showAll ? "Show Less" : "Load More"}
-        </button>
-      )}
 
     </div>
   );

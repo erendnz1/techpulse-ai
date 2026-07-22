@@ -147,8 +147,8 @@ export default function NotificationsPage() {
   };
 
   return (
-        <main className="min-h-screen bg-transparent p-10 text-slate-950 dark:text-white">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+        <main className="min-h-screen bg-transparent px-4 py-5 text-slate-950 dark:text-white sm:px-6 lg:p-10">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-bold">
           Notifications
         </h1>
@@ -157,7 +157,7 @@ export default function NotificationsPage() {
           <button
             type="button"
             onClick={markAllAsRead}
-            className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20"
+            className="w-full sm:w-auto rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20"
           >
             Mark all as read
           </button>
@@ -217,7 +217,7 @@ export default function NotificationsPage() {
     <article
       key={notification.id}
       onClick={() => handleNotificationClick(notification)}
-      className={`cursor-pointer rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-0.5 ${
+      className={`cursor-pointer rounded-2xl border p-4 sm:p-5 transition-all duration-300 hover:-translate-y-0.5 ${
         notification.is_read
           ? "border-gray-200 bg-white/60 dark:border-gray-700 dark:bg-gray-800/40"
           : isSecurity
@@ -255,7 +255,7 @@ export default function NotificationsPage() {
         </div>
 
         <span
-          className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
+ className={`self-start rounded-full px-3 py-1 text-xs font-medium ${
             notification.is_read
               ? "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400"
               : isSecurity
@@ -276,10 +276,10 @@ export default function NotificationsPage() {
           {hasMore && (
             <div className="mt-8 flex justify-center">
               <button
-                onClick={() => fetchNotifications(true)}
-                disabled={loadingMore}
-                className="rounded-xl bg-blue-600 px-6 py-3 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
-              >
+ onClick={() => fetchNotifications(true)}
+ disabled={loadingMore}
+ className="w-full rounded-xl bg-blue-600 px-6 py-3 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+>
                 {loadingMore ? "Loading..." : "Load More"}
               </button>
             </div>

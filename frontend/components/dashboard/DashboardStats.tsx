@@ -7,7 +7,9 @@ import {
   ShieldAlert,
   Sparkles,
 } from "lucide-react";
+
 import StatCard from "./StatCard";
+
 
 type DashboardStatsProps = {
   stats?: {
@@ -18,11 +20,24 @@ type DashboardStatsProps = {
   };
 };
 
+
 export default function DashboardStats({
   stats,
 }: DashboardStatsProps) {
+
   return (
-    <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+
+    <section
+      className="
+        mt-5
+        grid
+        gap-4
+        sm:grid-cols-2
+        lg:grid-cols-3
+        2xl:grid-cols-5
+      "
+    >
+
 
       <StatCard
         title="Today's News"
@@ -35,6 +50,8 @@ export default function DashboardStats({
         trendColor="text-green-500"
       />
 
+
+
       <StatCard
         title="AI Summarized"
         value={stats?.total_news ?? "--"}
@@ -45,6 +62,8 @@ export default function DashboardStats({
         trend="100%"
         trendColor="text-green-500"
       />
+
+
 
       <StatCard
         title="Critical Alerts"
@@ -57,6 +76,8 @@ export default function DashboardStats({
         trendColor="text-red-500"
       />
 
+
+
       <StatCard
         title="Notifications"
         value={stats?.unread_notifications ?? "--"}
@@ -68,9 +89,15 @@ export default function DashboardStats({
         trendColor="text-purple-500"
       />
 
+
+
       <StatCard
         title="Sources"
-        value={Object.keys(stats?.sources ?? {}).length}
+        value={
+          Object.keys(
+            stats?.sources ?? {}
+          ).length
+        }
         subtitle="Active providers"
         icon={Globe2}
         iconBg="bg-cyan-500/15"
@@ -79,6 +106,8 @@ export default function DashboardStats({
         trendColor="text-cyan-500"
       />
 
+
     </section>
+
   );
 }

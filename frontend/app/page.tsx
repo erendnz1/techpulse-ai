@@ -1,70 +1,165 @@
 "use client";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FadeInSection } from "./fade-in-section";
 export default function Home() {
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <main className="min-h-screen bg-white text-gray-900 transition-colors dark:bg-gray-900 dark:text-white">
-      <nav className="flex items-center justify-between border-b border-gray-200 px-8 py-5 dark:border-gray-800">
-        <a
-          href="/"
-          className="text-xl font-bold tracking-tight text-gray-900 transition-opacity hover:opacity-80 dark:text-white"
-        >
-          TechPulse <span className="text-blue-600">AI</span>
-        </a>
+    <main className="min-h-screen overflow-x-hidden bg-white text-gray-900 transition-colors dark:bg-gray-900 dark:text-white">
+      <nav className="relative flex items-center justify-between border-b border-gray-200 px-4 py-4 sm:px-8 dark:border-gray-800">
 
-        <div className="flex items-center gap-10 text-base font-semibold text-gray-700 dark:text-gray-200">
-          <a href="#features"
-            className="transition-colors hover:text-blue-600 dark:hover:text-blue-400"
-          >
-            Features</a>
-          <a href="#categories"
-            className="transition-colors hover:text-blue-600 dark:hover:text-blue-400"
-          >
-            Categories</a>
-          <a href="#about"
-            className="transition-colors hover:text-blue-600 dark:hover:text-blue-400"
-          >
-            About</a>
-        </div>
+  <a
+    href="/"
+    className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+  >
+    TechPulse <span className="text-blue-600">AI</span>
+  </a>
 
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
 
-          <a
-            href="/login"
-            className="text-base font-semibold text-gray-700 transition duration-300 hover:-translate-y-0.5 hover:scale-105 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400"
-          >
-            Sign In
-          </a>
+  {/* Desktop Menu */}
+  <div className="hidden items-center gap-10 text-base font-semibold text-gray-700 dark:text-gray-200 md:flex">
 
-          <a
-            href="/register"
-            className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-blue-700 hover:shadow-lg"
-          >
-            Get Started
-          </a>
-        </div>
-      </nav>
+    <a
+      href="#features"
+      className="hover:text-blue-600"
+    >
+      Features
+    </a>
+
+    <a
+      href="#categories"
+      className="hover:text-blue-600"
+    >
+      Categories
+    </a>
+
+    <a
+      href="#about"
+      className="hover:text-blue-600"
+    >
+      About
+    </a>
+
+  </div>
+
+
+
+  {/* Desktop Actions */}
+  <div className="hidden items-center gap-4 md:flex">
+
+    <ThemeToggle />
+
+    <a
+      href="/login"
+      className="font-semibold text-gray-700 hover:text-blue-600 dark:text-gray-200"
+    >
+      Sign In
+    </a>
+
+
+    <a
+      href="/register"
+      className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
+    >
+      Get Started
+    </a>
+
+  </div>
+
+
+
+  {/* Mobile Button */}
+  <button
+    onClick={() => setMenuOpen(!menuOpen)}
+    className="text-3xl text-gray-700 dark:text-white md:hidden"
+  >
+    ☰
+  </button>
+
+
+
+  {/* Mobile Menu */}
+  {menuOpen && (
+
+    <div className="
+      absolute
+      left-0
+      top-[70px]
+      z-50
+      flex
+      w-full
+      flex-col
+      gap-5
+      border-b
+      border-gray-200
+      bg-white
+      p-6
+      shadow-lg
+      dark:border-gray-800
+      dark:bg-gray-900
+      md:hidden
+    ">
+
+
+      <a href="#features">
+        Features
+      </a>
+
+      <a href="#categories">
+        Categories
+      </a>
+
+      <a href="#about">
+        About
+      </a>
+
+
+      <a
+        href="/login"
+        className="text-blue-600"
+      >
+        Sign In
+      </a>
+
+
+      <a
+        href="/register"
+        className="rounded-lg bg-blue-600 px-4 py-2 text-center text-white"
+      >
+        Get Started
+      </a>
+
+
+      <div className="flex justify-start">
+  <ThemeToggle />
+</div>
+
+    </div>
+
+  )}
+
+</nav>
+     
       <FadeInSection>
-        <section className="relative mx-auto flex max-w-5xl flex-col items-center px-6 py-24 text-center">
+        <section className="relative mx-auto flex max-w-5xl flex-col items-center px-4 py-20 sm:py-24 text-center sm:px-6 sm:py-24">
           <div className="pointer-events-none absolute left-1/2 top-0 z-0 hidden h-96 w-96 -translate-x-1/2 rounded-full bg-blue-600/20 blur-3xl dark:block" />
           {/* Light mode - left edge glow */}
-          <div className="pointer-events-none absolute -left-64 top-1/2 z-0 h-96 w-96 -translate-y-1/2 rounded-full bg-blue-200/60 blur-3xl dark:hidden" />
+         <div className="pointer-events-none absolute -left-64 top-1/2 z-0 hidden sm:block h-96 w-96 -translate-y-1/2 rounded-full bg-blue-200/60 blur-3xl dark:hidden" />
 
           {/* Light mode - right edge glow */}
-          <div className="pointer-events-none absolute -right-64 top-1/2 z-0 h-96 w-96 -translate-y-1/2 rounded-full bg-blue-200/60 blur-3xl dark:hidden" />
+          <div className="pointer-events-none absolute -right-64 top-1/2 z-0  hidden sm:block h-96 w-96 -translate-y-1/2 rounded-full bg-blue-200/60 blur-3xl dark:hidden" />
 
-          <h1 className="max-w-4xl text-5xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl">
+          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white sm:text-5xl lg:text-6xl">
             Stay ahead of technology with{" "}
             <span className="text-blue-600">AI-powered insights.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-300">
+          <p className="mt-6 max-w-xl text-base leading-7 text-gray-600 dark:text-gray-300 sm:text-lg sm:leading-8">
             Track important software developments, security vulnerabilities, AI news,
             framework updates, and developer tools in one intelligent platform.
           </p>
-          <div className="mt-10 flex items-center gap-4">
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <button
   onClick={() => {
     const token = localStorage.getItem("access_token");
@@ -92,7 +187,7 @@ export default function Home() {
         <section
 
           id="features"
-          className="relative overflow-hidden bg-gray-50 px-6 py-24 dark:bg-gray-900"
+          className="relative overflow-hidden bg-gray-50 px-4 py-16 sm:px-6 sm:py-24 dark:bg-gray-900"
         >
           <div className="pointer-events-none absolute right-0 top-1/2 z-0 hidden h-96 w-96 -translate-y-1/2 rounded-full bg-blue-600/20 blur-3xl dark:block" />
           <div className="pointer-events-none absolute left-0 top-1/2 z-0 hidden h-96 w-96 -translate-y-1/2 rounded-full bg-blue-600/20 blur-3xl dark:block" />
@@ -160,7 +255,7 @@ export default function Home() {
       <FadeInSection>
         <section
           id="categories"
-          className="relative overflow-hidden px-6 py-24"
+          className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24"
         >
           <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
           <div className="mx-auto max-w-6xl text-center">
@@ -202,7 +297,7 @@ export default function Home() {
       <FadeInSection>
         <section
           id="about"
-          className="relative overflow-hidden bg-gray-50 px-6 py-24 dark:bg-gray-900"
+          className="relative overflow-hidden bg-gray-50 px-4 py-16 sm:px-6 sm:py-24 dark:bg-gray-900"
         >
           <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
           <div className="mx-auto max-w-4xl text-center">
@@ -225,7 +320,7 @@ export default function Home() {
         </section>
       </FadeInSection>
       <FadeInSection>
-        <section className="relative overflow-hidden px-6 py-24">
+        <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24">
           <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
           <div className="mx-auto max-w-6xl rounded-3xl border border-gray-200 bg-gray-50 px-8 py-16 text-center shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:px-16">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
@@ -249,10 +344,10 @@ export default function Home() {
         </section>
       </FadeInSection>
       <footer className="border-t border-gray-200 px-6 py-8 dark:border-gray-800">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
           <a
             href="/"
-            className="text-xl font-bold tracking-tight text-gray-900 transition-opacity hover:opacity-80 dark:text-white"
+            className="text-2xl sm:text-xl font-bold tracking-tight text-gray-900 transition-opacity hover:opacity-80 dark:text-white"
           >
             TechPulse <span className="text-blue-600">AI</span>
           </a>

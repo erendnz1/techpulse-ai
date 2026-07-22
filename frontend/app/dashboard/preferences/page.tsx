@@ -209,7 +209,7 @@ export default function PreferencesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10 md:px-10">
+    <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-10">
       <div>
         <h1 className="text-3xl font-bold text-gray-950 dark:text-white">
           Preferences
@@ -239,7 +239,7 @@ export default function PreferencesPage() {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
             {categories.map((category) => {
               const selected =
                 preferences.categories.includes(category);
@@ -281,7 +281,7 @@ export default function PreferencesPage() {
             </div>
           </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2">
             {regions.map((region) => {
               const selected = preferences.regions.includes(
                 region.value
@@ -379,7 +379,7 @@ export default function PreferencesPage() {
         {/* Notifications */}
         {/* Email Notifications */}
 <section className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-white/[0.03]">
-  <div className="flex items-center justify-between gap-6">
+  <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
     <div className="flex items-start gap-3">
       <div className="rounded-xl bg-emerald-500/10 p-2.5 text-emerald-500">
         <Bell className="h-5 w-5" />
@@ -424,7 +424,7 @@ export default function PreferencesPage() {
   </div>
 </section>
         <section className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-white/[0.03]">
-          <div className="flex items-center justify-between gap-6">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
               <div className="rounded-xl bg-purple-500/10 p-2.5 text-purple-500">
                 <Bell className="h-5 w-5" />
@@ -484,12 +484,12 @@ export default function PreferencesPage() {
         )}
 
         {/* Save button */}
-        <div className="flex justify-end">
+        <div className="flex justify-stretch sm:justify-end">
           <button
             type="button"
             onClick={savePreferences}
             disabled={isSaving}
-            className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+           className="flex w-full sm:w-auto items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSaving ? (
               <>

@@ -95,12 +95,12 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white px-4 transition-colors dark:bg-gray-900">
+    <main className="relative flex min-h-screen items-center justify-center py-10 overflow-hidden bg-white px-4 transition-colors dark:bg-gray-900">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.12),transparent_45%)] dark:bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.18),transparent_45%)]" />
 
       <a
         href="/"
-        className="absolute left-8 top-6 z-10 text-xl font-bold tracking-tight text-gray-900 transition-opacity hover:opacity-80 dark:text-white"
+        className="absolute left-8 top-6 z-10 text-2xl font-bold tracking-tight text-gray-900 transition-opacity hover:opacity-80 dark:text-white"
       >
         TechPulse <span className="text-blue-600">AI</span>
       </a>
@@ -109,13 +109,13 @@ export default function LoginPage() {
         <ThemeToggle />
       </div>
 
-      <div className="relative z-10 w-full max-w-md">
+      <div className="relative z-10 w-full  max-w-md px-4">
 
   {/* Card Glow */}
   <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-blue-500/20 blur-3xl dark:bg-cyan-500/20" />
 
-  <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
-        <h1 className="text-center text-2xl font-bold text-gray-900 dark:text-white">
+  <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 shadow-xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
+        <h1 className="text-center text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
           Welcome back
         </h1>
 
@@ -213,7 +213,14 @@ export default function LoginPage() {
               </button>
             </div>
           </div>
-
+<div className="mt-3 text-right text-sm">
+  <a
+    href="/forgot-password"
+    className="font-medium text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+  >
+    Forgot Password?
+  </a>
+</div>
           {error && (
             <p className="mt-4 text-center text-sm text-red-500">
               {error}
@@ -236,14 +243,14 @@ export default function LoginPage() {
           </button>
 
           <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-            Don&apos;t have an account?{" "}
-            <a
-              href="/register"
-              className="font-semibold text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              Create account
-            </a>
-          </p>
+  Don&apos;t have an account?{" "}
+  <a
+    href="/register"
+    className="font-semibold text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+  >
+    Create account
+  </a>
+</p>
         </form>
       </div>
       </div>

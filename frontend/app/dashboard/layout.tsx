@@ -83,7 +83,7 @@ export default function DashboardLayout({
 
   return (
     <AuthGuard>
-      <main className="relative min-h-screen overflow-hidden bg-white text-slate-950 transition-colors dark:bg-gray-900 dark:text-white">
+     <main className="relative min-h-screen overflow-x-hidden bg-white text-slate-950 transition-colors dark:bg-gray-900 dark:text-white">
 
         <div className="pointer-events-none absolute left-0 right-0 top-0 h-screen bg-[radial-gradient(circle_at_50%_30%,rgba(37,99,235,0.12),transparent_45%)] dark:bg-[radial-gradient(circle_at_50%_30%,rgba(37,99,235,0.18),transparent_45%)]" />
 
@@ -101,7 +101,7 @@ export default function DashboardLayout({
               onMenuClick={openMenu}
             />
 
-            <div className="flex-1 px-4 py-4 sm:px-6 lg:px-8">
+            <div className="flex-1 px-4 py-4 sm:px-6 lg:px-10">
   {children}
 </div>
 

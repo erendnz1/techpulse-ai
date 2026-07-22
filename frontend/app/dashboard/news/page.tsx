@@ -504,7 +504,7 @@ const loadMore = async () => {
   };
 
   return (
-    <main className="min-h-screen bg-transparent px-4 py-6 text-slate-950 dark:text-white sm:px-6 md:px-8 lg:px-10">
+    <main className="min-h-screen bg-transparent px-4 py-4 text-slate-950 dark:text-white sm:px-6 md:px-8 lg:px-10">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold sm:text-3xl">
@@ -518,7 +518,7 @@ const loadMore = async () => {
       </div>
 
       {/* Feed tabs */}
-      <div className="mt-8 mt-8 flex w-full flex-col gap-3 sm:inline-flex sm:w-auto sm:flex-row rounded-2xl border rounded-2xl border border-gray-200 bg-gray-800 p-1.5 shadow-sm dark:border-gray-700 dark:bg-gray-800/60">
+      <div className="mt-6 flex w-full flex-col gap-3 rounded-2xl border border-gray-200 bg-gray-800 p-1.5 shadow-sm sm:inline-flex sm:w-auto sm:flex-row dark:border-gray-700 dark:bg-gray-800/60">
         <button
           type="button"
           onClick={() => {
@@ -588,7 +588,7 @@ const loadMore = async () => {
     className="w-full rounded-xl border border-gray-200 bg-white/70 px-4 py-3 text-sm outline-none transition focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800/60"
   />
 </div>
-<div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+<div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
 
   <select
     value={selectedCategory}
@@ -784,12 +784,12 @@ focus:ring-blue-500/20
 
       {/* News cards */}
       {!loading && !error && filteredNews.length > 0 && (
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {sortedNews.map((item) => (
             <article
               key={item.id}
               onClick={() => openNewsDetail(item.id)}
-              className="group h-full cursor-pointer rounded-2xl border border-gray-200 bg-white/70 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/60"
+              className="group h-full cursor-pointer rounded-2xl border border-gray-200 bg-white/70 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/60"
             >
               {(() => {
   const placeholder = getPlaceholder(item.category);
@@ -797,7 +797,7 @@ focus:ring-blue-500/20
 
   return (
     <div
-      className={`relative mb-5 h-52 sm:h-64 overflow-hidden rounded-2xl bg-gradient-to-br ${placeholder.colors}`}
+      className={`relative mb-5 h-44 sm:h-64 overflow-hidden rounded-2xl bg-gradient-to-br ${placeholder.colors}`}
     >
       {/* Glow */}
       <div

@@ -11,8 +11,8 @@ import {
   Settings,
   User,
   X,
-  
   LogOut,
+  Database,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -77,9 +77,9 @@ const adminItems = [
     icon: User,
   },
   {
-    href: "/dashboard/admin/news",
-    label: "News Manager",
-    icon: Newspaper,
+    href: "/dashboard/admin/database",
+    label: "Database",
+    icon: Database,
   },
 ];
   const handleLinkClick = () => {
@@ -129,12 +129,12 @@ useEffect(() => {
       <aside
         className={`
           fixed left-0 top-0 z-50
-          h-screen w-72 overflow-y-auto
+          h-screen w-72 max-w-[85vw] overflow-y-auto
           border-r border-gray-200
           bg-white/80
           backdrop-blur-xl
           shadow-xl
-          transition-all duration-500 ease-out
+          transition-transform duration-300 ease-out
           dark:border-gray-700
           dark:bg-gray-900/80
 

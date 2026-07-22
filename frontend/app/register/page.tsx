@@ -30,7 +30,7 @@ export default function RegisterPage() {
         return;
       }
 
-      router.push("/login?onboarding=true");
+      router.push("/login");
 
     } catch (error) {
       console.error(error);
@@ -61,14 +61,14 @@ export default function RegisterPage() {
       <div className="absolute right-8 top-5 z-10">
         <ThemeToggle />
       </div>
-      <div className="relative z-10 w-full max-w-md">
+      <div className="relative z-10 w-full max-w-lg px-4">
 
   {/* Card Glow */}
   <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-cyan-500/20 blur-3xl dark:bg-cyan-500/20" />
 
   <div className="rounded-2xl border border-gray-200 bg-white/95 p-8 shadow-2xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
         <form onSubmit={handleRegister}>
-          <h1 className="text-center text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-center text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
             Create your account
           </h1>
 
@@ -87,6 +87,7 @@ export default function RegisterPage() {
               id="username"
               name="username"
               type="text"
+              required
               placeholder="Choose a username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -105,6 +106,7 @@ export default function RegisterPage() {
               id="email"
               name="email"
               type="email"
+              required
               placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -124,6 +126,7 @@ export default function RegisterPage() {
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
+                required
                 placeholder="Create a password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

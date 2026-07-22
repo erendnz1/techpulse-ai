@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
   Trash2,
   Shield,
@@ -90,11 +91,53 @@ export default function UsersPage() {
       loadUsers();
     }
   }
+async function updateRole(
+  id: number,
+  role: string
+) {
+  const token = localStorage.getItem("access_token");
 
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${id}/role?role=${role}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data.detail || "Role update failed"
+      );
+    }
+
+    toast.success("User role updated.");
+
+    loadUsers();
+
+    if (selectedUser?.id === id) {
+      setSelectedUser(null);
+    }
+
+  } catch(error) {
+
+    toast.error(
+      error instanceof Error
+        ? error.message
+        : "Role update failed."
+    );
+
+  }
+}
 
 
     return (
-<div className="space-y-8 p-8">
+<div className="space-y-6 px-4 py-6 sm:px-6 lg:space-y-8 lg:px-10 lg:py-10">
   <div>
     <h1 className="text-3xl font-bold text-white">
       User Management
@@ -105,7 +148,7 @@ export default function UsersPage() {
     </p>
   </div>
 
-  <div className="grid gap-6 md:grid-cols-4">
+ <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
     <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
       <div className="flex items-center justify-between">
@@ -165,21 +208,35 @@ export default function UsersPage() {
 
   </div>
 
-  <div className="flex justify-end">
+<div className="flex justify-stretch sm:justify-end">
 
     <input
       type="text"
       placeholder="Search username or email..."
       value={search}
       onChange={(e) => setSearch(e.target.value)}
-      className="w-full max-w-sm rounded-xl border border-white/10 bg-slate-900/60 px-4 py-2 text-white placeholder:text-gray-500 outline-none backdrop-blur-xl focus:border-violet-500"
+      className="
+w-full
+sm:max-w-sm
+rounded-xl
+border
+border-white/10
+bg-slate-900/60
+px-4
+py-2
+text-white
+placeholder:text-gray-500
+outline-none
+backdrop-blur-xl
+focus:border-violet-500
+"
     />
 
   </div>
 
-  <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl">
+  <div className="overflow-x-auto rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl">
 
-    <table className="w-full">
+   <table className="min-w-[900px] w-full">
 
       <thead className="bg-white/5">
 
@@ -265,7 +322,7 @@ export default function UsersPage() {
 
               <td className="px-6 py-5">
 
-                <div className="flex items-center justify-center gap-3">
+                <div className="flex flex-wrap items-center justify-center gap-2">
 
                   <button
                     onClick={() => setSelectedUser(user)}
@@ -274,7 +331,23 @@ export default function UsersPage() {
                     <Eye size={16} />
                     View
                   </button>
+                  <button
+  onClick={() =>
+    updateRole(
+      user.id,
+      user.role === "admin"
+        ? "user"
+        : "admin"
+    )
+  }
+  className="inline-flex items-center gap-2 rounded-xl border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300 transition hover:bg-violet-500/20"
+>
+  <Shield size={16} />
 
+  {user.role === "admin"
+    ? "Remove Admin"
+    : "Make Admin"}
+</button>
                   {user.role !== "admin" && (
                     <button
                       onClick={() => deleteUser(user.id)}
@@ -303,7 +376,7 @@ export default function UsersPage() {
         {selectedUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
 
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-slate-900 p-8 shadow-2xl">
+          <div className="mx-4 w-full max-w-md rounded-2xl border border-white/10 bg-slate-900 p-5 shadow-2xl sm:p-8">
 
             <h2 className="mb-6 text-2xl font-bold text-white">
               User Details

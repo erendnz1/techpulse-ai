@@ -80,8 +80,8 @@ useEffect(() => {
   return () => clearTimeout(timeout);
 }, [query]);
   return (
-    <header className="mb-10">
-      <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
+    <header className="mb-6 sm:mb-10">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
 
         {/* Left */}
         <div>
@@ -89,7 +89,7 @@ useEffect(() => {
             Dashboard
           </p>
 
-          <h1 className="mt-2 text-4xl font-bold tracking-tight">
+          <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">
             Welcome back,{" "}
             <span className="text-blue-600 dark:text-blue-400">
               {username || "User"}
@@ -97,7 +97,7 @@ useEffect(() => {
             👋
           </h1>
 
-          <p className="mt-3 max-w-2xl text-gray-500 dark:text-gray-400">
+          <p className="mt-3 max-w-xl text-sm sm:text-base text-gray-500 dark:text-gray-400">
             Here's what's happening in the technology world today.
             Stay updated with AI, Security, Cloud, Developer Tools , Framework updates, and Software news.
             
@@ -105,12 +105,12 @@ useEffect(() => {
         </div>
 
         {/* Right */}
-        <div className="flex flex-col gap-4 xl:items-end">
+        <div className="flex w-full flex-col gap-4 lg:w-auto lg:items-end">
 
           {/* Search */}
           <div
   ref={searchRef}
-  className="relative w-full xl:w-[340px]"
+  className="relative w-full lg:w-[340px]"
 >
             <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
 
@@ -187,9 +187,9 @@ useEffect(() => {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex flex-wrap items-center justify-start gap-2 sm:justify-end">
 
-            <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
+            <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 sm:px-4 dark:border-gray-700 dark:bg-gray-900">
               <CalendarDays className="h-4 w-4 text-blue-500" />
 
               <span className="text-sm text-gray-600 dark:text-gray-300">

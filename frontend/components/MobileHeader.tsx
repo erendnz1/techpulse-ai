@@ -20,7 +20,7 @@ export default function MobileHeader({
       </button>
 
       <div className="flex flex-col items-center">
-        <h1 className="text-base font-bold">
+        <h1 className="text-lg font-bold">
           TechPulse <span className="text-blue-600">AI</span>
         </h1>
 

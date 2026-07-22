@@ -13,11 +13,13 @@ import TopSources from "@/components/dashboard/TopSources";
 import RecentSecurityAlerts from "@/components/dashboard/RecentSecurityAlerts";
 import AIActivity from "@/components/dashboard/AIActivity";
 
+
 type User = {
   id: number;
   username: string;
   email: string;
 };
+
 
 type DashboardStatsType = {
   total_news: number;
@@ -35,6 +37,7 @@ type DashboardStatsType = {
   top_source: string | null;
 };
 
+
 type NewsItem = {
   id: number;
   title: string;
@@ -44,7 +47,9 @@ type NewsItem = {
   published_at?: string | null;
 };
 
+
 export default function DashboardPage() {
+
   const router = useRouter();
 
   const [user, setUser] = useState<User | null>(null);
@@ -54,131 +59,319 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+
   useEffect(() => {
+
     const loadDashboard = async () => {
+
       const token = localStorage.getItem("access_token");
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL ||
+        "http://localhost:8000";
+
 
       if (!token) {
         router.replace("/login");
         return;
       }
 
+
       try {
-        const [userResponse, statsResponse, newsResponse] =
-          await Promise.all([
-            fetch(`${apiUrl}/users/me`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }),
 
-            fetch(`${apiUrl}/dashboard/stats`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }),
+        const [
+          userResponse,
+          statsResponse,
+          newsResponse,
+        ] = await Promise.all([
 
-            fetch(`${apiUrl}/news/dashboard?limit=5`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }),
-          ]);
+          fetch(`${apiUrl}/users/me`, {
+            headers:{
+              Authorization:`Bearer ${token}`,
+            },
+          }),
 
-        if (!userResponse.ok) {
+
+          fetch(`${apiUrl}/dashboard/stats`, {
+            headers:{
+              Authorization:`Bearer ${token}`,
+            },
+          }),
+
+
+          fetch(`${apiUrl}/news/dashboard?limit=5`, {
+            headers:{
+              Authorization:`Bearer ${token}`,
+            },
+          }),
+
+        ]);
+
+
+
+        if(!userResponse.ok){
           throw new Error("Failed to load user.");
         }
 
-        if (!statsResponse.ok) {
+
+        if(!statsResponse.ok){
           throw new Error("Failed to load statistics.");
         }
 
-        setUser(await userResponse.json());
-        setStats(await statsResponse.json());
 
-        if (newsResponse.ok) {
-  const data = await newsResponse.json();
 
-  console.log("Dashboard API:", data);
+        setUser(
+          await userResponse.json()
+        );
 
-  setPersonalizedNews(data);
-}
-      } catch (err) {
+
+        setStats(
+          await statsResponse.json()
+        );
+
+
+
+        if(newsResponse.ok){
+
+          const data = await newsResponse.json();
+
+          setPersonalizedNews(data);
+
+        }
+
+
+
+      } catch(err){
+
         setError(
           err instanceof Error
-            ? err.message
-            : "Dashboard could not be loaded."
+          ? err.message
+          : "Dashboard could not be loaded."
         );
+
+
       } finally {
+
         setLoading(false);
+
       }
+
     };
 
-    loadDashboard();
-  }, [router]);
 
-  if (loading) {
-    return (
-      <main className="flex min-h-[70vh] items-center justify-center">
+    loadDashboard();
+
+
+  },[router]);
+
+
+
+  if(loading){
+
+    return(
+      <main className="
+        flex
+        min-h-[70vh]
+        items-center
+        justify-center
+        text-gray-400
+      ">
         Loading dashboard...
       </main>
     );
+
   }
 
+
+
   return (
-    <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 md:px-8 lg:px-10">
+
+    <main
+      className="
+        min-w-0
+        flex-1
+        px-3
+        py-5
+        sm:px-6
+        md:px-8
+        lg:px-10
+      "
+    >
+
 
       <DashboardHeader
-        username={user?.username ?? "User"}
-        unreadCount={stats?.unread_notifications ?? 0}
+        username={
+          user?.username ?? "User"
+        }
+        unreadCount={
+          stats?.unread_notifications ?? 0
+        }
       />
 
+
+
       {error && (
-        <div className="mb-6 rounded-xl bg-red-500/10 p-4 text-red-500">
+
+        <div
+          className="
+            mb-6
+            rounded-xl
+            bg-red-500/10
+            p-4
+            text-sm
+            text-red-500
+          "
+        >
           {error}
         </div>
+
       )}
 
-      <DashboardStats stats={stats ?? undefined} />
 
-      {/* Row 1 */}
-      <div className="mt-8 grid gap-6 xl:grid-cols-3">
 
-        <div className="min-w-0 xl:col-span-2">
-          <LatestNews news={personalizedNews} />
+      <DashboardStats
+        stats={
+          stats ?? undefined
+        }
+      />
+
+
+
+      {/* Latest News + AI Summary */}
+
+      <div
+        className="
+          mt-6
+          grid
+          min-w-0
+          gap-5
+          xl:grid-cols-3
+        "
+      >
+
+
+        <div
+          className="
+            min-w-0
+            xl:col-span-2
+          "
+        >
+
+          <LatestNews
+            news={personalizedNews}
+          />
+
         </div>
 
-        <AISummary stats={stats ?? undefined} />
+
+
+        <div className="min-w-0">
+
+          <AISummary
+            stats={
+              stats ?? undefined
+            }
+          />
+
+        </div>
+
 
       </div>
 
-      {/* Row 2 */}
-      <div className="mt-6 grid gap-6 xl:grid-cols-3">
 
-        <CategoryChart
-          categories={stats?.categories}
-        />
 
-        <RiskChart
-          risks={stats?.risk_levels}
-        />
 
-        <TopSources
-          sources={stats?.sources}
-        />
+
+      {/* Charts */}
+
+      <div
+        className="
+          mt-5
+          grid
+          min-w-0
+          gap-5
+          xl:grid-cols-3
+        "
+      >
+
+
+        <div className="min-w-0">
+
+          <CategoryChart
+            categories={
+              stats?.categories
+            }
+          />
+
+        </div>
+
+
+
+        <div className="min-w-0">
+
+          <RiskChart
+            risks={
+              stats?.risk_levels
+            }
+          />
+
+        </div>
+
+
+
+        <div className="min-w-0">
+
+          <TopSources
+            sources={
+              stats?.sources
+            }
+          />
+
+        </div>
+
 
       </div>
 
-      {/* Row 3 */}
-      <div className="mt-6 grid items-stretch gap-6 xl:grid-cols-2">
 
-        <RecentSecurityAlerts />
 
-        <AIActivity stats={stats ?? undefined} />
+
+
+      {/* Bottom Section */}
+
+      <div
+        className="
+          mt-5
+          grid
+          min-w-0
+          gap-5
+          xl:grid-cols-2
+        "
+      >
+
+
+        <div className="min-w-0">
+
+          <RecentSecurityAlerts />
+
+        </div>
+
+
+
+        <div className="min-w-0">
+
+          <AIActivity
+            stats={
+              stats ?? undefined
+            }
+          />
+
+        </div>
+
 
       </div>
+
 
     </main>
+
   );
 }

@@ -26,34 +26,34 @@ function StatusRow({
   offlineText: string;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-xl border border-slate-700 bg-slate-900/40 p-4 transition-all duration-300 hover:border-indigo-500 hover:bg-slate-900/70">
+    <div className="flex items-center justify-between rounded-xl border border-slate-700 bg-slate-900/40 px-4 py-3 transition hover:border-indigo-500 hover:bg-slate-900/70">
 
       <div className="flex items-center gap-3">
 
         <div className="rounded-lg bg-slate-800 p-2">
           <Icon
-            size={18}
+            size={16}
             className="text-indigo-400"
           />
         </div>
 
-        <span className="text-slate-300">
+        <span className="text-sm text-slate-300">
           {title}
         </span>
 
       </div>
 
       <div
-        className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm ${
+        className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${
           online
             ? "bg-emerald-500/10 text-emerald-400"
             : "bg-red-500/10 text-red-400"
         }`}
       >
         {online ? (
-          <CheckCircle2 size={15} />
+          <CheckCircle2 size={14} />
         ) : (
-          <XCircle size={15} />
+          <XCircle size={14} />
         )}
 
         {online ? onlineText : offlineText}
@@ -68,8 +68,8 @@ export default function PlatformHealth() {
 
   if (loading) {
     return (
-      <div className="rounded-3xl border border-slate-700 bg-slate-800/60 p-6 backdrop-blur-xl">
-        <h2 className="mb-4 text-xl font-bold text-white">
+      <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-5 backdrop-blur-xl">
+        <h2 className="mb-3 text-lg font-bold text-white">
           Platform Health
         </h2>
 
@@ -82,7 +82,7 @@ export default function PlatformHealth() {
 
   if (!data) {
     return (
-      <div className="rounded-3xl border border-red-500 bg-slate-800/60 p-6 backdrop-blur-xl">
+      <div className="rounded-2xl border border-red-500 bg-slate-800/60 p-5 backdrop-blur-xl">
         <p className="text-red-400">
           Failed to load platform status.
         </p>
@@ -91,22 +91,22 @@ export default function PlatformHealth() {
   }
 
   return (
-    <div className="rounded-3xl border border-slate-700 bg-slate-800/60 p-6 backdrop-blur-xl">
+    <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-5 backdrop-blur-xl">
 
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-5 flex items-center justify-between">
 
-        <h2 className="text-xl font-bold text-white">
+        <h2 className="text-lg font-bold text-white">
           Platform Health
         </h2>
 
-        <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-sm text-emerald-400">
-          <Radio size={15} />
+        <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
+          <Radio size={13} />
           Live
         </div>
 
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
 
         <StatusRow
           icon={Server}
@@ -142,19 +142,15 @@ export default function PlatformHealth() {
 
       </div>
 
-      <div className="mt-6 rounded-2xl border border-slate-700 bg-slate-900/40 p-4">
+      <div className="mt-5 flex items-center justify-between rounded-xl border border-slate-700 bg-slate-900/40 px-4 py-3">
 
-        <div className="flex items-center justify-between">
+        <span className="text-sm text-slate-400">
+          Active News Sources
+        </span>
 
-          <span className="text-slate-400">
-            Active News Sources
-          </span>
-
-          <span className="rounded-full bg-indigo-500/10 px-3 py-1 text-sm font-semibold text-indigo-400">
-            {data.news_sources}
-          </span>
-
-        </div>
+        <span className="rounded-full bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-400">
+          {data.news_sources}
+        </span>
 
       </div>
 

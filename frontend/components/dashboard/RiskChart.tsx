@@ -10,11 +10,20 @@ import {
 
 import DashboardProgressCard from "./DashboardProgressCard";
 
-type RiskLevel = "Critical" | "High" | "Medium" | "Low" | "None";
+
+type RiskLevel =
+  | "Critical"
+  | "High"
+  | "Medium"
+  | "Low"
+  | "None";
+
 
 type Props = {
   risks?: Partial<Record<RiskLevel, number>>;
 };
+
+
 
 const riskLevels: RiskLevel[] = [
   "Critical",
@@ -24,6 +33,8 @@ const riskLevels: RiskLevel[] = [
   "None",
 ];
 
+
+
 const iconMap = {
   Critical: ShieldX,
   High: ShieldAlert,
@@ -31,6 +42,8 @@ const iconMap = {
   Low: ShieldCheck,
   None: CircleOff,
 };
+
+
 
 const colorMap = {
   Critical: "bg-purple-500",
@@ -40,6 +53,8 @@ const colorMap = {
   None: "bg-slate-500",
 };
 
+
+
 const bgMap = {
   Critical: "bg-purple-500/10",
   High: "bg-red-500/10",
@@ -47,6 +62,8 @@ const bgMap = {
   Low: "bg-green-500/10",
   None: "bg-slate-500/10",
 };
+
+
 
 const iconColorMap = {
   Critical: "text-purple-500",
@@ -56,8 +73,16 @@ const iconColorMap = {
   None: "text-slate-500",
 };
 
-export default function RiskChart({ risks = {} }: Props) {
+
+
+
+export default function RiskChart({
+  risks = {},
+}: Props) {
+
+
   const items = riskLevels
+
     .map((level) => ({
       label: level,
       value: risks[level] ?? 0,
@@ -66,14 +91,28 @@ export default function RiskChart({ risks = {} }: Props) {
       bgColor: bgMap[level],
       iconColor: iconColorMap[level],
     }))
-    .sort((a, b) => b.value - a.value);
+
+
+    // 0 değerli riskleri gizle
+    .filter((item) => item.value > 0)
+
+
+    // Büyükten küçüğe sırala
+    .sort(
+      (a, b) =>
+        b.value - a.value
+    );
+
+
 
   return (
+
     <DashboardProgressCard
       title="Risk Levels"
       subtitle="Current security status"
       badge="LIVE"
       items={items}
     />
+
   );
 }
