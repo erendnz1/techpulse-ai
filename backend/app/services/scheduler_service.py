@@ -71,13 +71,16 @@ def scheduled_cleanup():
 from datetime import datetime
 
 
+from datetime import datetime, timedelta
+
+
 scheduler.add_job(
     scheduled_news_fetch,
     trigger="interval",
     hours=2,
     id="news_fetch_job",
     replace_existing=True,
-    next_run_time=datetime.now(),
+    next_run_time=datetime.now() + timedelta(seconds=10),
 )
 
 scheduler.add_job(
