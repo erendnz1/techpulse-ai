@@ -23,9 +23,20 @@ def create_notifications_for_news(
         )
         .all()
     )
-
+    print(
+    "Checking notification:",
+    news.title,
+    news.category,
+    news.region,
+)
     for preference in preferences:
-
+        print(
+    "User preference:",
+    preference.user_id,
+    preference.categories,
+    preference.regions,
+    preference.minimum_importance_score
+)
         # Category preference check
         if (
             not preference.categories
