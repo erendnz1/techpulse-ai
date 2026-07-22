@@ -23,77 +23,112 @@ def create_notifications_for_news(
         )
         .all()
     )
+
     print(
-    "Checking notification:",
-    news.title,
-    news.category,
-    news.region,
-)
+        "🔎 Checking notification:",
+        news.title,
+        "| Category:",
+        news.category,
+        "| Region:",
+        news.region,
+        "| Score:",
+        news.importance_score,
+    )
+
     for preference in preferences:
+
         print(
-    "User preference:",
-    preference.user_id,
-    preference.categories,
-    preference.regions,
-    preference.minimum_importance_score
-)
-        # Category preference check
+            "👤 User preference:",
+            preference.user_id,
+            preference.categories,
+            preference.regions,
+            preference.minimum_importance_score,
+            "Email:",
+            preference.email_notification_enabled,
+        )
+
+        # Category check
         if (
-            not preference.categories
-            or news.category not in preference.categories
+            preference.categories
+            and news.category not in preference.categories
         ):
+            print(
+                "❌ Category mismatch:",
+                preference.user_id,
+            )
             continue
 
-        # Region preference check (case-insensitive)
+
+        # Region check
         news_region = (news.region or "").lower()
 
         user_regions = [
-         region.lower()
-         for region in preference.regions
+            region.lower()
+            for region in (preference.regions or [])
         ]
 
         if (
-         not preference.regions
-         or news_region not in user_regions
+            user_regions
+            and news_region not in user_regions
         ):
-         continue
+            print(
+                "❌ Region mismatch:",
+                preference.user_id,
+                news_region,
+            )
+            continue
 
-        # Determine whether the news is important enough
-        important_categories = {
-    "AI",
-    "Security",
-    "Framework",
-    "Developer Tools",
-    "Cloud",
-    "DevOps",
-        }
 
-        minimum_score = preference.minimum_importance_score or 0
-
-        if news.importance_score is not None:
-           is_important = (
-           news.importance_score >= minimum_score
-         )
-        else:
-           is_important = (
-           news.category in important_categories
+        # Importance check
+        minimum_score = (
+            preference.minimum_importance_score
+            or 0
         )
 
-        if not is_important:
-         continue
+        if news.importance_score is not None:
 
-        # Prevent duplicate notification
+            is_important = (
+                news.importance_score >= minimum_score
+            )
+
+        else:
+
+            is_important = news.category in {
+                "AI",
+                "Security",
+                "Framework",
+                "Developer Tools",
+                "Cloud",
+                "DevOps",
+            }
+
+
+        if not is_important:
+            print(
+                "❌ Importance failed:",
+                news.importance_score,
+            )
+            continue
+
+
+        # Duplicate check
         if notification_exists(
             db=db,
             user_id=preference.user_id,
             news_id=news.id,
         ):
+            print(
+                "⚠️ Notification already exists:",
+                preference.user_id,
+            )
             continue
+
 
         message = (
             f"New {news.category} news detected: "
             f"{news.title}"
         )
+
 
         create_notification(
             db=db,
@@ -101,21 +136,41 @@ def create_notifications_for_news(
             news_id=news.id,
             message=message,
         )
+
+
         should_send_email = False
 
+
         if news.importance_score is not None:
-          should_send_email = (
-           news.importance_score >= 8
-           or news.risk_level in ["High", "Critical"]
-        )
+
+            should_send_email = (
+                news.importance_score >= 8
+                or news.risk_level in [
+                    "High",
+                    "Critical",
+                ]
+            )
+
         else:
-          should_send_email = news.category in {
-        "AI",
-        "Security",
-        "Framework",
-        "Developer Tools",
-        }
-        # Send email only for important news
+
+            should_send_email = news.category in {
+                "AI",
+                "Security",
+                "Framework",
+                "Developer Tools",
+            }
+
+
+        print(
+            "📧 Email check:",
+            preference.user_id,
+            "Enabled:",
+            preference.email_notification_enabled,
+            "Should send:",
+            should_send_email,
+        )
+
+
         if (
             preference.email_notification_enabled
             and should_send_email
@@ -123,12 +178,22 @@ def create_notifications_for_news(
 
             user = (
                 db.query(User)
-                .filter(User.id == preference.user_id)
+                .filter(
+                    User.id == preference.user_id
+                )
                 .first()
             )
 
+
+            print(
+                "📨 Email user:",
+                user.email if user else None
+            )
+
+
             if not user:
                 continue
+
 
             emoji = {
                 "Security": "🚨",
@@ -141,7 +206,11 @@ def create_notifications_for_news(
                 "Mobile": "📱",
                 "Business": "📈",
                 "Gaming": "🎮",
-            }.get(news.category, "📰")
+            }.get(
+                news.category,
+                "📰"
+            )
+
 
             subject = (
                 f"{emoji} TechPulse AI | "
@@ -149,97 +218,70 @@ def create_notifications_for_news(
                 f"{news.title[:60]}"
             )
 
+
             try:
-                print(f"📧 Sending email to {user.email}")
+
+                print(
+                    f"📧 Sending email to {user.email}"
+                )
+
                 send_email(
-                    
                     to_email=user.email,
                     subject=subject,
                     body=f"""
 <html>
-<body style="font-family:Arial,sans-serif;background:#f4f6f8;padding:30px;">
+<body>
 
-<div style="max-width:650px;margin:auto;background:white;border-radius:12px;padding:30px;border:1px solid #e5e7eb;">
-
-<h1 style="color:#2563eb;margin-bottom:0;">
-🚀 TechPulse AI
-</h1>
-
-<p style="color:#6b7280;margin-top:5px;">
-Technology Intelligence Platform
-</p>
-
-<hr style="margin:25px 0;">
+<h1>🚀 TechPulse AI</h1>
 
 <h2>New {news.category} Alert</h2>
 
 <p>
-<strong>Title</strong><br>
+<b>Title:</b><br>
 {news.title}
 </p>
 
 <p>
-<strong>Importance Score</strong><br>
-⭐ {
-    f"{news.importance_score}/10"
-    if news.importance_score is not None
-    else "Not analyzed"
-}
+<b>Importance:</b><br>
+{news.importance_score}/10
 </p>
 
 <p>
-<strong>Risk Level</strong><br>
-{
-    news.risk_level
-    if news.risk_level
-    else "Not analyzed"
-}
+<b>Risk Level:</b><br>
+{news.risk_level}
 </p>
 
 <p>
-<strong>Summary</strong><br>
+<b>Summary:</b><br>
 {news.summary or "No summary available."}
 </p>
 
 <p>
-<strong>Affected Technologies</strong><br>
+<b>Affected Technologies:</b><br>
 {", ".join(news.affected_technologies) if news.affected_technologies else "Not specified"}
 </p>
 
 <p>
-<strong>Recommended Action</strong><br>
+<b>Recommended Action:</b><br>
 {news.recommended_action or "No recommendation available."}
 </p>
 
-<p style="margin-top:30px;">
-<a href="{news.url}"
-style="
-background:#2563eb;
-color:white;
-padding:12px 18px;
-text-decoration:none;
-border-radius:8px;
-display:inline-block;
-">
+<a href="{news.url}">
 Read Full Article
 </a>
-</p>
-
-<hr style="margin-top:30px;">
-
-<p style="font-size:13px;color:#9ca3af;">
-This email was automatically generated by TechPulse AI according to your notification preferences.
-</p>
-
-</div>
 
 </body>
 </html>
 """,
                 )
 
-            except Exception as e:
                 print(
-                    f"Email notification failed for user "
-                    f"{user.id}: {e}"
+                    f"✅ Email sent to {user.email}"
+                )
+
+
+            except Exception as e:
+
+                print(
+                    f"❌ Email failed for {user.email}: {e}"
                 )
