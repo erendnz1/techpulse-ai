@@ -12,6 +12,7 @@ scheduler = BackgroundScheduler()
 
 
 def scheduled_news_fetch():
+    print("🚀 Scheduled news fetch started...")
     db = SessionLocal()
 
     try:
@@ -67,12 +68,16 @@ def scheduled_cleanup():
         db.close()
 
 
+from datetime import datetime
+
+
 scheduler.add_job(
     scheduled_news_fetch,
     trigger="interval",
     hours=2,
     id="news_fetch_job",
     replace_existing=True,
+    next_run_time=datetime.now(),
 )
 
 scheduler.add_job(
@@ -81,6 +86,7 @@ scheduler.add_job(
     hours=4,
     id="pending_analysis_job",
     replace_existing=True,
+    next_run_time=datetime.now(),
 )
 
 scheduler.add_job(
