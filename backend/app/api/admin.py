@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
+from fastapi import Header
 
 from app.database.session import get_db
 from app.dependencies.auth import admin_required
@@ -254,4 +254,39 @@ def system_status(
         "database": "Connected",
         "scheduler": "Running",
         "ai_service": "Active",
+    }
+
+from app.services.scheduler_service import scheduled_news_fetch
+
+
+@router.post("/test-fetch")
+def test_fetch():
+
+    scheduled_news_fetch()
+
+    return {
+        "message": "Manual scheduler fetch executed"
+    }
+
+from app.services.news_service import process_and_save_news
+from app.core.config import INTERNAL_API_KEY
+
+
+@router.post("/internal/fetch")
+def internal_fetch_news(
+    x_api_key: str = Header(None),
+    db: Session = Depends(get_db),
+):
+
+    if x_api_key != INTERNAL_API_KEY:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid API key."
+        )
+
+    saved_news = process_and_save_news(db)
+
+    return {
+        "message": "Automatic fetch completed.",
+        "saved_count": len(saved_news),
     }

@@ -139,7 +139,9 @@ def create_notifications_for_news(
             )
 
             try:
+                print(f"📧 Sending email to {user.email}")
                 send_email(
+                    
                     to_email=user.email,
                     subject=subject,
                     body=f"""

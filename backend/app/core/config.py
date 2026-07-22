@@ -16,3 +16,6 @@ SMTP_USERNAME = os.getenv("SMTP_USERNAME")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 SMTP_FROM = os.getenv("SMTP_FROM")
 FRONTEND_URL = os.getenv("FRONTEND_URL")
+INTERNAL_API_KEY = os.getenv(
+    "INTERNAL_API_KEY"
+)
