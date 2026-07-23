@@ -245,3 +245,29 @@ def get_latest_releases(
     )
 
     return releases
+from app.services.email_service import send_email
+from app.core.config import SMTP_FROM
+
+
+@router.get("/test-email")
+def test_email():
+    try:
+        send_email(
+            to_email="erenden224284@gmail.com",   # İstersen kendi mail adresini de yazabilirsin
+            subject="TechPulse AI SMTP Test",
+            body="""
+            <h2>✅ SMTP Test Successful</h2>
+            <p>If you received this email, Render SMTP configuration is working correctly.</p>
+            """
+        )
+
+        return {
+            "success": True,
+            "message": "Test email sent successfully."
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
