@@ -15,7 +15,8 @@ from app.crud.notification import (
 def create_notifications_for_news(
     db: Session,
     news: News,
-):
+): 
+    print("========== NOTIFICATION SERVICE STARTED ==========")
     preferences = (
         db.query(UserPreferences)
         .filter(
@@ -224,7 +225,7 @@ def create_notifications_for_news(
                 print(
                     f"📧 Sending email to {user.email}"
                 )
-
+                print("========== ABOUT TO SEND EMAIL ==========")
                 send_email(
                     to_email=user.email,
                     subject=subject,
