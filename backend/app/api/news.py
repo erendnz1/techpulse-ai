@@ -172,6 +172,29 @@ are not affected.
         "original": sample_text,
         "analysis": analysis
     } 
+
+@router.get("/test-email")
+def test_email():
+    try:
+        send_email(
+            to_email="erenden224284@gmail.com",   # İstersen kendi mail adresini de yazabilirsin
+            subject="TechPulse AI SMTP Test",
+            body="""
+            <h2>✅ SMTP Test Successful</h2>
+            <p>If you received this email, Render SMTP configuration is working correctly.</p>
+            """
+        )
+
+        return {
+            "success": True,
+            "message": "Test email sent successfully."
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
 @router.get("/{news_id}", response_model=NewsResponse)
 def get_news_detail(
     news_id: int,
@@ -203,28 +226,6 @@ def delete_news_endpoint(
     return {"message": "News deleted successfully"}
 
 
-@router.get("/test-email")
-def test_email():
-    try:
-        send_email(
-            to_email="erenden224284@gmail.com",   # İstersen kendi mail adresini de yazabilirsin
-            subject="TechPulse AI SMTP Test",
-            body="""
-            <h2>✅ SMTP Test Successful</h2>
-            <p>If you received this email, Render SMTP configuration is working correctly.</p>
-            """
-        )
-
-        return {
-            "success": True,
-            "message": "Test email sent successfully."
-        }
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=str(e)
-        )
 
 @router.put("/{news_id}", response_model=NewsResponse)
 def update_news_endpoint(
