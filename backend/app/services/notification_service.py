@@ -171,7 +171,12 @@ def create_notifications_for_news(
             should_send_email,
         )
 
-
+        print(
+    "DEBUG:",
+    preference.email_notification_enabled,
+    should_send_email,
+    user.email if 'user' in locals() else "no-user"
+)
         if (
             preference.email_notification_enabled
             and should_send_email
@@ -226,6 +231,7 @@ def create_notifications_for_news(
                     f"📧 Sending email to {user.email}"
                 )
                 print("========== ABOUT TO SEND EMAIL ==========")
+                print("EMAIL FUNCTION IS BEING CALLED")
                 send_email(
                     to_email=user.email,
                     subject=subject,
