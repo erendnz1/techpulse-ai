@@ -81,27 +81,28 @@ def process_and_save_news(db: Session):
         github_releases = fetch_github_releases()
 
         transformed_github_releases = [
-        transform_github_release(release)
-        for release in github_releases
+          transform_github_release(release)
+          for release in github_releases
         ]
 
         articles.extend(transformed_github_releases)
         stats["sources"] += 1
         stats["fetched"] += len(transformed_github_releases)
         print(
-        f"GitHub Releases: {len(transformed_github_releases)} "
-        f"releases fetched."
+          f"GitHub Releases: {len(transformed_github_releases)} "
+          f"releases fetched."
     )
 
     except Exception as error:
-        print(f"GitHub Releases fetch failed: {error}"),
-    
+        print(f"GitHub Releases fetch failed: {error}")
+    print("✅ GitHub section finished")
+    print("➡️ Starting CVE fetch")
     try:
         cve_vulnerabilities = fetch_recent_cves()
 
         transformed_cves = [
-        transform_cve(vulnerability)
-        for vulnerability in cve_vulnerabilities
+          transform_cve(vulnerability)
+          for vulnerability in cve_vulnerabilities
         ]
 
         articles.extend(transformed_cves)
@@ -116,7 +117,7 @@ def process_and_save_news(db: Session):
 
     except Exception as error:
         print(f"NVD/CVE fetch failed: {error}")
-
+    print("✅ CVE section finished")
     
     try:
        kvkk_breaches = fetch_kvkk_data_breaches()
