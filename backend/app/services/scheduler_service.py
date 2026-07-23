@@ -82,7 +82,7 @@ scheduler.add_job(
 scheduler.add_job(
     scheduled_news_fetch,
     trigger="interval",
-    minutes=5,
+    hours=1,
     id="news_fetch_job",
     replace_existing=True,
 )

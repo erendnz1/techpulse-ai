@@ -170,13 +170,6 @@ def create_notifications_for_news(
             "Should send:",
             should_send_email,
         )
-
-        print(
-    "DEBUG:",
-    preference.email_notification_enabled,
-    should_send_email,
-    user.email if 'user' in locals() else "no-user"
-)
         if (
             preference.email_notification_enabled
             and should_send_email
