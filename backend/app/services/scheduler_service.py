@@ -9,9 +9,6 @@ from app.services.news_service import (
 )
 from app.services.cleanup_service import cleanup_old_news
 
-from datetime import datetime, timedelta
-
-
 
 def scheduled_news_fetch():
     print("🚀 Scheduled news fetch started...")
@@ -40,7 +37,6 @@ def scheduled_pending_analysis():
 
     try:
         reanalyze_pending_news(db)
-
         print("✅ Pending AI analysis completed.")
 
     except Exception as error:
@@ -71,18 +67,11 @@ def scheduled_cleanup():
         db.close()
 
 
-scheduler.add_job(
-    scheduled_news_fetch,
-    trigger="date",
-    run_date=datetime.now() + timedelta(seconds=10),
-    id="startup_fetch_job",
-    replace_existing=True,
-)
-
+# News fetch every 2 hours
 scheduler.add_job(
     scheduled_news_fetch,
     trigger="interval",
-    minutes=5,
+    hours=2,
     id="news_fetch_job",
     replace_existing=True,
 )
@@ -96,7 +85,6 @@ scheduler.add_job(
     replace_existing=True,
 )
 
-
 # Cleanup every day at 03:00
 scheduler.add_job(
     scheduled_cleanup,
@@ -106,4 +94,3 @@ scheduler.add_job(
     id="cleanup_job",
     replace_existing=True,
 )
-

@@ -23,6 +23,8 @@ type User = {
 
 type DashboardStatsType = {
   total_news: number;
+  today_news: number;
+
   unread_notifications: number;
 
   categories: Record<string, number>;
@@ -31,7 +33,9 @@ type DashboardStatsType = {
 
   ai_articles: number;
   cloud_articles: number;
+
   critical_alerts: number;
+  security_alerts: number;
 
   top_category: string | null;
   top_source: string | null;

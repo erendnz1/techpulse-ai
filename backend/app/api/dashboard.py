@@ -8,6 +8,7 @@ from app.models.user import User
 from app.models.news import News
 from app.models.notification import Notification
 from app.schemas.dashboard import DashboardStatsResponse
+from datetime import datetime, timezone
 
 router = APIRouter(
     prefix="/dashboard",
@@ -20,8 +21,24 @@ def get_dashboard_stats(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    total_news = db.query(News).count()
+    from datetime import datetime
 
+    total_news = db.query(News).count()
+    today = datetime.now(timezone.utc).date()
+
+    today_news = (
+    db.query(News)
+    .filter(func.date(News.created_at) == today)
+    .count()
+)
+    print("TODAY =", today)
+
+    print(
+    "TODAY NEWS =",
+       db.query(News)
+      .filter(func.date(News.published_at) == today)
+        .count()
+)
     unread_notifications = (
         db.query(Notification)
         .filter(
@@ -86,6 +103,10 @@ def get_dashboard_stats(
 
     critical_alerts = risk_levels.get("Critical", 0)
 
+    security_alerts = (
+       risk_levels.get("High", 0)
+      +  risk_levels.get("Critical", 0)
+)
     top_category = (
         max(categories, key=categories.get)
         if categories
@@ -99,6 +120,7 @@ def get_dashboard_stats(
     )
 
     return {
+        "today_news": today_news,
         "total_news": total_news,
         "unread_notifications": unread_notifications,
 
@@ -108,8 +130,10 @@ def get_dashboard_stats(
 
         "ai_articles": ai_articles,
         "cloud_articles": cloud_articles,
-        "critical_alerts": critical_alerts,
+        "security_alerts": security_alerts,
 
         "top_category": top_category,
         "top_source": top_source,
+        "critical_alerts": critical_alerts,
+        
     }

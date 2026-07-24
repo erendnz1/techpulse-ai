@@ -3,6 +3,8 @@ from pydantic import BaseModel
 
 class DashboardStatsResponse(BaseModel):
     total_news: int
+    today_news: int
+
     unread_notifications: int
 
     categories: dict[str, int]
@@ -11,7 +13,9 @@ class DashboardStatsResponse(BaseModel):
 
     ai_articles: int
     cloud_articles: int
+
     critical_alerts: int
+    security_alerts: int
 
     top_category: str | None
     top_source: str | None

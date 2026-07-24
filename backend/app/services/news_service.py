@@ -175,7 +175,7 @@ def process_and_save_news(db: Session):
     try:
         rss_articles = []
 
-        for source in RSS_SOURCES:
+        for source in RSS_SOURCES[:5]:
           try:
            rss_articles.extend(fetch_rss(source, limit=3))
 
@@ -239,7 +239,9 @@ Content:
 
         if ai_enabled:
             try:
+                print(f"\n>>> AI START: {title}")
                 analysis = analyze_news(content_for_analysis)
+                print(f">>> AI END: {title}")
                 print("=" * 60)
                 print(article["title"])
                 print(analysis)
@@ -248,7 +250,7 @@ Content:
                 ai_enabled = False
                 stats["ai_status"] = "Quota Exhausted"
 
-                print(
+                print( 
                     "\n"
                     "========================================\n"
                     "Groq daily quota exhausted.\n"
@@ -304,15 +306,19 @@ Content:
             )
 
         news = save_news(db, article)
-
-        create_notifications_for_news(
-            db=db,
-            news=news,
+        if (
+           news.summary
+           and news.importance_score is not None
+           and news.category
+        ):
+           create_notifications_for_news(
+           db=db,
+           news=news,
         )
 
         saved_news.append(news)
         stats["saved"] += 1
-
+  
     print("\n========================================")
     print("        TechPulse AI Scheduler")
     print("========================================")
