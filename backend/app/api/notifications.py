@@ -98,69 +98,87 @@ def send_test_email(
     send_email(
         to_email=current_user.email,
         subject="🚀 TechPulse AI | Test Email",
-        body="""
+        body=f"""
 <html>
-<body style="font-family:Arial,sans-serif;background:#f4f6f8;padding:30px;">
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,sans-serif;">
 
-<div style="max-width:650px;margin:auto;background:white;border-radius:12px;padding:30px;border:1px solid #e5e7eb;">
+<div style="max-width:650px;margin:40px auto;background:#fff;border-radius:16px;padding:40px;border:1px solid #e5e7eb;">
 
-<h1 style="color:#2563eb;margin-bottom:0;">
-🚀 TechPulse AI
-</h1>
+<h1 style="margin:0;color:#2563eb;">🚀 TechPulse AI</h1>
 
-<p style="color:#6b7280;margin-top:5px;">
+<p style="color:#6b7280;margin-top:6px;">
 Technology Intelligence Platform
 </p>
 
-<hr style="margin:25px 0;">
+<hr style="margin:30px 0;">
 
-<h2>✅ Email System Working</h2>
+<h2 style="margin:0;">🚨 High Importance Technology Alert</h2>
 
-<p>
-Congratulations!
+<h3 style="margin-top:20px;">
+OpenAI Releases GPT-6 Preview
+</h3>
+
+<div style="background:#f9fafb;padding:20px;border-radius:10px;margin-top:20px;">
+<b>AI Summary</b>
+
+<p style="margin-top:10px;">
+OpenAI introduced GPT-6 Preview with major improvements in reasoning,
+coding and AI agents.
 </p>
-
-<p>
-Your email notification system has been configured successfully.
-</p>
-
-<div style="
-background:#eff6ff;
-border-left:4px solid #2563eb;
-padding:15px;
-margin:25px 0;
-">
-
-<strong>Status</strong><br>
-SMTP Connection: ✅ Successful<br>
-Authentication: ✅ Successful<br>
-Email Delivery: ✅ Successful
-
 </div>
 
+<table style="width:100%;margin-top:25px;">
+<tr>
+<td><b>Category</b></td>
+<td>AI</td>
+</tr>
+
+<tr>
+<td><b>Importance</b></td>
+<td>9 / 10</td>
+</tr>
+
+<tr>
+<td><b>Risk</b></td>
+<td>High</td>
+</tr>
+</table>
+
+<h3 style="margin-top:30px;">🔧 Affected Technologies</h3>
+
+<ul>
+<li>OpenAI API</li>
+<li>GPT Models</li>
+<li>AI Agents</li>
+</ul>
+
+<h3>✅ Recommended Action</h3>
+
 <p>
-You are now ready to receive AI-powered technology alerts from
-<strong>TechPulse AI</strong>.
+Review the release notes and evaluate migration to the latest model.
 </p>
 
-<p style="margin-top:30px;">
-<a href="http://localhost:3000/dashboard"
+<div style="text-align:center;margin:40px 0;">
+<a
+href="https://techpulse-ai.vercel.app/dashboard/news/999"
 style="
 background:#2563eb;
 color:white;
-padding:12px 18px;
+padding:16px 30px;
+border-radius:10px;
 text-decoration:none;
-border-radius:8px;
+font-weight:bold;
 display:inline-block;
 ">
-Open Dashboard
+🚀 Open in TechPulse AI
 </a>
-</p>
+</div>
 
-<hr style="margin-top:30px;">
+<hr>
 
-<p style="font-size:13px;color:#9ca3af;">
-This is an automated email from TechPulse AI.
+<p style="font-size:13px;color:#6b7280;">
+View the complete AI analysis, affected technologies,
+recommendations and the original source inside TechPulse AI.
 </p>
 
 </div>
