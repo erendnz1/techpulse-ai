@@ -80,57 +80,75 @@ def create_notifications_for_news(
             continue
 
 
-        # Importance check
-        minimum_score = (
-            preference.minimum_importance_score
-            or 0
-        )
+        # Notification rule
 
-        if news.importance_score is not None:
+        minimum_score = preference.minimum_importance_score or 0
 
-            is_important = (
-                news.importance_score >= minimum_score
+        if news.category == "Security":
+          print(
+              "DEBUG:",
+               news.category,
+               news.risk_level,
+               news.importance_score,
+          )
+          risk_level = (news.risk_level or "").strip()
+          is_important = (
+               risk_level in ["High", "Critical"]
+               or (
+                 news.importance_score is not None
+                 and news.importance_score >= minimum_score
+                )
             )
-
+          
         else:
 
-            is_important = news.category in {
-                "AI",
-                "Security",
-                "Framework",
-                "Developer Tools",
-                "Cloud",
-                "DevOps",
-            }
+          if news.importance_score is not None:
 
+                is_important = (
+                 news.importance_score >= minimum_score
+               )
+
+          else:
+
+              is_important = False
+          
 
         if not is_important:
+
             print(
-                "❌ Importance failed:",
-                news.importance_score,
+            "❌ Notification rule failed:",
+             news.importance_score,
+             news.risk_level,
             )
+
             continue
 
 
         # Duplicate check
-        if notification_exists(
-            db=db,
-            user_id=preference.user_id,
-            news_id=news.id,
-        ):
-            print(
-                "⚠️ Notification already exists:",
-                preference.user_id,
-            )
-            continue
-
-
-        message = (
-            f"New {news.category} news detected: "
-            f"{news.title}"
+        exists = notification_exists(
+          db=db,
+          user_id=preference.user_id,
+          news_id=news.id,
         )
 
+        print(
+         f"DEBUG duplicate -> user:{preference.user_id}, news:{news.id}, exists:{exists}"
+        )
 
+        if exists:
+          print(
+           "⚠️ Notification already exists:",
+           preference.user_id,
+        )
+          continue
+
+        print("✅ Passed duplicate check")
+
+        
+        message = (
+    f"New {news.category} news detected: "
+    f"{news.title}"
+) 
         create_notification(
             db=db,
             user_id=preference.user_id,
@@ -138,28 +156,25 @@ def create_notifications_for_news(
             message=message,
         )
 
-
-        should_send_email = False
-
-
+        
         if news.importance_score is not None:
 
-            should_send_email = (
-                news.importance_score >= 8
-                or news.risk_level in [
-                    "High",
-                    "Critical",
-                ]
-            )
+          should_send_email = (
+        news.importance_score >= 8
+        or news.risk_level in [
+            "High",
+            "Critical",
+        ]
+    )
 
         else:
-
-            should_send_email = news.category in {
-                "AI",
-                "Security",
-                "Framework",
-                "Developer Tools",
-            }
+ 
+          should_send_email = news.category in {
+        "AI",
+        "Security",
+        "Framework",
+        "Developer Tools",
+    }
 
 
         print(

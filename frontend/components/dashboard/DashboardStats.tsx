@@ -14,10 +14,13 @@ import StatCard from "./StatCard";
 type DashboardStatsProps = {
   stats?: {
     total_news: number;
+    today_news: number;
     unread_notifications: number;
+    ai_articles: number;
+    security_alerts: number;
     risk_levels: Record<string, number>;
     sources?: Record<string, number>;
-  };
+};
 };
 
 
@@ -41,7 +44,7 @@ export default function DashboardStats({
 
       <StatCard
         title="Today's News"
-        value={stats?.total_news ?? "--"}
+        value={stats?.today_news ?? "--"}
         subtitle="Technology updates"
         icon={Newspaper}
         iconBg="bg-blue-500/15"
@@ -54,7 +57,7 @@ export default function DashboardStats({
 
       <StatCard
         title="AI Summarized"
-        value={stats?.total_news ?? "--"}
+        value={stats?.ai_articles ?? "--"}
         subtitle="AI analyzed"
         icon={Sparkles}
         iconBg="bg-green-500/15"
@@ -66,15 +69,15 @@ export default function DashboardStats({
 
 
       <StatCard
-        title="Critical Alerts"
-        value={stats?.risk_levels?.Critical ?? 0}
-        subtitle="High priority"
-        icon={ShieldAlert}
-        iconBg="bg-red-500/15"
-        iconColor="text-red-500"
-        trend="Security"
-        trendColor="text-red-500"
-      />
+  title="Security Alerts"
+  value={stats?.security_alerts ?? 0}
+  subtitle="High + Critical"
+  icon={ShieldAlert}
+  iconBg="bg-red-500/15"
+  iconColor="text-red-500"
+  trend="Security"
+  trendColor="text-red-500"
+/>
 
 
 

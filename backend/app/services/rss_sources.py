@@ -101,9 +101,47 @@ RSS_SOURCES = [
         "category": "Security",
         "region": "global",
         "url": "https://feeds.feedburner.com/TheHackersNews",
-        "limit": 3,
+        "limit": 5,
     },
+    {
+    "name": "BleepingComputer",
+    "category": "Security",
+    "region": "global",
+    "url": "https://www.bleepingcomputer.com/feed/",
+    "limit": 5,
+},
 
+{
+    "name": "SecurityWeek",
+    "category": "Security",
+    "region": "global",
+    "url": "https://feeds.feedburner.com/securityweek",
+    "limit": 5,
+},
+
+{
+    "name": "SANS Internet Storm Center",
+    "category": "Security",
+    "region": "global",
+    "url": "https://isc.sans.edu/rssfeed.xml",
+    "limit": 5,
+},
+
+{
+    "name": "Google Project Zero",
+    "category": "Security",
+    "region": "global",
+    "url": "https://googleprojectzero.blogspot.com/feeds/posts/default",
+    "limit": 5,
+},
+
+{
+    "name": "Microsoft Security Blog",
+    "category": "Security",
+    "region": "global",
+    "url": "https://www.microsoft.com/en-us/security/blog/feed/",
+    "limit": 5,
+},
     {
         "name": "Visual Studio Blog",
         "category": "Developer Tools",
