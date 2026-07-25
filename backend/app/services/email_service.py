@@ -1,5 +1,8 @@
 
+import smtplib
 
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from app.core.config import FRONTEND_URL
 from app.core.config import (
     SMTP_FROM,
@@ -9,12 +12,11 @@ from app.core.config import (
     SMTP_USERNAME,
 )
 from app.models.news import News
-import resend
+
 
 from app.core.config import (
     FRONTEND_URL,
-    RESEND_API_KEY,
-    RESEND_FROM,
+   
 )
 
 from app.models.news import News
@@ -23,27 +25,30 @@ def send_email(
     subject: str,
     body: str,
 ):
-    resend.api_key = RESEND_API_KEY
-
-    print("========== RESEND START ==========")
+    print("========== SMTP START ==========")
     print("TO =", to_email)
-    print("FROM =", RESEND_FROM)
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = subject
+    message["From"] = SMTP_FROM
+    message["To"] = to_email
+
+    message.attach(MIMEText(body, "html"))
 
     try:
-        response = resend.Emails.send(
-            {
-                "from": RESEND_FROM,
-                "to": [to_email],
-                "subject": subject,
-                "html": body,
-            }
-        )
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USERNAME, SMTP_PASSWORD)
+            server.sendmail(
+                SMTP_FROM,
+                to_email,
+                message.as_string(),
+            )
 
         print("✅ Email sent successfully")
-        print(response)
 
     except Exception as e:
-        print(f"❌ Email sending failed: {e}")
+        print("❌ SMTP Error:", e)
         raise
 
 

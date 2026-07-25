@@ -100,9 +100,12 @@ def delete_user(
 
     if user.role == "admin":
         raise HTTPException(
-        status_code=400,
-        detail="Admin users cannot be deleted.",
-    )
+            status_code=400,
+            detail="Admin users cannot be deleted.",
+        )
+
+    # Eksik olan kısım
+    db.delete(user)
     db.commit()
 
     return {

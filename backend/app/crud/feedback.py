@@ -25,19 +25,11 @@ def create_feedback(
 
 def get_user_feedbacks(
     db: Session,
-    user: User,
+    user_id: int,
 ):
     return (
         db.query(Feedback)
-        .filter(Feedback.user_id == user.id)
-        .order_by(Feedback.created_at.desc())
-        .all()
-    )
-
-
-def get_all_feedbacks(db: Session):
-    return (
-        db.query(Feedback)
+        .filter(Feedback.user_id == user_id)
         .order_by(Feedback.created_at.desc())
         .all()
     )
@@ -48,6 +40,7 @@ def get_all_feedbacks(db: Session):
         .order_by(Feedback.created_at.desc())
         .all()
     )
+
 def update_feedback(
     db: Session,
     feedback_id: int,

@@ -20,5 +20,5 @@ FRONTEND_URL = os.getenv("FRONTEND_URL")
 INTERNAL_API_KEY = os.getenv(
     "INTERNAL_API_KEY"
 )
-RESEND_API_KEY = os.getenv("RESEND_API_KEY")
-RESEND_FROM = os.getenv("RESEND_FROM")
+#RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+#RESEND_FROM = os.getenv("RESEND_FROM")
