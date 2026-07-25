@@ -16,6 +16,10 @@ def send_email(
     subject: str,
     body: str,
 ):
+    print("========== SMTP START ==========")
+    print("SMTP_HOST =", SMTP_HOST)
+    print("SMTP_USERNAME =", SMTP_USERNAME)
+    print("SMTP_FROM =", SMTP_FROM)
     message = MIMEMultipart()
 
     message["From"] = SMTP_FROM
@@ -183,6 +187,9 @@ def send_news_notification_email(
     to_email: str,
     news: News,
 ):
+    print("========== EMAIL FUNCTION STARTED ==========")
+    print("TO =", to_email)
+    print("TITLE =", news.title)
     print("FRONTEND_URL =", FRONTEND_URL)
 
     subject = f"🚀 TechPulse AI | {news.category} - {news.title[:60]}"

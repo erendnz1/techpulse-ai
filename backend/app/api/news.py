@@ -140,11 +140,13 @@ def get_security_news_endpoint(
     )
 @router.get("/fetch")
 def fetch_news(db: Session = Depends(get_db)):
+    print("========== FETCH ENDPOINT CALLED ==========")
+
     saved_news = process_and_save_news(db)
 
     return {
         "message": "News fetched successfully.",
-        "saved_count": len(saved_news)
+        "saved_count": len(saved_news),
     }
 @router.post("/reanalyze")
 def reanalyze_news(
