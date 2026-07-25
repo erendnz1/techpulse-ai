@@ -47,3 +47,20 @@ export async function getAllFeedback(token: string) {
 
   return res.json();
 }
+
+export async function getAllFeedbacks(token: string) {
+    const res = await fetch(
+        `${API_URL}/admin/feedbacks`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch feedback.");
+    }
+
+    return res.json();
+}

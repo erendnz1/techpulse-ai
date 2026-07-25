@@ -38,21 +38,6 @@ def create_new_feedback(
         feedback,
     )
 
-
-@router.get(
-    "/me",
-    response_model=list[FeedbackResponse],
-)
-def my_feedbacks(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    return get_user_feedbacks(
-        db,
-        current_user,
-    )
-
-
 @router.get(
     "/admin",
     response_model=list[FeedbackResponse],
@@ -60,4 +45,11 @@ def my_feedbacks(
 def all_feedbacks(
     db: Session = Depends(get_db),
 ):
-    return get_all_feedbacks(db)
+    feedbacks = get_all_feedbacks(db)
+
+    for f in feedbacks:
+        print("ID:", f.id)
+        print("STATUS:", repr(f.status))
+        print("ADMIN_NOTE:", repr(f.admin_note))
+
+    return feedbacks
