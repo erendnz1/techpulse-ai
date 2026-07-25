@@ -103,6 +103,13 @@ def process_and_save_news(db: Session):
         transform_cve(vulnerability)
         for vulnerability in cve_vulnerabilities
         ]
+        print("\n========== FETCHED CVEs ==========")
+
+        for cve in transformed_cves:
+          print(cve["title"])
+          print(cve["url"])
+
+        print("==================================")
 
         articles.extend(transformed_cves)
 
