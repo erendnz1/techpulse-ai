@@ -1,6 +1,5 @@
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+
+
 from app.core.config import FRONTEND_URL
 from app.core.config import (
     SMTP_FROM,
@@ -10,54 +9,41 @@ from app.core.config import (
     SMTP_USERNAME,
 )
 from app.models.news import News
-import socket
+import resend
+
+from app.core.config import (
+    FRONTEND_URL,
+    RESEND_API_KEY,
+    RESEND_FROM,
+)
+
+from app.models.news import News
 def send_email(
     to_email: str,
     subject: str,
     body: str,
 ):
-    print("========== SMTP START ==========")
-    print("SMTP_HOST =", SMTP_HOST)
-    print("SMTP_USERNAME =", SMTP_USERNAME)
-    print("SMTP_FROM =", SMTP_FROM)
+    resend.api_key = RESEND_API_KEY
 
-    print(socket.getaddrinfo(SMTP_HOST, SMTP_PORT))
-    message = MIMEMultipart()
-
-    message["From"] = SMTP_FROM
-    message["To"] = to_email
-    message["Subject"] = subject
-
-    message.attach(MIMEText(body, "html"))
+    print("========== RESEND START ==========")
+    print("TO =", to_email)
+    print("FROM =", RESEND_FROM)
 
     try:
-        server = smtplib.SMTP(
-         host=SMTP_HOST,
-         port=int(SMTP_PORT),
-         timeout=30,
-        )
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        server.starttls()
-
-        server.login(
-            SMTP_USERNAME,
-            SMTP_PASSWORD,
+        response = resend.Emails.send(
+            {
+                "from": RESEND_FROM,
+                "to": [to_email],
+                "subject": subject,
+                "html": body,
+            }
         )
 
-        server.sendmail(
-            SMTP_FROM,
-            to_email,
-            message.as_string(),
-        )
-
-        server.quit()
-
-        print(f"Email sent to {to_email}")
+        print("✅ Email sent successfully")
+        print(response)
 
     except Exception as e:
-        print(f"Email sending failed: {e}")
+        print(f"❌ Email sending failed: {e}")
         raise
 
 
