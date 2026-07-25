@@ -751,13 +751,17 @@ def analyze_gemini(text: str) -> dict | None:
 
 def analyze_news(text: str) -> dict | None:
     logger.info(f"Active provider: {AI_PROVIDER}")
+
     if not text:
         return None
 
-    if AI_PROVIDER.lower() == "groq":
+    provider = (AI_PROVIDER or "").lower()
+
+    if provider == "groq":
         return analyze_groq(text)
 
-    if AI_PROVIDER.lower() == "gemini":
+    if provider == "gemini":
         return analyze_gemini(text)
 
-    raise ValueError(f"Unsupported AI provider: {AI_PROVIDER}")
+    logger.error(f"Unsupported AI provider: {AI_PROVIDER}")
+    return None
