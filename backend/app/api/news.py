@@ -29,6 +29,8 @@ from app.services.news_service import (
 )
 from app.crud.news import search_news
 from app.services.news_service import process_and_save_news
+from app.services.email_service import send_email
+from app.core.config import RESEND_FROM
 router = APIRouter(
     prefix="/news",
     tags=["News"]
@@ -148,6 +150,20 @@ def fetch_news(db: Session = Depends(get_db)):
         "message": "News fetched successfully.",
         "saved_count": len(saved_news),
     }
+
+
+@router.get("/test-email")
+def test_email():
+    send_email(
+        to_email="erenden224284@gmail.com",
+        subject="TechPulse AI - Resend Test",
+        body="""
+        <h2>✅ Resend çalışıyor.</h2>
+        <p>Bu test mailidir.</p>
+        """,
+    )
+
+    return {"message": "Test email sent."}
 @router.post("/reanalyze")
 def reanalyze_news(
     db: Session = Depends(get_db),
