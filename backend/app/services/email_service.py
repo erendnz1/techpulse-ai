@@ -10,7 +10,7 @@ from app.core.config import (
     SMTP_USERNAME,
 )
 from app.models.news import News
-
+import socket
 def send_email(
     to_email: str,
     subject: str,
@@ -20,6 +20,8 @@ def send_email(
     print("SMTP_HOST =", SMTP_HOST)
     print("SMTP_USERNAME =", SMTP_USERNAME)
     print("SMTP_FROM =", SMTP_FROM)
+
+    print(socket.getaddrinfo(SMTP_HOST, SMTP_PORT))
     message = MIMEMultipart()
 
     message["From"] = SMTP_FROM
@@ -29,7 +31,14 @@ def send_email(
     message.attach(MIMEText(body, "html"))
 
     try:
-        server = smtplib.SMTP(SMTP_HOST, SMTP_PORT)
+        server = smtplib.SMTP(
+         host=SMTP_HOST,
+         port=int(SMTP_PORT),
+         timeout=30,
+        )
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
         server.starttls()
 
         server.login(
