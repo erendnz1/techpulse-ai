@@ -21,7 +21,7 @@ const categories = [
   "DevOps",
   "Developer Tools",
   "Software",
-  "Frameworks",
+  "Framework",
   "Mobile",
   "Business",
 ];

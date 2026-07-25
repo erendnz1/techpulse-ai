@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
 import {
   LayoutDashboard,
   Newspaper,
@@ -13,6 +14,8 @@ import {
   X,
   LogOut,
   Database,
+  MessageSquare,
+  MessageSquareText,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -64,6 +67,12 @@ export default function Sidebar({
   label: "Profile",
   icon: User,
 },
+{
+  href: "/dashboard/feedback",
+  label: "Feedback",
+  icon: MessageSquare,
+},
+
   ];
 const adminItems = [
   {
@@ -81,6 +90,11 @@ const adminItems = [
     label: "Database",
     icon: Database,
   },
+  {
+  href: "/dashboard/admin/feedback",
+  label: "Feedback",
+  icon: MessageSquareText,
+},
 ];
   const handleLinkClick = () => {
     if (window.innerWidth < 1024) {
@@ -128,8 +142,9 @@ useEffect(() => {
       {/* Sidebar */}
       <aside
         className={`
+          flex flex-col 
           fixed left-0 top-0 z-50
-          h-screen w-72 max-w-[85vw] overflow-y-auto
+          h-screen w-72 max-w-[85vw] 
           border-r border-gray-200
           bg-white/80
           backdrop-blur-xl
@@ -212,7 +227,7 @@ useEffect(() => {
 </div>
 
 </div>
-        <nav className="flex flex-1 flex-col gap-2 px-4 py-5">
+        <nav className="flex-1 overflow-y-auto px-4 py-5 space-y-2">
           {navItems.map((item) => {
             const Icon = item.icon;
 
@@ -297,9 +312,9 @@ ${
     })}
   </>
 )}
-          <div className="flex-1" />
+        
         </nav>
-        <div className="mt-4 border-t border-gray-200 p-5 dark:border-gray-700">
+        <div className="border-t border-gray-200 p-5 dark:border-gray-700">
 
   <div className="mb-5 rounded-2xl border border-gray-200 bg-gray-50 p-4 transition-all duration-300 hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
 

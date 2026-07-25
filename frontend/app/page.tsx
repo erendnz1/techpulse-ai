@@ -279,7 +279,7 @@ export default function Home() {
               "Software",
               "Cloud",
               "DevOps",
-              "Frameworks", 
+              "Framework", 
               "Mobile",
               "Developer Tools",
               "Business",

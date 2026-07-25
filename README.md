@@ -64,7 +64,7 @@ TechPulse AI continuously monitors multiple trusted technology sources to provid
 | Category | Sources |
 |----------|----------|
 | 🤖 Artificial Intelligence | OpenAI, Hugging Face |
-| 💻 Frameworks | React, Next.js, Laravel, .NET Blog, Node.js |
+| 💻 Framework | React, Next.js, Laravel, .NET Blog, Node.js |
 | ☁️ Cloud & DevOps | AWS, Cloudflare, Docker, Kubernetes |
 | 🛠 Developer Tools | GitHub Releases, JetBrains, Dev.to |
 | 🔒 Security | NVD, CVE, KVKK |

@@ -175,7 +175,7 @@ def process_and_save_news(db: Session):
     try:
         rss_articles = []
 
-        for source in RSS_SOURCES[:5]:
+        for source in RSS_SOURCES[:8]:
           try:
            rss_articles.extend(fetch_rss(source, limit=3))
 
@@ -210,7 +210,7 @@ def process_and_save_news(db: Session):
           continue
 
     # Çok kısa içerikleri AI'a gönderme
-        if len(content) < 120:
+        if len(content) < 40:
           print(f"Skipped (content too short): {title}")
           continue
 

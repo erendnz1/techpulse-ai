@@ -22,7 +22,7 @@ from app.api.admin import router as admin_router
 
 from app.services.scheduler_service import scheduler
 
-
+from app.api import feedback
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
@@ -91,3 +91,4 @@ app.include_router(preferences_router)
 app.include_router(notifications_router)
 app.include_router(dashboard_router)
 app.include_router(admin_router)
+app.include_router(feedback.router)

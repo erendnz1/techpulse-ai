@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+from app.core.config import FRONTEND_URL
 from app.core.config import (
     SMTP_FROM,
     SMTP_HOST,
@@ -9,7 +9,7 @@ from app.core.config import (
     SMTP_PORT,
     SMTP_USERNAME,
 )
-
+from app.models.news import News
 
 def send_email(
     to_email: str,
@@ -170,6 +170,128 @@ def send_password_reset_email(
             </div>
 
         </body>
+    </html>
+    """
+
+    send_email(
+        to_email=to_email,
+        subject=subject,
+        body=body,
+    )
+
+def send_news_notification_email(
+    to_email: str,
+    news: News,
+):
+    print("FRONTEND_URL =", FRONTEND_URL)
+
+    subject = f"🚀 TechPulse AI | {news.category} - {news.title[:60]}"
+    article_url = f"{FRONTEND_URL}/dashboard/news/{news.id}"
+    print("ARTICLE_URL =", article_url)
+    body = f"""
+    <html>
+    <body
+style="
+margin:0;
+padding:0;
+font-family:Arial,sans-serif;
+background:
+radial-gradient(circle at top right,#2563eb22 0%,transparent 35%),
+radial-gradient(circle at bottom left,#7c3aed22 0%,transparent 35%),
+linear-gradient(135deg,#0f172a,#111827,#1e293b);
+">
+
+    <div
+style="
+max-width:650px;
+margin:40px auto;
+background:#f8fbff;
+border-radius:18px;
+padding:40px;
+border:1px solid #dbeafe;
+box-shadow:
+0 20px 50px rgba(15,23,42,.18);
+">
+
+    <h1 style="margin:0;color:#2563eb;">🚀 TechPulse AI</h1>
+
+    <p style="color:#6b7280;margin-top:6px;">
+    Technology Intelligence Platform
+    </p>
+
+    <hr style="margin:30px 0;">
+
+    <h2 style="margin:0;">🚨 {news.category} Alert</h2>
+
+    <h3 style="margin-top:20px;">
+    {news.title}
+    </h3>
+
+    <div style="background:#f9fafb;padding:20px;border-radius:10px;margin-top:20px;">
+    <b>AI Summary</b>
+
+    <p style="margin-top:10px;">
+    {news.summary or "No summary available."}
+    </p>
+    </div>
+
+    <table style="width:100%;margin-top:25px;">
+    <tr>
+    <td><b>Category</b></td>
+    <td>{news.category}</td>
+    </tr>
+
+    <tr>
+    <td><b>Importance</b></td>
+    <td>{news.importance_score}/10</td>
+    </tr>
+
+    <tr>
+    <td><b>Risk</b></td>
+    <td>{news.risk_level}</td>
+    </tr>
+    </table>
+
+    <h3 style="margin-top:30px;">🔧 Affected Technologies</h3>
+
+    <ul>
+    {"".join(f"<li>{tech}</li>" for tech in (news.affected_technologies or []))}
+    </ul>
+
+    <h3>✅ Recommended Action</h3>
+
+    <p>
+    {news.recommended_action or "No recommendation available."}
+    </p>
+
+    <div style="text-align:center;margin:40px 0;">
+    <a
+    href="{article_url}"
+    style="
+    background:#2563eb;
+    color:white;
+    padding:16px 30px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+    display:inline-block;
+    ">
+    🚀 Read Full Article
+    </a>
+    </div>
+
+    <hr>
+
+    <p style="font-size:13px;color:#6b7280;">
+    View the complete AI analysis inside TechPulse AI.
+    </p>
+    <p style="font-size:13px;color:#6b7280;text-align:center;">
+Click <b>Read Full Article</b> to view the complete AI analysis, risk assessment,
+affected technologies and recommendations inside TechPulse AI.
+</p>
+    </div>
+
+    </body>
     </html>
     """
 

@@ -20,6 +20,7 @@ const categories = [
   "Cloud",
   "DevOps",
   "Software",
+  "Hardware",
   "Mobile",
   "Gaming",
   "Business",

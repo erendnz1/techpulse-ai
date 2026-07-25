@@ -193,7 +193,7 @@ def get_personalized_news(
         News.importance_score >= current_score,
     )
     .order_by(
-    News.published_at.desc(),
+    News.created_at.desc(),
     News.importance_score.desc(),
 )
 )

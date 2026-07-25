@@ -82,7 +82,11 @@ export default function NewsDetailPage() {
       fetchNewsDetail();
     }
   }, [newsId]);
-
+  useEffect(() => {
+  if (news) {
+    document.title = `${news.title} | TechPulse AI`;
+  }
+}, [news]);
   const getRiskClasses = (riskLevel: string | null) => {
     switch (riskLevel?.toLowerCase()) {
       case "critical":
@@ -153,7 +157,7 @@ export default function NewsDetailPage() {
     className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition hover:border-blue-500 hover:text-blue-600 dark:border-white/10 dark:bg-white/[0.03] dark:text-gray-300"
   >
     <ArrowLeft className="h-4 w-4" />
-    Back
+    Back to News 
   </button>
 
   <a
@@ -162,7 +166,7 @@ export default function NewsDetailPage() {
     rel="noopener noreferrer"
     className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
   >
-    Read Original
+    View Original Article
     <ArrowUpRight className="h-4 w-4" />
   </a>
 
@@ -172,15 +176,19 @@ export default function NewsDetailPage() {
         <article className="overflow-hidden relative rounded-3xl border border-gray-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
         <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-blue-600/10 blur-3xl" />
 <div className="absolute left-0 top-20 h-60 w-60 rounded-full bg-indigo-500/10 blur-3xl" />
-          {news.image_url && (
-            <div className="relative h-64 overflow-hidden border-b border-gray-200 dark:border-white/10 md:h-80">
-              <img
-                src={news.image_url}
-                alt={news.title}
-                className="h-full w-full object-cover"
-              />
-            </div>
-          )}
+          {news.image_url ? (
+  <div className="relative h-64 overflow-hidden border-b border-gray-200 dark:border-white/10 md:h-80">
+    <img
+      src={news.image_url}
+      alt={news.title}
+      className="h-full w-full object-cover"
+    />
+  </div>
+) : (
+  <div className="flex h-64 items-center justify-center border-b border-gray-200 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 md:h-80">
+    <Newspaper className="h-20 w-20 text-white/40" />
+  </div>
+)}
 
           <div className="p-6 md:p-9">
             {/* Badges */}
@@ -226,6 +234,27 @@ export default function NewsDetailPage() {
            <h1 className="mt-8 max-w-4xl text-5xl font-black leading-tight tracking-tight text-gray-950 dark:text-white">
   {news.title}
 </h1>
+<div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-gray-500 dark:text-gray-400">
+  <div className="flex items-center gap-2">
+    <CalendarDays className="h-4 w-4" />
+    {news.published_at
+      ? new Date(news.published_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "Unknown date"}
+  </div>
+
+  <div className="flex items-center gap-2">
+    <Globe2 className="h-4 w-4" />
+    {news.source}
+  </div>
+</div>
+<div className="mt-4 max-w-3xl text-base leading-7 text-gray-600 dark:text-gray-400">
+  AI-powered analysis of the latest technology news, including impact assessment,
+  affected technologies and recommended actions.
+</div>
 
             {/* Metadata */}
 
@@ -250,7 +279,9 @@ export default function NewsDetailPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400">
           TechPulse AI
         </p>
-
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+  AI-generated analysis powered by TechPulse AI
+</p>
         <h2 className="text-2xl font-bold">
           AI Generated Summary
         </h2>
@@ -401,6 +432,35 @@ export default function NewsDetailPage() {
     <h2 className="font-semibold">
       Original Article
     </h2>
+    <section className="mt-8 rounded-2xl border border-gray-200 bg-gray-50/70 p-6 dark:border-white/10 dark:bg-white/[0.03]">
+  <h2 className="text-lg font-semibold">
+    Next Steps
+  </h2>
+
+  <p className="mt-3 text-gray-600 dark:text-gray-300">
+    Review the AI analysis above, assess the potential impact on your
+    projects, and visit the original source for full technical details if
+    needed.
+  </p>
+
+  <div className="mt-6 flex flex-wrap gap-3">
+    <button
+      onClick={() => router.push("/dashboard/news")}
+      className="rounded-xl border border-gray-300 px-5 py-3 text-sm font-semibold transition hover:border-blue-500 hover:text-blue-600"
+    >
+      ← Back to News
+    </button>
+
+    <a
+      href={news.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+    >
+      Open Original Source
+    </a>
+  </div>
+</section>
   </div>
 
   <p className="mt-4 leading-7 text-gray-600 dark:text-gray-300">
@@ -422,30 +482,13 @@ export default function NewsDetailPage() {
 </section>
             )}
 
-            {/* Original source button */}
-            <div className="mt-8 flex justify-end">
-              <a
-                href={news.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-              >
-                Read Original Source
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
-            </div>
+            
           </div>
         </article>
       </div>
       <div className="mt-6 flex flex-wrap gap-4 text-xs text-gray-500">
 
-  <span className="rounded-full bg-white/10 px-3 py-1">
-    AI Confidence: High
-  </span>
-
-  <span className="rounded-full bg-white/10 px-3 py-1">
-    Generated automatically
-  </span>
+  
 
 </div>
     </main>

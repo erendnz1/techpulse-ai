@@ -787,10 +787,17 @@ focus:ring-blue-500/20
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {sortedNews.map((item) => (
             <article
-              key={item.id}
-              onClick={() => openNewsDetail(item.id)}
-              className="group h-full cursor-pointer rounded-2xl border border-gray-200 bg-white/70 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/60"
-            >
+  key={item.id}
+  role="button"
+  tabIndex={0}
+  onClick={() => openNewsDetail(item.id)}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      openNewsDetail(item.id);
+    }
+  }}
+  className="group h-full cursor-pointer rounded-2xl border border-gray-200 bg-white/70 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/60"
+>
               {(() => {
   const placeholder = getPlaceholder(item.category);
   const Icon = placeholder.icon;
@@ -840,6 +847,11 @@ focus:ring-blue-500/20
 
       {/* Bottom gradient */}
       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/20 to-transparent" />
+      <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition duration-300 group-hover:bg-black/20">
+  <div className="translate-y-2 rounded-xl bg-white px-5 py-2 text-sm font-semibold text-gray-900 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+    View AI Analysis →
+  </div>
+</div>
     </div>
   );
 })()}

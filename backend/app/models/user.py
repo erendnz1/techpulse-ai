@@ -84,4 +84,9 @@ class User(Base):
         "PasswordResetToken",
         back_populates="user",
         cascade="all, delete-orphan",
+    ) 
+    feedbacks = relationship(
+    "Feedback",
+    back_populates="user",
+    cascade="all, delete-orphan",
     )
