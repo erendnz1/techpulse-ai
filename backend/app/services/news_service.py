@@ -204,7 +204,7 @@ def process_and_save_news(db: Session):
 
     articles.insert(0, {
     "title": f"EMAIL TEST {uuid.uuid4()}",
-    "content": "Automatic email notification test.",
+    "content": "This is a test news created to verify the automatic email notification system. The content is intentionally long enough to pass the minimum content length validation and trigger the complete notification and email workflow.",
     "summary": "Automatic email notification test.",
     "source": "Test",
     "url": f"https://test.local/{uuid.uuid4()}",
