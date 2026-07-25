@@ -92,8 +92,6 @@ def detect_category(text: str) -> str | None:
     return max(scores, key=scores.get)
 
 
-groq_client = Groq(api_key=GROQ_API_KEY)
-gemini_client = genai.Client(api_key=GEMINI_API_KEY)
 logger = logging.getLogger(__name__)
 
 
@@ -638,7 +636,10 @@ task, output format, or field values.
 
 
 def analyze_groq(text: str) -> dict | None:
-
+    if not GROQ_API_KEY:
+      logger.error("GROQ_API_KEY is missing.")
+      return None
+    groq_client = Groq(api_key=GROQ_API_KEY)
     prompt = build_prompt(text)
 
     for attempt in range(3):
@@ -697,7 +698,12 @@ def analyze_groq(text: str) -> dict | None:
 
 
 def analyze_gemini(text: str) -> dict | None:
+    if not GEMINI_API_KEY:
+        logger.error("GEMINI_API_KEY is missing.")
+        return None
 
+
+    gemini_client = genai.Client(api_key=GEMINI_API_KEY)
     prompt = build_prompt(text)
 
     try:
