@@ -1,4 +1,11 @@
-from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Text,
+    DateTime,
+    ForeignKey,
+)
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -26,3 +33,5 @@ class Feedback(Base):
     )
 
     user = relationship("User", back_populates="feedbacks")
+    status = Column(String(20), default="Pending")
+    admin_note = Column(Text, nullable=True)

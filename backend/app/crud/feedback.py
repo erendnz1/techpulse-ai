@@ -41,3 +41,32 @@ def get_all_feedbacks(db: Session):
         .order_by(Feedback.created_at.desc())
         .all()
     )
+
+def get_all_feedbacks(db: Session):
+    return (
+        db.query(Feedback)
+        .order_by(Feedback.created_at.desc())
+        .all()
+    )
+def update_feedback(
+    db: Session,
+    feedback_id: int,
+    status: str,
+    admin_note: str | None,
+):
+    feedback = (
+        db.query(Feedback)
+        .filter(Feedback.id == feedback_id)
+        .first()
+    )
+
+    if not feedback:
+        return None
+
+    feedback.status = status
+    feedback.admin_note = admin_note
+
+    db.commit()
+    db.refresh(feedback)
+
+    return feedback

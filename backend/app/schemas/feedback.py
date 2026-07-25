@@ -13,6 +13,11 @@ class FeedbackResponse(BaseModel):
     user_id: int
     rating: int
     message: str
+    status: str
+    admin_note: str | None = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+class FeedbackUpdate(BaseModel):
+    status: str
+    admin_note: str | None = None

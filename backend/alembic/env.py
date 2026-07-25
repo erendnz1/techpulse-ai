@@ -16,7 +16,7 @@ from app.models.notification import Notification
 from app.models.user_preferences import UserPreferences
 from app.models.email_verification_token import EmailVerificationToken
 from app.models.password_reset_token import PasswordResetToken  # NEW
-
+from app.models.feedback import Feedback
 # Load environment variables
 load_dotenv()
 

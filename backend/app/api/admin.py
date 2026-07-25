@@ -6,7 +6,12 @@ from app.database.session import get_db
 from app.dependencies.auth import admin_required
 import os
 import tempfile
-
+from app.crud.feedback import (
+    get_all_feedbacks,
+    update_feedback,
+)
+from app.schemas.feedback import FeedbackResponse, FeedbackUpdate
+from app.schemas.feedback import FeedbackUpdate
 from fastapi.responses import FileResponse
 
 from app.services.report_service import generate_admin_report
@@ -290,3 +295,37 @@ def internal_fetch_news(
         "message": "Automatic fetch completed.",
         "saved_count": len(saved_news),
     }
+@router.get(
+    "/feedbacks",
+    response_model=list[FeedbackResponse],
+)
+def get_feedbacks(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(admin_required),
+):
+    return get_all_feedbacks(db)
+
+@router.patch(
+    "/feedbacks/{feedback_id}",
+    response_model=FeedbackResponse,
+)
+def update_feedback_status(
+    feedback_id: int,
+    request: FeedbackUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(admin_required),
+):
+    feedback = update_feedback(
+        db,
+        feedback_id,
+        request.status,
+        request.admin_note,
+    )
+
+    if not feedback:
+        raise HTTPException(
+            status_code=404,
+            detail="Feedback not found."
+        )
+
+    return feedback
