@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from pydantic import BaseModel, EmailStr, Field
 
@@ -8,11 +8,20 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
 
+    date_of_birth: date | None = None
+    country: str | None = None
+    city: str | None = None
+
 
 class UserResponse(BaseModel):
     id: int
     username: str
     email: EmailStr
+
+    date_of_birth: date | None = None
+    country: str | None = None
+    city: str | None = None
+
     role: str
     is_active: bool
     created_at: datetime

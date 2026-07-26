@@ -21,6 +21,7 @@ const categories = [
   "DevOps",
   "Developer Tools",
   "Software",
+  "Hardware",
   "Framework",
   "Mobile",
   "Business",

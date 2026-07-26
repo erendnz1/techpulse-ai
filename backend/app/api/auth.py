@@ -61,10 +61,14 @@ async def register(
         )
 
     new_user = User(
-        username=user.username,
-        email=user.email,
-        password=hash_password(user.password),
-    )
+    username=user.username,
+    email=user.email,
+    password=hash_password(user.password),
+
+    date_of_birth=user.date_of_birth,
+    country=user.country,
+    city=user.city,
+)
 
     db.add(new_user)
     db.commit()
@@ -82,7 +86,8 @@ async def register(
     verification_url = (
     f"{FRONTEND_URL}/verify-email?token={verification.token}"
 )
-
+    print("DB TOKEN :", verification.token)
+    print("MAIL URL :", verification_url)
     send_verification_email(
     to_email=new_user.email,
     username=new_user.username,

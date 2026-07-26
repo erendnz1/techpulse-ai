@@ -1,6 +1,6 @@
 from datetime import UTC, datetime
 
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy import Boolean, Column, Date, DateTime, Integer, String
 from sqlalchemy.orm import relationship
 
 from app.database.base import Base
@@ -30,6 +30,20 @@ class User(Base):
     password = Column(
         String(255),
         nullable=False,
+    )
+    date_of_birth = Column(
+        Date,
+        nullable=True,
+    )
+
+    country = Column(
+       String(100),
+       nullable=True,
+    )
+
+    city = Column(
+        String(100),
+        nullable=True,
     )
 
     role = Column(

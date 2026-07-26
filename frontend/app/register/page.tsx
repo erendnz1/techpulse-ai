@@ -2,6 +2,12 @@
 import { ThemeToggle } from "../../components/theme-toggle";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const Select = dynamic(() => import("react-select"), {
+  ssr: false,
+});
+import { Country, City } from "country-state-city";
 export default function RegisterPage() {
   const router = useRouter();
   const handleRegister = async (e: React.FormEvent) => {
@@ -16,10 +22,16 @@ export default function RegisterPage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            username,
-            email,
-            password,
-          }),
+  username,
+  email,
+  password,
+
+  date_of_birth: dateOfBirth,
+
+  country: selectedCountry?.name,
+
+  city: selectedCity?.name,
+}),
         }
       );
 
@@ -41,8 +53,59 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+const [selectedCountry, setSelectedCountry] = useState<any>(null);
+const [selectedCity, setSelectedCity] = useState<any>(null);
+const countries = Country.getAllCountries();
+
+const cities =
+  selectedCountry && selectedCountry.isoCode
+    ? City.getCitiesOfCountry(selectedCountry.isoCode) ?? []
+    : [];
+
+const selectStyles = {
+  control: (base: any) => ({
+    ...base,
+    backgroundColor: "#1f2937",
+    borderColor: "#374151",
+    color: "white",
+    minHeight: "48px",
+    boxShadow: "none",
+    "&:hover": {
+      borderColor: "#3b82f6",
+    },
+  }),
+
+  menu: (base: any) => ({
+    ...base,
+    backgroundColor: "#1f2937",
+  }),
+
+  option: (base: any, state: any) => ({
+    ...base,
+    backgroundColor: state.isFocused ? "#2563eb" : "#1f2937",
+    color: "white",
+    cursor: "pointer",
+  }),
+
+  singleValue: (base: any) => ({
+    ...base,
+    color: "white",
+  }),
+
+  input: (base: any) => ({
+    ...base,
+    color: "white",
+  }),
+
+  placeholder: (base: any) => ({
+    ...base,
+    color: "#9ca3af",
+  }),
+};
+  
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white px-4 transition-colors dark:bg-gray-900">
+    <main className="relative flex min-h-screen items-center justify-center overflow-y-auto bg-white px-4 py-10 transition-colors dark:bg-gray-900">
 
       <>
   <div className="pointer-events-none absolute -left-32 top-0 h-[450px] w-[450px] rounded-full bg-cyan-500/15 blur-[140px]" />
@@ -54,25 +117,25 @@ export default function RegisterPage() {
 
       <a
         href="/"
-        className="absolute left-8 top-6 z-10 text-xl font-bold tracking-tight text-gray-900 transition-opacity hover:opacity-80 dark:text-white"
+        className="absolute left-4 sm:left-8 top-5 sm:top-6 z-10 text-lg sm:text-xl font-bold tracking-tight text-gray-900 dark:text-white"
       >
         TechPulse <span className="text-blue-600">AI</span>
       </a>
       <div className="absolute right-8 top-5 z-10">
         <ThemeToggle />
       </div>
-      <div className="relative z-10 w-full max-w-lg px-4">
+      <div className="relative z-10 w-full max-w-xl px-4 sm:px-6">
 
   {/* Card Glow */}
   <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-cyan-500/20 blur-3xl dark:bg-cyan-500/20" />
 
-  <div className="rounded-2xl border border-gray-200 bg-white/95 p-8 shadow-2xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
+  <div className="rounded-2xl border border-gray-200 bg-white/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
         <form onSubmit={handleRegister}>
           <h1 className="text-center text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
             Create your account
           </h1>
 
-          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-center text-sm sm:text-base text-gray-600 dark:text-gray-400">
             Create your TechPulse AI account to monitor software news, AI developments and security alerts.
           </p>
           <div className="mt-8">
@@ -175,6 +238,81 @@ export default function RegisterPage() {
               </button>
             </div>
           </div>
+          <div className="mt-5">
+  <label className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
+    Date of Birth
+  </label>
+
+  <input
+    type="date"
+    value={dateOfBirth}
+    onChange={(e) => setDateOfBirth(e.target.value)}
+    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+  />
+</div>
+<div className="mt-5">
+  <label className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
+    Country
+  </label>
+
+  <Select
+  styles={selectStyles}
+placeholder="Select your country"
+    options={countries.map((country) => ({
+      value: country.isoCode,
+      label: country.name,
+      country,
+      
+    }))}
+
+    value={
+      selectedCountry
+        ? {
+            value: selectedCountry.isoCode,
+            label: selectedCountry.name,
+          }
+        : null
+    }
+
+    onChange={(option: any) => {
+  if (!option) return;
+
+  setSelectedCountry(option.country);
+  setSelectedCity(null);
+}}
+  />
+</div>
+<div className="mt-5">
+  <label className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
+    City
+  </label>
+
+  <Select
+    styles={selectStyles}
+    placeholder="Select your city"
+    isDisabled={!selectedCountry}
+
+    options={cities.map((city) => ({
+      value: city.name,
+      label: city.name,
+      city,
+    }))}
+
+    value={
+      selectedCity
+        ? {
+            value: selectedCity.name,
+            label: selectedCity.name,
+          }
+        : null
+    }
+
+    onChange={(option: any) => {
+  if (!option) return;
+  setSelectedCity(option.city);
+}}
+  />
+</div>
           {error && (
             <p className="mt-4 text-center text-sm text-red-500">
               {error}
@@ -182,7 +320,7 @@ export default function RegisterPage() {
           )}
           <button
             type="submit"
-            className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3.5 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
           >
             Create Account
           </button>
