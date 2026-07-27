@@ -291,7 +291,7 @@ lg:text-5xl font-black leading-tight tracking-tight text-gray-950 dark:text-whit
 
     </div>
 
-    <div className="mt-8 rounded-2xl border border-white/10 bg-white/50 p-6 backdrop-blur-xl dark:bg-white/[0.03]">
+    <div className="mt-8 rounded-2xl border border-white/10 bg-white/50 p-5 sm:p-6 lg:p-7 backdrop-blur-xl dark:bg-white/[0.03]">
 
       <p className="text-sm
 leading-7
