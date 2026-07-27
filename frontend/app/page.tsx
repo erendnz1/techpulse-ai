@@ -212,13 +212,12 @@ export default function Home() {
     Trusted by Technology Professionals
   </h2>
 </div>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
-          <h3 className="text-5xl font-bold text-blue-600">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <h3 className="text-3xl sm:text-5xl font-bold text-blue-600">
   <CountUp end={1200} duration={2.5} separator="," />+
 </h3>
-          <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+          <p className="mt-2 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">
             Articles Collected
           </p>
         </div>
@@ -242,13 +241,13 @@ export default function Home() {
     dark:bg-gray-800
   "
 >
-          <h3 className="text-5xl font-bold text-blue-600">
+          <h3 className="text-3xl sm:text-5xl font-bold text-blue-600">
   <CountUp end={25} duration={2.5} />+
 </h3>
           <p
   className="
     mt-3
-    text-sm
+    text-xs sm:text-sm
     font-semibold
     uppercase
     tracking-widest
@@ -260,20 +259,20 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
-          <h3 className="text-5xl font-bold text-blue-600">
+        <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <h3 className="text-3xl sm:text-5xl font-bold text-blue-600">
   <CountUp end={10} duration={2.5} />
 </h3>
-          <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+          <p className="mt-2 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">
             Technology Categories
           </p>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
-          <h3 className="text-5xl font-bold text-blue-600">
+        <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <h3 className="text-3xl sm:text-5xl font-bold text-blue-600">
   24/7
 </h3>
-          <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+          <p className="mt-2 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">
             Powered Analysis
           </p>
         </div>
@@ -303,72 +302,68 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-14 grid grid-cols-2 gap-4 lg:grid-cols-4">
 
-        <div className="group rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+        <div className="group rounded-2xl border border-gray-200 bg-white p-4 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
 
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
-  <Newspaper className="h-9 w-9 text-blue-600 group-hover:text-white" />
+          <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
+  <Newspaper className="h-7 w-7 sm:h-9 sm:w-9 text-blue-600 group-hover:text-white" />
 </div>
 
-          <h3 className="mt-6 text-xl font-bold text-gray-900 dark:text-white">
+          <h3 className="mt-6 text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
             Collect News
           </h3>
 
           <p className="mt-4 leading-7 text-gray-600 dark:text-gray-400">
-            Continuously gathers technology news, security alerts,
-            AI updates and framework releases from trusted sources.
+            Gather technology news from trusted sources.
           </p>
 
         </div>
 
-        <div className="group rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+        <div className="group rounded-2xl border border-gray-200 bg-white p-4 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
 
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
-  <Bot className="h-9 w-9 text-blue-600 group-hover:text-white" />
+          <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
+  <Bot className="h-7 w-7 sm:h-9 sm:w-9 text-blue-600 group-hover:text-white" />
 </div>
 
-          <h3 className="mt-6 text-xl font-bold text-gray-900 dark:text-white">
+          <h3 className="mt-6 text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
             AI Analysis
           </h3>
 
           <p className="mt-4 leading-7 text-gray-600 dark:text-gray-400">
-            Every article is analyzed using AI to generate summaries,
-            categories, importance scores and recommendations.
+            AI summarizes and categorizes every update.
           </p>
 
         </div>
 
-        <div className="group rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+        <div className="group rounded-2xl border border-gray-200 bg-white p-4 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
 
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
-  <ChartColumn className="h-9 w-9 text-blue-600 group-hover:text-white" />
+          <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
+  <ChartColumn className="h-7 w-7 sm:h-9 sm:w-9 text-blue-600 group-hover:text-white" />
 </div>
 
-          <h3 className="mt-6 text-xl font-bold text-gray-900 dark:text-white">
+          <h3 className="mt-6 text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
             Smart Scoring
           </h3>
 
           <p className="mt-4 leading-7 text-gray-600 dark:text-gray-400">
-            Risk levels, affected technologies and importance scores
-            help prioritize the updates that matter most.
+           Prioritize updates with AI risk scores.
           </p>
 
         </div>
 
-        <div className="group rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+        <div className="group rounded-2xl border border-gray-200 bg-white p-4 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
 
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
-  <BellRing className="h-9 w-9 text-blue-600 group-hover:text-white" />
+          <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
+  <BellRing className="h-7 w-7 sm:h-9 sm:w-9 text-blue-600 group-hover:text-white" />
 </div>
 
-          <h3 className="mt-6 text-xl font-bold text-gray-900 dark:text-white">
+          <h3 className="mt-6 text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
             Personalized Alerts
           </h3>
 
           <p className="mt-4 leading-7 text-gray-600 dark:text-gray-400">
-            Receive instant notifications based on your interests,
-            preferred categories and importance thresholds.
+            Receive notifications based on your interests.
           </p>
 
         </div>
@@ -401,46 +396,65 @@ export default function Home() {
               developments so you can focus on what truly matters.
             </p>
           </div>
-          <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:border-blue-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <div className="mt-12 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="
+group
+rounded-3xl
+border
+border-gray-200
+bg-white
+p-5
+sm:p-6
+text-left
+shadow-sm
+transition-all
+duration-300
+hover:-translate-y-2
+hover:border-blue-400
+hover:shadow-xl
+dark:border-gray-700
+dark:bg-gray-800
+dark:hover:border-blue-500
+">
+              <h3 className="mt-4 text-lg font-bold text-gray-900 dark:text-white">
                 AI-Powered Analysis
               </h3>
 
-              <p className="mt-3 leading-7 text-gray-600 dark:text-gray-300">
-                Every technology update is analyzed by AI to generate summaries,
-                categories, importance scores, risk levels, affected technologies, and
-                recommended actions.
+             <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300">
+                AI analyzes every update with summaries,
+categories and risk scores.
               </p>
             </div>
             <div className="rounded-2xl border border-gray-200 bg-white p-6 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:border-blue-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3 className="mt-4 text-lg font-bold text-gray-900 dark:text-white">
                 Security Monitoring
               </h3>
 
-              <p className="mt-3 leading-7 text-gray-600 dark:text-gray-300">
-                Track critical CVEs, security vulnerabilities, and data breach notifications with AI-generated risk levels, affected technologies, and recommended actions.
+             <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300">
+                Monitor CVEs and security alerts
+with AI-powered risk analysis.
               </p>
             </div>
 
             <div className="rounded-2xl border border-gray-200 bg-white p-6 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:border-blue-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3 className="mt-4 text-lg font-bold text-gray-900 dark:text-white">
                 Multiple Trusted Sources
               </h3>
 
-              <p className="mt-3 leading-7 text-gray-600 dark:text-gray-300">
-                Follow AI, software, cybersecurity, cloud, DevOps, and technology updates from trusted global and Turkish sources — all in one unified platform.
+              <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300">
+                Stay updated through trusted
+global and Turkish tech sources.
               </p>
             </div>
 
             <div className="rounded-2xl border border-gray-200 bg-white p-6 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:border-blue-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-500">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+             <h3 className="mt-4 text-lg font-bold text-gray-900 dark:text-white">
                 Personalized Alerts
               </h3>
 
-              <p className="mt-3 leading-7 text-gray-600 dark:text-gray-300">
-                Receive personalized notifications based on your preferred categories,
-                regions, and minimum importance score.
+              <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300">
+                Get alerts based on your interests
+and preferred categories.
               </p>
             </div>
           </div>
@@ -473,18 +487,17 @@ blur-3xl
           DASHBOARD PREVIEW
         </p>
 
-        <h2 className="mt-4 text-4xl font-bold text-gray-900 dark:text-white">
+        <h2 className="mt-4 text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
           See TechPulse AI in Action
         </h2>
 
         <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
-          Stay on top of AI, cybersecurity,
-frameworks, cloud technologies,
-and software updates from one
-intelligent dashboard
+          Monitor AI, cybersecurity,
+frameworks and cloud updates
+from one intelligent dashboard.
         </p>
 
-        <div className="mt-8 space-y-4">
+        <div className="mt-7 space-y-3">
 
           <div className="flex items-center gap-3">
             <span className="text-xl text-blue-600">✓</span>
@@ -535,6 +548,7 @@ scale-95">
     border
     border-gray-200
     shadow-2xl
+    lg:max-w-none
     transition-all
     duration-500
     hover:scale-[1.02]
@@ -622,7 +636,7 @@ scale-95">
               cybersecurity, software, cloud, DevOps, mobile, and developer tools.
             </p>
           </div>
-          <div className="mx-auto mt-14 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto mt-10 grid grid-cols-2 gap-3 lg:mt-14 lg:max-w-5xl lg:grid-cols-3 lg:gap-4">
   {[
     "Artificial Intelligence",
     "Security",
@@ -630,6 +644,7 @@ scale-95">
     "Cloud",
     "DevOps",
     "Framework",
+    "Hardware",
     "Mobile",
     "Developer Tools",
     "Business",
@@ -637,26 +652,25 @@ scale-95">
     <div
       key={category}
       className="
-        group
-        rounded-2xl
-        border
-        border-gray-200
-        bg-white
-        px-8
-        py-8
-        text-center
-        shadow-sm
-        transition-all
-        duration-300
-        hover:-translate-y-2
-        hover:border-blue-400
-        hover:shadow-xl
-        dark:border-gray-700
-        dark:bg-gray-800
-        dark:hover:border-blue-500
-      "
+group
+rounded-xl
+border
+border-gray-200
+bg-white
+px-4
+py-4
+text-center
+shadow-sm
+transition-all
+duration-300
+hover:-translate-y-1
+hover:border-blue-400
+hover:shadow-lg
+dark:border-gray-700
+dark:bg-gray-800
+"
     >
-      <h3 className="text-lg font-semibold text-gray-900 transition-colors duration-300 group-hover:text-blue-600 dark:text-white">
+      <h3 className="text-sm sm:text-lg font-semibold text-gray-900 transition-colors duration-300 group-hover:text-blue-600 dark:text-white">
         {category}
       </h3>
     </div>
