@@ -1,8 +1,12 @@
 
-import smtplib
+import resend
 
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+from app.core.config import (
+    FRONTEND_URL,
+    RESEND_API_KEY,
+    RESEND_FROM,
+)
+resend.api_key = RESEND_API_KEY
 from app.core.config import FRONTEND_URL
 from app.core.config import (
     SMTP_FROM,
@@ -25,31 +29,22 @@ def send_email(
     subject: str,
     body: str,
 ):
-    print("========== SMTP START ==========")
-    print("TO =", to_email)
-
-    message = MIMEMultipart("alternative")
-    message["Subject"] = subject
-    message["From"] = SMTP_FROM
-    message["To"] = to_email
-
-    message.attach(MIMEText(body, "html"))
-
     try:
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_USERNAME, SMTP_PASSWORD)
-            server.sendmail(
-                SMTP_FROM,
-                to_email,
-                message.as_string(),
-            )
+        resend.Emails.send(
+            {
+                "from": RESEND_FROM,
+                "to": [to_email],
+                "subject": subject,
+                "html": body,
+            }
+        )
 
-        print("✅ Email sent successfully")
+        print("✅ Email sent successfully via Resend")
 
     except Exception as e:
-        print("❌ SMTP Error:", e)
+        print("❌ Resend Error:", e)
         raise
+     
 
 
 def send_verification_email(

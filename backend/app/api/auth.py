@@ -1,6 +1,6 @@
 from datetime import UTC, datetime, timedelta
 from app.schemas.user import ResendVerificationRequest
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
@@ -37,6 +37,7 @@ router = APIRouter(
 @router.post("/register", response_model=UserResponse)
 async def register(
     user: UserCreate,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
 ):
 
@@ -88,11 +89,13 @@ async def register(
 )
     print("DB TOKEN :", verification.token)
     print("MAIL URL :", verification_url)
-    send_verification_email(
-    to_email=new_user.email,
-    username=new_user.username,
-    verification_url=verification_url,
-)
+    background_tasks.add_task(
+        send_verification_email,
+        to_email=new_user.email,
+        username=new_user.username,
+        verification_url=verification_url,
+    )
+
 
     return new_user
 
@@ -228,6 +231,7 @@ def verify_email(
 @router.post("/resend-verification")
 async def resend_verification(
     data: ResendVerificationRequest,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
 ):
 
@@ -272,10 +276,11 @@ async def resend_verification(
     f"{FRONTEND_URL}/verify-email?token={verification.token}"
 )
 
-    send_verification_email(
-    to_email=user.email,
-    username=user.username,
-    verification_url=verification_url,
+    background_tasks.add_task(
+      send_verification_email,
+      to_email=user.email,
+      username=user.username,
+      verification_url=verification_url,
 )
 
     return {
@@ -285,6 +290,7 @@ async def resend_verification(
 @router.post("/forgot-password")
 async def forgot_password(
     data: ForgotPasswordRequest,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
 ):
 
@@ -322,11 +328,12 @@ async def forgot_password(
         f"{FRONTEND_URL}/reset-password?token={reset_token.token}"
     )
 
-    send_password_reset_email(
-        to_email=user.email,
-        username=user.username,
-        reset_url=reset_url,
-    )
+    background_tasks.add_task(
+      send_password_reset_email,
+      to_email=user.email,
+      username=user.username,
+      reset_url=reset_url,
+)
 
     return {
         "message": "If an account exists for this email, a password reset link has been sent."
