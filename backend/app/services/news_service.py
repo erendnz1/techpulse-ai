@@ -229,14 +229,19 @@ def process_and_save_news(db: Session):
             continue
 
         title = article.get("title", "")
-        content = article.get("content", "")
+        content = (
+    article.get("content")
+    or article.get("description")
+    or article.get("summary")
+    or ""
+)
 
         # Başlıksız haberleri alma
         if not title:
           continue
 
     # Çok kısa içerikleri AI'a gönderme
-        if len(content) < 40:
+        if not content or len(content) < 40:
           print(f"Skipped (content too short): {title}")
           continue
 

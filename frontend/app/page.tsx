@@ -100,12 +100,13 @@ export default function Home() {
   {menuOpen && (
 
     <div className="
-      absolute
+      fixed
       left-0
       top-[70px]
       z-50
       flex
       w-full
+      h-screen
       flex-col
       gap-5
       border-b
@@ -159,7 +160,7 @@ export default function Home() {
 </nav>
      
       <FadeInSection>
-        <section className="relative mx-auto flex max-w-5xl flex-col items-center px-4 py-20 sm:py-24 text-center sm:px-6 sm:py-24">
+        <section className="relative mx-auto flex max-w-5xl flex-col items-center px-4 py-12 text-center sm:px-6 sm:py-20 lg:py-24">
           <div className="pointer-events-none absolute left-1/2 top-0 z-0 hidden h-96 w-96 -translate-x-1/2 rounded-full bg-blue-600/20 blur-3xl dark:block" />
           {/* Light mode - left edge glow */}
          <div className="pointer-events-none absolute -left-64 top-1/2 z-0 hidden sm:block h-96 w-96 -translate-y-1/2 rounded-full bg-blue-200/60 blur-3xl dark:hidden" />
@@ -175,7 +176,7 @@ export default function Home() {
             Track important software developments, security vulnerabilities, AI news,
             framework updates, and developer tools in one intelligent platform.
           </p>
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+          <div className="mt-10 flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
             <button
   onClick={() => {
     const token = localStorage.getItem("access_token");
@@ -184,14 +185,14 @@ export default function Home() {
       token ? "/dashboard/news" : "/login"
     );
   }}
-  className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-blue-700 hover:shadow-lg"
+  className="w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-blue-700 hover:shadow-lg sm:w-auto"
 >
   Explore Latest News
 </button>
 
             <a
               href="/register"
-              className="rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-700 transition duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-gray-50 hover:shadow-lg dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800"
+              className="w-full rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-700 transition duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-gray-50 hover:shadow-lg dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800 sm:w-auto"
             >
               Create Free Account
             </a>
@@ -211,7 +212,7 @@ export default function Home() {
     Trusted by Technology Professionals
   </h2>
 </div>
-      <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 
         <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
           <h3 className="text-5xl font-bold text-blue-600">
@@ -229,7 +230,7 @@ export default function Home() {
     border
     border-gray-200
     bg-white
-    p-8
+    p-6 sm:p-8
     text-center
     shadow-sm
     transition-all
@@ -302,9 +303,9 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="mt-20 grid gap-8 md:grid-cols-4">
+      <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 
-        <div className="group rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+        <div className="group rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
 
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
   <Newspaper className="h-9 w-9 text-blue-600 group-hover:text-white" />
@@ -321,7 +322,7 @@ export default function Home() {
 
         </div>
 
-        <div className="group rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+        <div className="group rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
 
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
   <Bot className="h-9 w-9 text-blue-600 group-hover:text-white" />
@@ -338,7 +339,7 @@ export default function Home() {
 
         </div>
 
-        <div className="group rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+        <div className="group rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
 
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
   <ChartColumn className="h-9 w-9 text-blue-600 group-hover:text-white" />
@@ -355,7 +356,7 @@ export default function Home() {
 
         </div>
 
-        <div className="group rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+        <div className="group rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
 
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
   <BellRing className="h-9 w-9 text-blue-600 group-hover:text-white" />
@@ -519,7 +520,8 @@ intelligent dashboard
       </div>
 
       {/* Right Side */}
-      <div className="relative lg:scale-110">
+      <div className="relative lg:scale-110
+scale-95">
         <Image
   src="/images/dashboard-preview.png"
   alt="TechPulse AI Dashboard"
@@ -527,6 +529,7 @@ intelligent dashboard
   height={1000}
   priority
   className="
+    h-auto
     w-full
     rounded-3xl
     border
@@ -567,7 +570,7 @@ intelligent dashboard
 
       </div>
 
-      <div className="mt-16 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
+      <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
 
         {[
   { icon: FaGithub, name: "GitHub" },
@@ -582,7 +585,7 @@ intelligent dashboard
   return (
     <div
       key={item.name}
-      className="group rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-400 hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
+      className="group rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-400 hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
     >
       <Icon className="mx-auto h-10 w-10 text-blue-600 transition-transform duration-500 group-hover:scale-110" />
 
@@ -619,7 +622,7 @@ intelligent dashboard
               cybersecurity, software, cloud, DevOps, mobile, and developer tools.
             </p>
           </div>
-          <div className="mx-auto mt-14 grid max-w-5xl gap-6 sm:grid-cols-2 md:grid-cols-3">
+          <div className="mx-auto mt-14 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
   {[
     "Artificial Intelligence",
     "Security",
@@ -702,7 +705,7 @@ intelligent dashboard
             <div className="mt-8">
               <a
                 href="/register"
-                className="inline-block rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-blue-500 hover:shadow-lg"
+                className="inline-block w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-blue-500 hover:shadow-lg sm:w-auto"
               >
                 Get Started for Free
               </a>
@@ -711,7 +714,7 @@ intelligent dashboard
         </section>
       </FadeInSection>
       <footer className="border-t border-gray-200 px-6 py-8 dark:border-gray-800">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
           <a
             href="/"
             className="text-2xl sm:text-xl font-bold tracking-tight text-gray-900 transition-opacity hover:opacity-80 dark:text-white"
