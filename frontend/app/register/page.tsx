@@ -119,7 +119,7 @@ indicatorsContainer: (base: any) => ({
 };
   
   return (
-     <main className="relative flex min-h-screen items-center justify-center overflow-y-auto py-4 sm:py-10 overflow-x-hidden bg-white px-3 sm:px-4 transition-colors dark:bg-gray-900">
+     <main className="relative flex min-h-screen items-start sm:items-center justify-center overflow-y-auto py-6 sm:py-10 overflow-x-hidden bg-white px-3 sm:px-4 transition-colors dark:bg-gray-900">
       <>
   <div className="pointer-events-none absolute -left-32 top-0 h-[280px] w-[280px] sm:h-[450px] sm:w-[450px] rounded-full bg-cyan-500/15 blur-[140px]" />
 
@@ -142,7 +142,7 @@ indicatorsContainer: (base: any) => ({
   {/* Card Glow */}
   <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-cyan-500/20 blur-3xl dark:bg-cyan-500/20" />
 
-  <div className="rounded-2xl border border-gray-200 bg-white/95 p-4 sm:p-8 shadow-2xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
+  <div className="rounded-2xl border max-h-[92vh] overflow-y-auto  border-gray-200 bg-white/95 p-4 sm:p-8 shadow-2xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
         <form onSubmit={handleRegister}>
           <h1 className="text-center text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white">
             Create your account
