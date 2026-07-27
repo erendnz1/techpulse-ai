@@ -147,14 +147,14 @@ export default function NewsDetailPage() {
   }
 
   return (
-    <main className="min-h-screen bg-transparent px-6 py-10 text-slate-950 dark:text-white md:px-10">
+    <main className="min-h-screen bg-transparent px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-10">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
+        <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
   <button
     type="button"
     onClick={() => router.back()}
-    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition hover:border-blue-500 hover:text-blue-600 dark:border-white/10 dark:bg-white/[0.03] dark:text-gray-300"
+    className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition hover:border-blue-500 hover:text-blue-600 dark:border-white/10 dark:bg-white/[0.03] dark:text-gray-300 sm:w-auto"
   >
     <ArrowLeft className="h-4 w-4" />
     Back to News 
@@ -164,7 +164,7 @@ export default function NewsDetailPage() {
     href={news.url}
     target="_blank"
     rel="noopener noreferrer"
-    className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
   >
     View Original Article
     <ArrowUpRight className="h-4 w-4" />
@@ -177,7 +177,7 @@ export default function NewsDetailPage() {
         <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-blue-600/10 blur-3xl" />
 <div className="absolute left-0 top-20 h-60 w-60 rounded-full bg-indigo-500/10 blur-3xl" />
           {news.image_url ? (
-  <div className="relative h-64 overflow-hidden border-b border-gray-200 dark:border-white/10 md:h-80">
+  <div className="relative h-44 sm:h-56 md:h-80 overflow-hidden border-b border-gray-200 dark:border-white/10">
     <img
       src={news.image_url}
       alt={news.title}
@@ -190,7 +190,7 @@ export default function NewsDetailPage() {
   </div>
 )}
 
-          <div className="p-6 md:p-9">
+          <div className="p-5 sm:p-6 lg:p-9">
             {/* Badges */}
             <div className="flex flex-wrap gap-2">
               {news.category && (
@@ -231,7 +231,9 @@ export default function NewsDetailPage() {
             </div>
 
             {/* Title */}
-           <h1 className="mt-8 max-w-4xl text-5xl font-black leading-tight tracking-tight text-gray-950 dark:text-white">
+           <h1 className="mt-8 max-w-4xl text-3xl
+sm:text-4xl
+lg:text-5xl font-black leading-tight tracking-tight text-gray-950 dark:text-white">
   {news.title}
 </h1>
 <div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-gray-500 dark:text-gray-400">
@@ -260,7 +262,7 @@ export default function NewsDetailPage() {
 
             {/* AI Summary */}
            {/* AI Summary */}
-<section className="relative mt-10 overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-indigo-500/5 to-purple-500/10 p-8">
+<section className="relative mt-10 overflow-hidden rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-indigo-500/5 to-purple-500/10 p-5 sm:p-6 lg:p-8">
 
   {/* Glow */}
   <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-blue-500/20 blur-3xl" />
@@ -282,7 +284,7 @@ export default function NewsDetailPage() {
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
   AI-generated analysis powered by TechPulse AI
 </p>
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-xl sm:text-2xl font-bold">
           AI Generated Summary
         </h2>
       </div>
@@ -291,13 +293,16 @@ export default function NewsDetailPage() {
 
     <div className="mt-8 rounded-2xl border border-white/10 bg-white/50 p-6 backdrop-blur-xl dark:bg-white/[0.03]">
 
-      <p className="text-[17px] leading-8 text-gray-700 dark:text-gray-300">
+      <p className="text-sm
+leading-7
+sm:text-base
+lg:text-[17px] text-gray-700 dark:text-gray-300">
         {news.summary || "AI summary is not available for this article."}
       </p>
 
     </div>
 
-    <div className="mt-6 flex items-center justify-between">
+    <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
       <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
 
@@ -320,9 +325,9 @@ export default function NewsDetailPage() {
 </section>
 
             {/* Analysis grid */}
-            <div className="mt-6 grid gap-6 lg:grid-cols-3">
+            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {/* Affected technologies */}
-              <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6 dark:border-white/10 dark:bg-white/[0.03]">
+              <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-5 sm:p-6 dark:border-white/10 dark:bg-white/[0.03]">
                 <div className="flex items-center gap-2 text-gray-900 dark:text-white">
                   <Wrench className="h-5 w-5 text-purple-500" />
 
@@ -354,7 +359,7 @@ export default function NewsDetailPage() {
 
               {/* Recommended action */}
               {/* Risk Analysis */}
-<section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6 dark:border-white/10 dark:bg-white/[0.03]">
+<section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-5 sm:p-6 dark:border-white/10 dark:bg-white/[0.03]">
 
   <div className="flex items-center gap-2">
     <ShieldAlert className="h-5 w-5 text-red-500" />
@@ -406,7 +411,7 @@ export default function NewsDetailPage() {
   </div>
 
 </section>
-              <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6 dark:border-white/10 dark:bg-white/[0.03]">
+              <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-5 sm:p-6 dark:border-white/10 dark:bg-white/[0.03]">
                 <div className="flex items-center gap-2 text-gray-900 dark:text-white">
                   <Lightbulb className="h-5 w-5 text-amber-500" />
 
@@ -427,26 +432,44 @@ export default function NewsDetailPage() {
               <section className="mt-8 rounded-2xl border border-blue-500/20 bg-blue-500/[0.04] p-6">
 
   <div className="flex items-center gap-2">
-    <Newspaper className="h-5 w-5 text-blue-500" />
+  <Newspaper className="h-5 w-5 text-blue-500" />
 
-    <h2 className="font-semibold">
-      Original Article
-    </h2>
-    <section className="mt-8 rounded-2xl border border-gray-200 bg-gray-50/70 p-6 dark:border-white/10 dark:bg-white/[0.03]">
+  <h2 className="font-semibold">
+    Original Article
+  </h2>
+</div>
+
+<p className="mt-4 leading-7 text-gray-600 dark:text-gray-300">
+  This analysis was generated from the original article published by{" "}
+  <span className="font-semibold">{news.source}</span>.
+  For complete technical details and the full context, read the original publication.
+</p>
+
+<a
+  href={news.url}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+>
+  Read Original Article
+  <ArrowUpRight className="h-4 w-4" />
+</a>
+<section className="mt-8 rounded-2xl border border-gray-200 bg-gray-50/70 p-6 dark:border-white/10 dark:bg-white/[0.03]">
+
   <h2 className="text-lg font-semibold">
     Next Steps
   </h2>
 
   <p className="mt-3 text-gray-600 dark:text-gray-300">
     Review the AI analysis above, assess the potential impact on your
-    projects, and visit the original source for full technical details if
-    needed.
+    projects, and visit the original source for full technical details if needed.
   </p>
 
-  <div className="mt-6 flex flex-wrap gap-3">
+  <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+
     <button
       onClick={() => router.push("/dashboard/news")}
-      className="rounded-xl border border-gray-300 px-5 py-3 text-sm font-semibold transition hover:border-blue-500 hover:text-blue-600"
+      className="w-full rounded-xl border border-gray-300 px-5 py-3 text-sm font-semibold transition hover:border-blue-500 hover:text-blue-600 sm:w-auto"
     >
       ← Back to News
     </button>
@@ -455,29 +478,15 @@ export default function NewsDetailPage() {
       href={news.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+      className="w-full rounded-xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
     >
       Open Original Source
     </a>
+
   </div>
+
 </section>
-  </div>
-
-  <p className="mt-4 leading-7 text-gray-600 dark:text-gray-300">
-    This analysis was generated from the original article published by{" "}
-    <span className="font-semibold">{news.source}</span>.
-    For complete technical details and the full context, read the original publication.
-  </p>
-
-  <a
-    href={news.url}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-  >
-    Read Original Article
-    <ArrowUpRight className="h-4 w-4" />
-  </a>
+  
 
 </section>
             )}
