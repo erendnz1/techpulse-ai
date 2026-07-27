@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 const Select = dynamic(() => import("react-select"), {
   ssr: false,
 });
-import { Country, City } from "country-state-city";
+import { Country, State } from "country-state-city";
 export default function RegisterPage() {
   const router = useRouter();
   const handleRegister = async (e: React.FormEvent) => {
@@ -58,11 +58,10 @@ const [selectedCountry, setSelectedCountry] = useState<any>(null);
 const [selectedCity, setSelectedCity] = useState<any>(null);
 const countries = Country.getAllCountries();
 
-const cities =
+const states =
   selectedCountry && selectedCountry.isoCode
-    ? City.getCitiesOfCountry(selectedCountry.isoCode) ?? []
+    ? State.getStatesOfCountry(selectedCountry.isoCode)
     : [];
-
 const selectStyles = {
   control: (base: any) => ({
     ...base,
@@ -105,12 +104,13 @@ const selectStyles = {
 };
   
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-y-auto bg-white px-4 py-10 transition-colors dark:bg-gray-900">
+    <main
+className="relative flex min-h-screen items-start justify-center overflow-y-auto bg-white px-4 py-10 sm:items-center">
 
       <>
-  <div className="pointer-events-none absolute -left-32 top-0 h-[450px] w-[450px] rounded-full bg-cyan-500/15 blur-[140px]" />
+  <div className="pointer-events-none absolute -left-32 top-0 h-[280px] w-[280px] sm:h-[450px] sm:w-[450px] rounded-full bg-cyan-500/15 blur-[140px]" />
 
-  <div className="pointer-events-none absolute -bottom-32 -right-32 h-[450px] w-[450px] rounded-full bg-violet-500/15 blur-[140px]" />
+  <div className="pointer-events-none absolute -bottom-32 -right-32 h-[280px] w-[280px] sm:h-[450px] sm:w-[450px] rounded-full bg-violet-500/15 blur-[140px]" />
 
   <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.10),transparent_45%)] dark:bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.18),transparent_45%)]" />
 </>
@@ -121,10 +121,10 @@ const selectStyles = {
       >
         TechPulse <span className="text-blue-600">AI</span>
       </a>
-      <div className="absolute right-8 top-5 z-10">
-        <ThemeToggle />
-      </div>
-      <div className="relative z-10 w-full max-w-xl px-4 sm:px-6">
+      <div className="absolute right-4 top-5 sm:right-8 z-10">
+  <ThemeToggle />
+</div>
+      <div className="relative z-10 w-full max-w-xl px-3 sm:px-6">
 
   {/* Card Glow */}
   <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-cyan-500/20 blur-3xl dark:bg-cyan-500/20" />
@@ -284,7 +284,7 @@ placeholder="Select your country"
 </div>
 <div className="mt-5">
   <label className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
-    City
+    State / Province
   </label>
 
   <Select
@@ -292,24 +292,24 @@ placeholder="Select your country"
     placeholder="Select your city"
     isDisabled={!selectedCountry}
 
-    options={cities.map((city) => ({
-      value: city.name,
-      label: city.name,
-      city,
-    }))}
+    options={states.map((state) => ({
+  value: state.isoCode,
+  label: state.name,
+  state,
+}))}
 
     value={
-      selectedCity
-        ? {
-            value: selectedCity.name,
-            label: selectedCity.name,
-          }
-        : null
-    }
+  selectedCity
+    ? {
+        value: selectedCity.isoCode,
+        label: selectedCity.name,
+      }
+    : null
+}
 
     onChange={(option: any) => {
   if (!option) return;
-  setSelectedCity(option.city);
+  setSelectedCity(option.state);
 }}
   />
 </div>
