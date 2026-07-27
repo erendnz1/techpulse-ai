@@ -148,7 +148,7 @@ export default function NewsDetailPage() {
 
   return (
     <main className="min-h-screen bg-transparent px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-10">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-screen-2xl">
         <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
   <button
@@ -325,9 +325,9 @@ lg:text-[17px] text-gray-700 dark:text-gray-300">
 </section>
 
             {/* Analysis grid */}
-            <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="mt-10 grid grid-cols-1 gap-8 xl:grid-cols-2">
               {/* Affected technologies */}
-              <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-5 sm:p-6 dark:border-white/10 dark:bg-white/[0.03]">
+              <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6 lg:p-8 dark:border-white/10 dark:bg-white/[0.03]">
                 <div className="flex items-center gap-2 text-gray-900 dark:text-white">
                   <Wrench className="h-5 w-5 text-purple-500" />
 
@@ -359,7 +359,7 @@ lg:text-[17px] text-gray-700 dark:text-gray-300">
 
               {/* Recommended action */}
               {/* Risk Analysis */}
-<section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-5 sm:p-6 dark:border-white/10 dark:bg-white/[0.03]">
+<section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6 lg:p-8 dark:border-white/10 dark:bg-white/[0.03]">
 
   <div className="flex items-center gap-2">
     <ShieldAlert className="h-5 w-5 text-red-500" />
@@ -411,7 +411,7 @@ lg:text-[17px] text-gray-700 dark:text-gray-300">
   </div>
 
 </section>
-              <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-5 sm:p-6 dark:border-white/10 dark:bg-white/[0.03]">
+              <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6 lg:p-8 dark:border-white/10 dark:bg-white/[0.03]">
                 <div className="flex items-center gap-2 text-gray-900 dark:text-white">
                   <Lightbulb className="h-5 w-5 text-amber-500" />
 
