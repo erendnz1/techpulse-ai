@@ -119,7 +119,7 @@ indicatorsContainer: (base: any) => ({
 };
   
   return (
-     <main className="relative flex min-h-screen items-start sm:items-center justify-center overflow-y-auto pt-14 pb-6 sm:py-10 overflow-x-hidden bg-white px-3 sm:px-4 transition-colors dark:bg-gray-900">
+     <main className="relative flex min-h-screen justify-center overflow-y-auto overflow-x-hidden bg-white px-3 pt-20 pb-8 transition-colors dark:bg-gray-900 sm:items-center sm:px-4 sm:py-10">
       <>
   <div className="pointer-events-none absolute -left-32 top-0 h-[280px] w-[280px] sm:h-[450px] sm:w-[450px] rounded-full bg-cyan-500/15 blur-[140px]" />
 
