@@ -1,20 +1,15 @@
 
-import resend
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
 
 from app.core.config import (
     FRONTEND_URL,
-    RESEND_API_KEY,
-    RESEND_FROM,
+    BREVO_API_KEY,
+    BREVO_FROM_EMAIL,
+    BREVO_FROM_NAME,
 )
-resend.api_key = RESEND_API_KEY
-from app.core.config import FRONTEND_URL
-from app.core.config import (
-    SMTP_FROM,
-    SMTP_HOST,
-    SMTP_PASSWORD,
-    SMTP_PORT,
-    SMTP_USERNAME,
-)
+
+
 from app.models.news import News
 
 
@@ -29,20 +24,37 @@ def send_email(
     subject: str,
     body: str,
 ):
-    try:
-        resend.Emails.send(
-            {
-                "from": RESEND_FROM,
-                "to": [to_email],
-                "subject": subject,
-                "html": body,
-            }
-        )
+    configuration = sib_api_v3_sdk.Configuration()
+    configuration.api_key["api-key"] = BREVO_API_KEY
 
-        print("✅ Email sent successfully via Resend")
+    api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
+        sib_api_v3_sdk.ApiClient(configuration)
+    )
+
+    email = sib_api_v3_sdk.SendSmtpEmail(
+        sender={
+            "name": BREVO_FROM_NAME,
+            "email": BREVO_FROM_EMAIL,
+        },
+        to=[
+            {
+                "email": to_email,
+            }
+        ],
+        subject=subject,
+        html_content=body,
+    )
+
+    try:
+        api_instance.send_transac_email(email)
+        print("✅ Email sent successfully via Brevo")
+
+    except ApiException as e:
+        print("❌ Brevo API Error:", e.body)
+        raise
 
     except Exception as e:
-        print("❌ Resend Error:", e)
+        print("❌ Brevo Error:", e)
         raise
      
 
