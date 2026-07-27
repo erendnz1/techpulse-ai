@@ -74,7 +74,16 @@ const selectStyles = {
     backgroundColor: "#1f2937",
     borderColor: "#374151",
     color: "white",
-    minHeight: "48px",
+    minHeight: "42px",
+    valueContainer: (base: any) => ({
+  ...base,
+  padding: "0 10px",
+}),
+
+indicatorsContainer: (base: any) => ({
+  ...base,
+  height: "42px",
+}),
     boxShadow: "none",
     "&:hover": {
       borderColor: "#3b82f6",
@@ -110,7 +119,7 @@ const selectStyles = {
 };
   
   return (
-     <main className="relative flex min-h-screen items-center justify-center overflow-y-auto py-6 sm:py-10 overflow-x-hidden bg-white px-4 transition-colors dark:bg-gray-900">
+     <main className="relative flex min-h-screen items-center justify-center overflow-y-auto py-4 sm:py-10 overflow-x-hidden bg-white px-3 sm:px-4 transition-colors dark:bg-gray-900">
       <>
   <div className="pointer-events-none absolute -left-32 top-0 h-[280px] w-[280px] sm:h-[450px] sm:w-[450px] rounded-full bg-cyan-500/15 blur-[140px]" />
 
@@ -133,19 +142,19 @@ const selectStyles = {
   {/* Card Glow */}
   <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-cyan-500/20 blur-3xl dark:bg-cyan-500/20" />
 
-  <div className="rounded-2xl border border-gray-200 bg-white/95 p-5 sm:p-8 shadow-2xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
+  <div className="rounded-2xl border border-gray-200 bg-white/95 p-4 sm:p-8 shadow-2xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
         <form onSubmit={handleRegister}>
           <h1 className="text-center text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white">
             Create your account
           </h1>
 
-          <p className="mt-2 text-center text-sm sm:text-base text-gray-600 dark:text-gray-400">
+          <p className="mt-1 text-center text-xs sm:text-base sm:text-base text-gray-600 dark:text-gray-400">
             Create your TechPulse AI account to monitor software news, AI developments and security alerts.
           </p>
-          <div className="mt-8">
+          <div className="mt-5">
             <label
               htmlFor="username"
-              className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200"
+              className="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200"
             >
               Username
             </label>
@@ -158,13 +167,13 @@ const selectStyles = {
               placeholder="Choose a username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
             />
           </div>
           <div className="mt-4">
             <label
               htmlFor="email"
-              className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200"
+              className="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200"
             >
               Email
             </label>
@@ -177,13 +186,13 @@ const selectStyles = {
               placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
             />
           </div>
           <div className="mt-4">
             <label
               htmlFor="password"
-              className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200"
+              className="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200"
             >
               Password
             </label>
@@ -197,7 +206,7 @@ const selectStyles = {
                 placeholder="Create a password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-12 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 pr-12 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
               />
 
               <button
@@ -243,7 +252,7 @@ const selectStyles = {
             </div>
           </div>
           <div className="mt-4">
-  <label className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
+  <label className="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200">
     Date of Birth
   </label>
 
@@ -251,11 +260,11 @@ const selectStyles = {
     type="date"
     value={dateOfBirth}
     onChange={(e) => setDateOfBirth(e.target.value)}
-    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
   />
 </div>
 <div className="mt-4">
-  <label className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
+  <label className="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200">
     Country
   </label>
 
@@ -325,7 +334,7 @@ placeholder="Select your country"
           <button
   type="submit"
   disabled={isLoading}
-  className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100"
+  className="mt-4 w-full rounded-lg bg-blue-600 px-4 py-2.5 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100"
 >
   {isLoading ? "Creating account..." : "Create Account"}
 </button>
