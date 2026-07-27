@@ -3,11 +3,11 @@ import { ThemeToggle } from "../../components/theme-toggle";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-
+import { TURKEY_CITIES } from "@/lib/turkeyCities";
 const Select = dynamic(() => import("react-select"), {
   ssr: false,
 });
-import { Country, State } from "country-state-city";
+import { Country, City } from "country-state-city";
 export default function RegisterPage() {
   const router = useRouter();
   const handleRegister = async (e: React.FormEvent) => {
@@ -58,10 +58,15 @@ const [selectedCountry, setSelectedCountry] = useState<any>(null);
 const [selectedCity, setSelectedCity] = useState<any>(null);
 const countries = Country.getAllCountries();
 
-const states =
-  selectedCountry && selectedCountry.isoCode
-    ? State.getStatesOfCountry(selectedCountry.isoCode)
+const cities =
+  selectedCountry?.isoCode === "TR"
+    ? TURKEY_CITIES.map((city) => ({
+        name: city,
+      }))
+    : selectedCountry
+    ? City.getCitiesOfCountry(selectedCountry.isoCode) ?? []
     : [];
+
 const selectStyles = {
   control: (base: any) => ({
     ...base,
@@ -104,9 +109,7 @@ const selectStyles = {
 };
   
   return (
-    <main
-className="relative flex min-h-screen items-start justify-center overflow-y-auto bg-white px-4 py-10 sm:items-center">
-
+     <main className="relative flex min-h-screen items-center justify-center overflow-y-auto py-10 overflow-x-hidden bg-white px-4 transition-colors dark:bg-gray-900">
       <>
   <div className="pointer-events-none absolute -left-32 top-0 h-[280px] w-[280px] sm:h-[450px] sm:w-[450px] rounded-full bg-cyan-500/15 blur-[140px]" />
 
@@ -124,7 +127,7 @@ className="relative flex min-h-screen items-start justify-center overflow-y-auto
       <div className="absolute right-4 top-5 sm:right-8 z-10">
   <ThemeToggle />
 </div>
-      <div className="relative z-10 w-full max-w-xl px-3 sm:px-6">
+      <div className="relative z-10 w-full max-w-xl px-0 sm:px-6">
 
   {/* Card Glow */}
   <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-cyan-500/20 blur-3xl dark:bg-cyan-500/20" />
@@ -284,7 +287,7 @@ placeholder="Select your country"
 </div>
 <div className="mt-5">
   <label className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
-    State / Province
+    City
   </label>
 
   <Select
@@ -292,24 +295,24 @@ placeholder="Select your country"
     placeholder="Select your city"
     isDisabled={!selectedCountry}
 
-    options={states.map((state) => ({
-  value: state.isoCode,
-  label: state.name,
-  state,
-}))}
+    options={cities.map((city) => ({
+      value: city.name,
+      label: city.name,
+      city,
+    }))}
 
     value={
-  selectedCity
-    ? {
-        value: selectedCity.isoCode,
-        label: selectedCity.name,
-      }
-    : null
-}
+      selectedCity
+        ? {
+            value: selectedCity.name,
+            label: selectedCity.name,
+          }
+        : null
+    }
 
     onChange={(option: any) => {
   if (!option) return;
-  setSelectedCity(option.state);
+  setSelectedCity(option.city);
 }}
   />
 </div>
