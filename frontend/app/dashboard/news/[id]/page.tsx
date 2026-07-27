@@ -148,7 +148,7 @@ export default function NewsDetailPage() {
 
   return (
     <main className="min-h-screen bg-transparent px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-10">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-7xl">
         <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
   <button
@@ -190,7 +190,7 @@ export default function NewsDetailPage() {
   </div>
 )}
 
-          <div className="p-5 sm:p-6 lg:p-9">
+          <div className="p-4 sm:p-6 lg:p-8">
             {/* Badges */}
             <div className="flex flex-wrap gap-2">
               {news.category && (
@@ -325,7 +325,7 @@ lg:text-[17px] text-gray-700 dark:text-gray-300">
 </section>
 
             {/* Analysis grid */}
-            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
               {/* Affected technologies */}
               <section className="rounded-2xl border border-gray-200 bg-gray-50/70 p-5 sm:p-6 dark:border-white/10 dark:bg-white/[0.03]">
                 <div className="flex items-center gap-2 text-gray-900 dark:text-white">
