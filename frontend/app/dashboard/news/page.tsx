@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowRight,
+  ChevronDown,
   Globe2,
   Loader2,
+  SlidersHorizontal,
   Newspaper,
   Sparkles,
   ShieldAlert,
@@ -44,7 +46,7 @@ export default function NewsPage() {
 
   const [selectedFeed, setSelectedFeed] =
     useState<FeedMode>("personalized");
-
+const [showFilters, setShowFilters] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedRisk, setSelectedRisk] = useState("all");
@@ -579,6 +581,42 @@ const loadMore = async () => {
 
       
 {/* Search */}
+<div className="mt-4">
+  <button
+    type="button"
+    onClick={() => setShowFilters(!showFilters)}
+    className="
+      flex
+      w-full
+      items-center
+      justify-between
+      rounded-xl
+      border
+      border-gray-200
+      bg-white/70
+      px-4
+      py-3
+      text-sm
+      font-medium
+      shadow-sm
+      transition
+      hover:border-blue-500
+      dark:border-gray-700
+      dark:bg-gray-800/60
+    "
+  >
+    <span className="flex items-center gap-2">
+      <SlidersHorizontal className="h-4 w-4" />
+      Filters
+    </span>
+
+    <ChevronDown
+      className={`h-4 w-4 transition-transform ${
+        showFilters ? "rotate-180" : ""
+      }`}
+    />
+  </button>
+</div>
 <div className="mt-6">
   <input
     type="text"
@@ -588,7 +626,8 @@ const loadMore = async () => {
     className="w-full rounded-xl border border-gray-200 bg-white/70 px-4 py-3 text-sm outline-none transition focus:border-blue-500 dark:border-gray-700 dark:bg-gray-800/60"
   />
 </div>
-<div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+{showFilters && (
+  <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
 
   <select
     value={selectedCategory}
@@ -708,6 +747,7 @@ focus:ring-blue-500/20
 </select>
 
 </div>
+)}
       {/* Result count */}
       {!loading && (
         <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-gray-400">
@@ -978,6 +1018,7 @@ focus:ring-blue-500/20
 
     </div>
 )}
+
     </main>
   );
 }

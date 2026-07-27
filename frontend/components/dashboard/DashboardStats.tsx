@@ -2,7 +2,7 @@
 
 import {
   Bell,
-  Globe2,
+  
   Newspaper,
   ShieldAlert,
   Sparkles,
@@ -30,16 +30,16 @@ export default function DashboardStats({
 
   return (
 
-    <section
-      className="
-        mt-5
-        grid
-        gap-4
-        sm:grid-cols-2
-        lg:grid-cols-3
-        2xl:grid-cols-5
-      "
-    >
+   <section
+  className="
+    mt-5
+    grid
+    grid-cols-2
+    gap-3
+    md:gap-4
+    xl:grid-cols-4
+  "
+>
 
 
       <StatCard
@@ -90,23 +90,6 @@ export default function DashboardStats({
         iconColor="text-purple-500"
         trend="Live"
         trendColor="text-purple-500"
-      />
-
-
-
-      <StatCard
-        title="Sources"
-        value={
-          Object.keys(
-            stats?.sources ?? {}
-          ).length
-        }
-        subtitle="Active providers"
-        icon={Globe2}
-        iconBg="bg-cyan-500/15"
-        iconColor="text-cyan-500"
-        trend="Online"
-        trendColor="text-cyan-500"
       />
 
 

@@ -1,6 +1,7 @@
 "use client";
 import { ThemeToggle } from "../../components/theme-toggle";
 import { useState } from "react";
+import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { TURKEY_CITIES } from "@/lib/turkeyCities";
@@ -10,6 +11,8 @@ const Select = dynamic(() => import("react-select"), {
 import { Country, City } from "country-state-city";
 export default function RegisterPage() {
   const router = useRouter();
+  const { resolvedTheme } = useTheme();
+const isDark = resolvedTheme === "dark";
   const handleRegister = async (e: React.FormEvent) => {
   e.preventDefault();
   if (isLoading) return; // çift tıklamayı engelle
@@ -71,9 +74,9 @@ const cities =
 const selectStyles = {
   control: (base: any) => ({
     ...base,
-    backgroundColor: "#1f2937",
-    borderColor: "#374151",
-    color: "white",
+    backgroundColor: isDark ? "#1f2937" : "#ffffff",
+borderColor: isDark ? "#374151" : "#d1d5db",
+color: isDark ? "#ffffff" : "#111827",
     minHeight: "42px",
     valueContainer: (base: any) => ({
   ...base,
@@ -92,29 +95,31 @@ indicatorsContainer: (base: any) => ({
 
   menu: (base: any) => ({
     ...base,
-    backgroundColor: "#1f2937",
+    backgroundColor: isDark ? "#1f2937" : "#ffffff",
   }),
 
   option: (base: any, state: any) => ({
     ...base,
-    backgroundColor: state.isFocused ? "#2563eb" : "#1f2937",
-    color: "white",
+    backgroundColor: state.isFocused
+  ? (isDark ? "#2563eb" : "#dbeafe")
+  : (isDark ? "#1f2937" : "#ffffff"),
+color: isDark ? "#ffffff" : "#111827",
     cursor: "pointer",
   }),
 
   singleValue: (base: any) => ({
     ...base,
-    color: "white",
+    color: isDark ? "#ffffff" : "#111827",
   }),
 
   input: (base: any) => ({
     ...base,
-    color: "white",
+    color: isDark ? "#ffffff" : "#111827",
   }),
 
   placeholder: (base: any) => ({
     ...base,
-    color: "#9ca3af",
+    color: isDark ? "#9ca3af" : "#6b7280",
   }),
 };
   

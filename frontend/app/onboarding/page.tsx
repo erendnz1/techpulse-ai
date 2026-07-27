@@ -47,15 +47,15 @@ type Preferences = {
   regions: string[];
   minimum_importance_score: number;
   notification_enabled: boolean;
+  email_notification_enabled: boolean;
 };
-
 const defaultPreferences: Preferences = {
   categories: [],
   regions: [],
   minimum_importance_score: 5,
   notification_enabled: true,
+  email_notification_enabled: false,
 };
-
 export default function OnboardingPage() {
   const router = useRouter();
 
@@ -226,7 +226,8 @@ export default function OnboardingPage() {
       {/* Background glow effects */}
 <div className="pointer-events-none absolute inset-0 overflow-hidden">
   {/* Top center main glow */}
-  <div className="absolute left-1/2 top-[-180px] h-[520px] w-[760px] -translate-x-1/2 rounded-full bg-blue-500/20 blur-[140px] dark:bg-blue-500/25" />
+  <div className="absolute left-1/2 top-[-180px] h-[360px] w-[360px]
+sm:h-[520px] sm:w-[760px] -translate-x-1/2 rounded-full bg-blue-500/20 blur-[140px] dark:bg-blue-500/25" />
 
   {/* Left ambient glow */}
   <div className="absolute left-[-180px] top-[30%] h-[420px] w-[420px] rounded-full bg-blue-400/10 blur-[130px] dark:bg-blue-500/15" />
@@ -280,7 +281,7 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
               {categories.map((category) => {
                 const selected =
                   preferences.categories.includes(category);
@@ -422,7 +423,52 @@ export default function OnboardingPage() {
 
           {/* Notifications */}
           <section className="rounded-3xl border border-gray-200 bg-white/90 p-6 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/[0.03] md:p-8">
-            <div className="flex items-center justify-between gap-6">
+            <section className="rounded-3xl border border-gray-200 bg-white/90 p-6 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/[0.03] md:p-8">
+  <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex items-start gap-3">
+      <div className="rounded-xl bg-emerald-500/10 p-2.5 text-emerald-500">
+        <Bell className="h-5 w-5" />
+      </div>
+
+      <div>
+        <h2 className="text-lg font-semibold">
+          Email Notifications
+        </h2>
+
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          Receive important AI, Security and technology updates directly in your inbox.
+        </p>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      role="switch"
+      aria-checked={preferences.email_notification_enabled}
+      onClick={() =>
+        setPreferences((current) => ({
+          ...current,
+          email_notification_enabled:
+            !current.email_notification_enabled,
+        }))
+      }
+      className={`relative h-7 w-12 shrink-0 rounded-full transition ${
+        preferences.email_notification_enabled
+          ? "bg-emerald-500"
+          : "bg-gray-300 dark:bg-gray-700"
+      }`}
+    >
+      <span
+        className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+          preferences.email_notification_enabled
+            ? "translate-x-6"
+            : "translate-x-1"
+        }`}
+      />
+    </button>
+  </div>
+</section>
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-start gap-3">
                 <div className="rounded-xl bg-purple-500/10 p-2.5 text-purple-500">
                   <Bell className="h-5 w-5" />
@@ -481,7 +527,7 @@ export default function OnboardingPage() {
               type="button"
               onClick={completeOnboarding}
               disabled={saving}
-              className="flex min-w-64 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-xl disabled:cursor-not-allowed disabled:transform-none disabled:opacity-60"
+              className="flex w-full sm:w-auto sm:min-w-64 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-xl disabled:cursor-not-allowed disabled:transform-none disabled:opacity-60"
             >
               {saving ? (
                 <>

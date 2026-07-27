@@ -26,4 +26,4 @@ class UserPreferencesUpdate(BaseModel):
     regions: list[str] | None = None
     minimum_importance_score: int | None = None
     notification_enabled: bool | None = None
-    email_notification_enabled: bool = False
+    email_notification_enabled: bool | None = None

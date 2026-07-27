@@ -10,6 +10,8 @@ import {
   MapPin,
   Save,
   ShieldCheck,
+  ChevronDown,
+  ChevronUp, 
 } from "lucide-react";
 
 const categories = [
@@ -60,7 +62,7 @@ const defaultPreferences: Preferences = {
 export default function PreferencesPage() {
   const [preferences, setPreferences] =
     useState<Preferences>(defaultPreferences);
-
+const [showCategories, setShowCategories] = useState(false);
   const [preferencesExist, setPreferencesExist] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -239,8 +241,41 @@ export default function PreferencesPage() {
               </p>
             </div>
           </div>
+<button
+  type="button"
+  onClick={() => setShowCategories(!showCategories)}
+  className="
+    mt-6
+    flex
+    w-full
+    items-center
+    justify-between
+    rounded-xl
+    border
+    border-gray-200
+    bg-gray-50
+    px-4
+    py-3
+    text-sm
+    font-medium
+    transition
+    hover:border-blue-500
+    dark:border-white/10
+    dark:bg-white/[0.04]
+  "
+>
+  <span>
+    {preferences.categories.length} categories selected
+  </span>
 
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
+  {showCategories ? (
+    <ChevronUp className="h-4 w-4" />
+  ) : (
+    <ChevronDown className="h-4 w-4" />
+  )}
+</button>
+          {showCategories && (
+  <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
             {categories.map((category) => {
               const selected =
                 preferences.categories.includes(category);
@@ -262,6 +297,7 @@ export default function PreferencesPage() {
               );
             })}
           </div>
+          )}
         </section>
 
         {/* Regions */}

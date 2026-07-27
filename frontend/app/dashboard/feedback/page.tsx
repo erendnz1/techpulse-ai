@@ -78,21 +78,21 @@ export default function FeedbackPage() {
 
     {/* Header */}
     <div className="mb-8">
-      <h1 className="flex items-center gap-3 text-3xl font-bold text-white sm:text-4xl">
+      <h1 className="flex items-center gap-3 text-3xl font-bold text-gray-950 dark:text-white sm:text-4xl">
         <MessageSquareText className="h-8 w-8 text-blue-400 sm:h-10 sm:w-10" />
         Feedback
       </h1>
 
-      <p className="mt-3 max-w-2xl text-sm text-gray-400 sm:text-base">
+      <p className="mt-3 max-w-2xl text-sm text-gray-600 dark:text-gray-400 sm:text-base">
         Help us improve TechPulse AI by sharing your ideas,
         suggestions, or reporting any issues.
       </p>
     </div>
 
     {/* Feedback Form */}
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-2xl backdrop-blur-xl sm:p-8">
+    <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-xl dark:border-white/10 dark:bg-white/5 sm:p-8">
 
-      <h2 className="mb-5 text-xl font-semibold text-white">
+      <h2 className="mb-5 text-xl font-semibold text-gray-900 dark:text-white">
         Rate your experience
       </h2>
 
@@ -116,7 +116,7 @@ export default function FeedbackPage() {
         ))}
       </div>
 
-      <label className="mb-3 block text-lg font-semibold text-white">
+      <label className="mb-3 block text-lg font-semibold text-gray-900 dark:text-white">
         Your Feedback
       </label>
 
@@ -125,7 +125,7 @@ export default function FeedbackPage() {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Tell us what you liked, what should be improved or report a bug..."
-        className="w-full rounded-2xl border border-white/10 bg-slate-900/60 p-4 text-white placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full rounded-2xl border border-gray-300 bg-white p-4 text-gray-900 placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/10 dark:bg-slate-900/60 dark:text-white"
       />
 
       <p className="mt-2 text-sm text-gray-500">
@@ -155,7 +155,7 @@ export default function FeedbackPage() {
 
       <div className="mb-6 flex items-center justify-between">
 
-        <h2 className="text-2xl font-bold text-white">
+       <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
           My Previous Feedback
         </h2>
 
@@ -174,7 +174,7 @@ export default function FeedbackPage() {
             className="mx-auto mb-4 text-gray-500"
           />
 
-          <p className="text-gray-400">
+          <p className="text-gray-600 dark:text-gray-400">
             You haven't submitted any feedback yet.
           </p>
 
@@ -188,7 +188,7 @@ export default function FeedbackPage() {
 
             <div
               key={item.id}
-              className="rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/10"
+              className="rounded-2xl border border-gray-200 bg-white p-6 transition hover:border-blue-400 hover:shadow-lg dark:border-white/10 dark:bg-white/5"
             >
 
               <div className="mb-3 flex items-center justify-between">
@@ -217,7 +217,7 @@ export default function FeedbackPage() {
 
               </div>
 
-              <p className="leading-7 text-gray-200">
+              <p className="leading-7 text-gray-700 dark:text-gray-200">
                 {item.message}
               </p>
 
