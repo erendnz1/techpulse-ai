@@ -110,7 +110,7 @@ const selectStyles = {
 };
   
   return (
-     <main className="relative flex min-h-screen items-center justify-center overflow-y-auto py-10 overflow-x-hidden bg-white px-4 transition-colors dark:bg-gray-900">
+     <main className="relative flex min-h-screen items-center justify-center overflow-y-auto py-6 sm:py-10 overflow-x-hidden bg-white px-4 transition-colors dark:bg-gray-900">
       <>
   <div className="pointer-events-none absolute -left-32 top-0 h-[280px] w-[280px] sm:h-[450px] sm:w-[450px] rounded-full bg-cyan-500/15 blur-[140px]" />
 
@@ -128,14 +128,14 @@ const selectStyles = {
       <div className="absolute right-4 top-5 sm:right-8 z-10">
   <ThemeToggle />
 </div>
-      <div className="relative z-10 w-full max-w-xl px-0 sm:px-6">
+      <div className="relative z-10 w-full max-w-md px-2 sm:max-w-xl sm:px-6">
 
   {/* Card Glow */}
   <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-cyan-500/20 blur-3xl dark:bg-cyan-500/20" />
 
-  <div className="rounded-2xl border border-gray-200 bg-white/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
+  <div className="rounded-2xl border border-gray-200 bg-white/95 p-5 sm:p-8 shadow-2xl backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95">
         <form onSubmit={handleRegister}>
-          <h1 className="text-center text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-center text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white">
             Create your account
           </h1>
 
@@ -161,7 +161,7 @@ const selectStyles = {
               className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
             />
           </div>
-          <div className="mt-5">
+          <div className="mt-4">
             <label
               htmlFor="email"
               className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200"
@@ -180,7 +180,7 @@ const selectStyles = {
               className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
             />
           </div>
-          <div className="mt-5">
+          <div className="mt-4">
             <label
               htmlFor="password"
               className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200"
@@ -242,7 +242,7 @@ const selectStyles = {
               </button>
             </div>
           </div>
-          <div className="mt-5">
+          <div className="mt-4">
   <label className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
     Date of Birth
   </label>
@@ -254,7 +254,7 @@ const selectStyles = {
     className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
   />
 </div>
-<div className="mt-5">
+<div className="mt-4">
   <label className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
     Country
   </label>
@@ -286,7 +286,7 @@ placeholder="Select your country"
 }}
   />
 </div>
-<div className="mt-5">
+<div className="mt-4">
   <label className="mb-2 block text-sm font-semibold text-gray-800 dark:text-gray-200">
     City
   </label>
@@ -325,7 +325,7 @@ placeholder="Select your country"
           <button
   type="submit"
   disabled={isLoading}
-  className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3.5 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100"
+  className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100"
 >
   {isLoading ? "Creating account..." : "Create Account"}
 </button>
