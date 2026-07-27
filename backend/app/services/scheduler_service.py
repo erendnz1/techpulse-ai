@@ -74,6 +74,9 @@ scheduler.add_job(
     hours=2,
     id="news_fetch_job",
     replace_existing=True,
+    max_instances=1,
+    coalesce=True,
+    misfire_grace_time=1800,
 )
 
 # AI analysis every 4 hours
