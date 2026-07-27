@@ -119,7 +119,7 @@ indicatorsContainer: (base: any) => ({
 };
   
   return (
-     <main className="relative flex min-h-screen items-start sm:items-center justify-center overflow-y-auto py-6 sm:py-10 overflow-x-hidden bg-white px-3 sm:px-4 transition-colors dark:bg-gray-900">
+     <main className="relative flex min-h-screen items-start sm:items-center justify-center overflow-y-auto pt-14 pb-6 sm:py-10 overflow-x-hidden bg-white px-3 sm:px-4 transition-colors dark:bg-gray-900">
       <>
   <div className="pointer-events-none absolute -left-32 top-0 h-[280px] w-[280px] sm:h-[450px] sm:w-[450px] rounded-full bg-cyan-500/15 blur-[140px]" />
 
@@ -137,7 +137,7 @@ indicatorsContainer: (base: any) => ({
       <div className="absolute right-4 top-5 sm:right-8 z-10">
   <ThemeToggle />
 </div>
-      <div className="relative z-10 w-full max-w-md px-2 sm:max-w-xl sm:px-6">
+      <div className="relative z-10 mt-16 sm:mt-0 w-full max-w-md px-2 sm:max-w-xl sm:px-6">
 
   {/* Card Glow */}
   <div className="absolute inset-0 -z-10 scale-110 rounded-[32px] bg-cyan-500/20 blur-3xl dark:bg-cyan-500/20" />
