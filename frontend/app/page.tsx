@@ -448,7 +448,7 @@ export default function Home() {
       </FadeInSection>
       <FadeInSection>
  <section className="relative overflow-hidden bg-gray-50 px-4 py-20 dark:bg-gray-900">
-  <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
+  <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
     <div className="
 absolute
 left-1/2
@@ -546,7 +546,7 @@ intelligent dashboard
 <FadeInSection>
   <section className="relative overflow-hidden bg-gray-50 px-4 py-20 dark:bg-gray-900">
 
-    <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
+    <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
 
     <div className="mx-auto max-w-7xl">
 
