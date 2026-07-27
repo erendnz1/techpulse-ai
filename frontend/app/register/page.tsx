@@ -40,7 +40,7 @@ export default function RegisterPage() {
       return;
     }
 
-    router.push("/login");
+    window.location.href = "/login";
   } catch (error) {
     console.error(error);
     setError("Bir hata oluştu, lütfen tekrar deneyin.");
