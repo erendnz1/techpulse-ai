@@ -3,6 +3,22 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FadeInSection } from "./fade-in-section";
+import CountUp from "react-countup";
+import {
+  Newspaper,
+  Bot,
+  ChartColumn,
+  BellRing,
+} from "lucide-react";
+import {
+  FaGithub,
+  FaDocker,
+  FaAws,
+  FaCloudflare,
+} from "react-icons/fa6";
+
+import { ShieldCheck } from "lucide-react";
+import Image from "next/image";
 export default function Home() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -184,6 +200,184 @@ export default function Home() {
         </section>
       </FadeInSection>
       <FadeInSection>
+  <section className="px-4 py-12 sm:px-6">
+    <div className="mx-auto w-full max-w-7xl">
+      <div className="mb-10 text-center">
+  <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
+    PLATFORM STATISTICS
+  </p>
+
+  <h2 className="mt-3 text-3xl font-bold text-gray-900 dark:text-white">
+    Trusted by Technology Professionals
+  </h2>
+</div>
+      <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <h3 className="text-5xl font-bold text-blue-600">
+  <CountUp end={1200} duration={2.5} separator="," />+
+</h3>
+          <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+            Articles Collected
+          </p>
+        </div>
+
+        <div
+  className="
+    group
+    rounded-3xl
+    border
+    border-gray-200
+    bg-white
+    p-8
+    text-center
+    shadow-sm
+    transition-all
+    duration-500
+    hover:-translate-y-2
+    hover:border-blue-300
+    hover:shadow-2xl
+    dark:border-gray-700
+    dark:bg-gray-800
+  "
+>
+          <h3 className="text-5xl font-bold text-blue-600">
+  <CountUp end={25} duration={2.5} />+
+</h3>
+          <p
+  className="
+    mt-3
+    text-sm
+    font-semibold
+    uppercase
+    tracking-widest
+    text-gray-500
+    dark:text-gray-400
+  "
+>
+            Trusted Sources
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <h3 className="text-5xl font-bold text-blue-600">
+  <CountUp end={10} duration={2.5} />
+</h3>
+          <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+            Technology Categories
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <h3 className="text-5xl font-bold text-blue-600">
+  24/7
+</h3>
+          <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+            Powered Analysis
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</FadeInSection>
+<FadeInSection>
+  <section className="relative overflow-hidden bg-gray-50 px-4 py-20 dark:bg-gray-900">
+    <div className="pointer-events-none absolute left-1/2 top-1/2 -z-0 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
+    <div className="mx-auto max-w-7xl">
+      
+
+      <div className="text-center">
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
+          HOW IT WORKS
+        </p>
+
+        <h2 className="mt-3 text-4xl font-bold text-gray-900 dark:text-white">
+          How TechPulse AI Works
+        </h2>
+
+        <p className="mx-auto mt-5 max-w-3xl text-lg text-gray-600 dark:text-gray-400">
+          From collecting technology news to delivering personalized AI-powered
+          insights — everything happens automatically.
+        </p>
+      </div>
+
+      <div className="mt-20 grid gap-8 md:grid-cols-4">
+
+        <div className="group rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
+  <Newspaper className="h-9 w-9 text-blue-600 group-hover:text-white" />
+</div>
+
+          <h3 className="mt-6 text-xl font-bold text-gray-900 dark:text-white">
+            Collect News
+          </h3>
+
+          <p className="mt-4 leading-7 text-gray-600 dark:text-gray-400">
+            Continuously gathers technology news, security alerts,
+            AI updates and framework releases from trusted sources.
+          </p>
+
+        </div>
+
+        <div className="group rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
+  <Bot className="h-9 w-9 text-blue-600 group-hover:text-white" />
+</div>
+
+          <h3 className="mt-6 text-xl font-bold text-gray-900 dark:text-white">
+            AI Analysis
+          </h3>
+
+          <p className="mt-4 leading-7 text-gray-600 dark:text-gray-400">
+            Every article is analyzed using AI to generate summaries,
+            categories, importance scores and recommendations.
+          </p>
+
+        </div>
+
+        <div className="group rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
+  <ChartColumn className="h-9 w-9 text-blue-600 group-hover:text-white" />
+</div>
+
+          <h3 className="mt-6 text-xl font-bold text-gray-900 dark:text-white">
+            Smart Scoring
+          </h3>
+
+          <p className="mt-4 leading-7 text-gray-600 dark:text-gray-400">
+            Risk levels, affected technologies and importance scores
+            help prioritize the updates that matter most.
+          </p>
+
+        </div>
+
+        <div className="group rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl dark:border-gray-700 dark:bg-gray-900 hover:scale-105 hover:shadow-blue-500/20">
+
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 transition-all duration-500 group-hover:bg-blue-600">
+  <BellRing className="h-9 w-9 text-blue-600 group-hover:text-white" />
+</div>
+
+          <h3 className="mt-6 text-xl font-bold text-gray-900 dark:text-white">
+            Personalized Alerts
+          </h3>
+
+          <p className="mt-4 leading-7 text-gray-600 dark:text-gray-400">
+            Receive instant notifications based on your interests,
+            preferred categories and importance thresholds.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</FadeInSection>
+      <FadeInSection>
         <section
 
           id="features"
@@ -253,6 +447,159 @@ export default function Home() {
         </section>
       </FadeInSection>
       <FadeInSection>
+ <section className="relative overflow-hidden bg-gray-50 px-4 py-20 dark:bg-gray-900">
+  <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
+    <div className="
+absolute
+left-1/2
+top-1/2
+-z-10
+h-[450px]
+w-[450px]
+-translate-x-1/2
+-translate-y-1/2
+rounded-full
+bg-blue-600/20
+blur-3xl
+"/>
+    <div className="pointer-events-none absolute right-0 top-1/2 hidden h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
+
+    <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-2">
+
+      {/* Left Side */}
+      <div>
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
+          DASHBOARD PREVIEW
+        </p>
+
+        <h2 className="mt-4 text-4xl font-bold text-gray-900 dark:text-white">
+          See TechPulse AI in Action
+        </h2>
+
+        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
+          Stay on top of AI, cybersecurity,
+frameworks, cloud technologies,
+and software updates from one
+intelligent dashboard
+        </p>
+
+        <div className="mt-8 space-y-4">
+
+          <div className="flex items-center gap-3">
+            <span className="text-xl text-blue-600">✓</span>
+            <span>AI-powered news analysis</span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-xl text-blue-600">✓</span>
+            <span>Real-time security monitoring</span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-xl text-blue-600">✓</span>
+            <span>Interactive dashboard & analytics</span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-xl text-blue-600">✓</span>
+            <span>Personalized notifications</span>
+          </div>
+
+        </div>
+
+        <button
+  onClick={() => {
+    const token = localStorage.getItem("access_token");
+    router.push(token ? "/dashboard" : "/login");
+  }}
+  className="mt-10 rounded-xl bg-blue-600 px-7 py-3 font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-xl"
+>
+  Try Live Dashboard →
+</button>
+      </div>
+
+      {/* Right Side */}
+      <div className="relative lg:scale-110">
+        <Image
+  src="/images/dashboard-preview.png"
+  alt="TechPulse AI Dashboard"
+  width={1600}
+  height={1000}
+  priority
+  className="
+    w-full
+    rounded-3xl
+    border
+    border-gray-200
+    shadow-2xl
+    transition-all
+    duration-500
+    hover:scale-[1.02]
+    dark:border-gray-700
+  "
+/>
+      </div>
+
+    </div>
+  </section>
+</FadeInSection>
+<FadeInSection>
+  <section className="relative overflow-hidden bg-gray-50 px-4 py-20 dark:bg-gray-900">
+
+    <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
+
+    <div className="mx-auto max-w-7xl">
+
+      <div className="text-center">
+
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">
+          TRUSTED SOURCES
+        </p>
+
+        <h2 className="mt-3 text-4xl font-bold text-gray-900 dark:text-white">
+          Powered by the World's Leading Technology Platforms
+        </h2>
+
+        <p className="mx-auto mt-5 max-w-3xl text-lg text-gray-600 dark:text-gray-400">
+          TechPulse AI continuously monitors trusted global technology providers,
+          security organizations and developer communities.
+        </p>
+
+      </div>
+
+      <div className="mt-16 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
+
+        {[
+  { icon: FaGithub, name: "GitHub" },
+  { icon: FaCloudflare, name: "Cloudflare" },
+  { icon: Bot, name: "OpenAI" },
+  { icon: ShieldCheck, name: "NVD / CVE" },
+  { icon: FaDocker, name: "Docker" },
+  { icon: FaAws, name: "AWS" },
+].map((item) => {
+  const Icon = item.icon;
+
+  return (
+    <div
+      key={item.name}
+      className="group rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-blue-400 hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
+    >
+      <Icon className="mx-auto h-10 w-10 text-blue-600 transition-transform duration-500 group-hover:scale-110" />
+
+      <p className="mt-5 font-semibold text-gray-900 dark:text-white">
+        {item.name}
+      </p>
+    </div>
+  );
+})}
+
+      </div>
+
+    </div>
+
+  </section>
+</FadeInSection>
+      <FadeInSection>
         <section
           id="categories"
           className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24"
@@ -272,26 +619,46 @@ export default function Home() {
               cybersecurity, software, cloud, DevOps, mobile, and developer tools.
             </p>
           </div>
-          <div className="mx-auto mt-12 grid max-w-6xl gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {[
-              "Artificial Intelligence",
-              "Security",
-              "Software",
-              "Cloud",
-              "DevOps",
-              "Framework", 
-              "Mobile",
-              "Developer Tools",
-              "Business",
-            ].map((category) => (
-              <div
-                key={category}
-                className="rounded-xl border border-gray-200 bg-white p-5 text-center font-semibold text-gray-800 shadow-sm transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-blue-500"
-              >
-                {category}
-              </div>
-            ))}
-          </div>
+          <div className="mx-auto mt-14 grid max-w-5xl gap-6 sm:grid-cols-2 md:grid-cols-3">
+  {[
+    "Artificial Intelligence",
+    "Security",
+    "Software",
+    "Cloud",
+    "DevOps",
+    "Framework",
+    "Mobile",
+    "Developer Tools",
+    "Business",
+  ].map((category) => (
+    <div
+      key={category}
+      className="
+        group
+        rounded-2xl
+        border
+        border-gray-200
+        bg-white
+        px-8
+        py-8
+        text-center
+        shadow-sm
+        transition-all
+        duration-300
+        hover:-translate-y-2
+        hover:border-blue-400
+        hover:shadow-xl
+        dark:border-gray-700
+        dark:bg-gray-800
+        dark:hover:border-blue-500
+      "
+    >
+      <h3 className="text-lg font-semibold text-gray-900 transition-colors duration-300 group-hover:text-blue-600 dark:text-white">
+        {category}
+      </h3>
+    </div>
+  ))}
+</div>
         </section>
       </FadeInSection>
       <FadeInSection>
@@ -299,7 +666,7 @@ export default function Home() {
           id="about"
           className="relative overflow-hidden bg-gray-50 px-4 py-16 sm:px-6 sm:py-24 dark:bg-gray-900"
         >
-          <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/15 blur-3xl dark:block" />
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 hidden h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/10 blur-[180px] dark:block" />
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">
               About TechPulse AI
