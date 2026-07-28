@@ -237,16 +237,14 @@ def process_and_save_news(db: Session):
           stats["duplicates"] += 1
           continue
 
-        combined_text = f"""
-Title:
+        content_for_analysis = f"""Title:
 {title}
 
 Content:
-{content}
-"""
+{content[:700]}
 
-        content_for_analysis = combined_text[:3000]
-
+"""     
+        combined_text = content_for_analysis
         analysis = None
 
         if ai_enabled:
