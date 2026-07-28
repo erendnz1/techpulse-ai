@@ -35,7 +35,7 @@ router = APIRouter(
     prefix="/news",
     tags=["News"]
 )
-@router.post("/", response_model=NewsResponse)
+@router.post("", response_model=NewsResponse)
 def create_news_endpoint(
     news: NewsCreate,
     db: Session = Depends(get_db)
@@ -103,8 +103,8 @@ def get_dashboard_news_endpoint(
         minimum_importance_score=preferences.minimum_importance_score,
         limit=limit,
     )
-@router.get("/", response_model=list[NewsResponse])
-@router.get("/", response_model=list[NewsResponse])
+
+@router.get("", response_model=list[NewsResponse])
 def get_all_news(
     category: str | None = None,
     region: str | None = None,

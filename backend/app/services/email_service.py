@@ -245,7 +245,7 @@ box-shadow:
     <b>AI Summary</b>
 
     <p style="margin-top:10px;">
-    {news.summary or "No summary available."}
+    {news.summary or "AI analysis is pending..."}
     </p>
     </div>
 

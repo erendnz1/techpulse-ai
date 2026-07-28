@@ -113,29 +113,30 @@ if (searchTerm.trim()) {
         setLoading(true);
         setError("");
 
-        const [
-          personalizedResponse,
-          allNewsResponse,
-        ] = await Promise.all([
-          fetch(
-  `${apiUrl}/news/personalized?skip=0&limit=${PAGE_SIZE}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          ),
-
-          fetch(
-  `${apiUrl}/news?${params.toString()}`,
+        const personalizedResponse = await fetch(
+  `${apiUrl}/news/personalized/?skip=0&limit=${PAGE_SIZE}`,
   {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }
-),
-         
-        ]);
+);
+
+console.log("Personalized Status:", personalizedResponse.status);
+
+console.log("API URL:", apiUrl);
+console.log("NEWS URL:", `${apiUrl}/news/?${params.toString()}`);
+
+const allNewsResponse = await fetch(
+  `${apiUrl}/news/?skip=0&limit=10`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`, 
+    },
+  }
+);
+
+console.log("All News Status:", allNewsResponse.status);
 
         if (personalizedResponse.status === 401) {
           localStorage.removeItem("access_token");
@@ -470,7 +471,7 @@ const loadMore = async () => {
   }
 
   const response = await fetch(
-    `${apiUrl}/news?${params.toString()}`,
+    `${apiUrl}/news/?${params.toString()}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
