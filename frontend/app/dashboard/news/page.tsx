@@ -938,7 +938,7 @@ focus:ring-blue-500/20
 
               {/* Summary */}
               <p className="mt-3 line-clamp-3 leading-7 text-gray-600 dark:text-gray-300">
-                {item.summary || "No summary available."}
+                {item.summary || "We're still working on this one's summary."}
               </p>
 
               {/* Footer */}

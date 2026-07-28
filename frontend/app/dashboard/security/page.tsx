@@ -242,7 +242,7 @@ export default function SecurityPage() {
                   </h2>
 
                   <p className="mt-3 leading-7 text-gray-600 dark:text-gray-300">
-                    {item.summary || "No summary available."}
+                    {item.summary || "We're still working on this one's summary."}
                   </p>
 
                   {item.affected_technologies && (
