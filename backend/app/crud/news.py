@@ -40,8 +40,7 @@ def get_news(
 ):
     query = db.query(News)
 
-    # Only AI analyzed news
-    query = query.filter(News.summary.isnot(None))
+    
 
     # Category
     if (

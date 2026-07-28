@@ -297,7 +297,7 @@ lg:text-5xl font-black leading-tight tracking-tight text-gray-950 dark:text-whit
 leading-7
 sm:text-base
 lg:text-[17px] text-gray-700 dark:text-gray-300">
-        {news.summary || "AI summary is not available for this article."}
+        {news.summary || "AI analysis is pending..."}
       </p>
 
     </div>
