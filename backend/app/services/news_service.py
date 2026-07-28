@@ -199,25 +199,6 @@ def process_and_save_news(db: Session):
 
     except Exception as error:
       print(f"RSS fetch failed: {error}")
-    from datetime import datetime
-    import uuid
-
-    articles.insert(0, {
-    "title": f"EMAIL TEST {uuid.uuid4()}",
-    "content": "This is a test news created to verify the automatic email notification system. The content is intentionally long enough to pass the minimum content length validation and trigger the complete notification and email workflow.",
-    "summary": "Automatic email notification test.",
-    "source": "Test",
-    "url": f"https://test.local/{uuid.uuid4()}",
-    "image_url": None,
-    "author": "System",
-    "published_at": datetime.utcnow(),
-    "category": "AI",
-    "importance_score": 10,
-    "risk_level": "High",
-    "affected_technologies": [],
-    "recommended_action": "None",
-    "region": "global",
-})
     saved_news = []
     ai_enabled = True
 
