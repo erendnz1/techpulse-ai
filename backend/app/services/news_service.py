@@ -2,7 +2,10 @@ from app.models.news import News
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from app.services.news_fetcher import fetch_technology_news
-from app.services.ai_service import analyze_news
+from app.services.ai_service import (
+    analyze_news,
+    detect_category,
+)
 from app.crud.news import get_news_by_url, save_news
 from app.services.devto_fetcher import (
     fetch_devto_articles,
@@ -32,7 +35,7 @@ from app.services.notification_service import create_notifications_for_news
 from app.services.rss_fetcher import fetch_rss
 from app.services.rss_sources import RSS_SOURCES
 from app.core.exceptions import QuotaExceededError
-from app.services.ai_service import analyze_news, detect_category
+
 
 def process_and_save_news(db: Session):
     articles = []
@@ -182,7 +185,7 @@ def process_and_save_news(db: Session):
     try:
         rss_articles = []
 
-        for source in RSS_SOURCES[:8]:
+        for source in RSS_SOURCES:
           try:
            rss_articles.extend(fetch_rss(source, limit=3))
 
@@ -201,6 +204,7 @@ def process_and_save_news(db: Session):
       print(f"RSS fetch failed: {error}")
     saved_news = []
     ai_enabled = True
+    
 
     for article in articles:
         existing_news = get_news_by_url(db, article["url"])
@@ -245,6 +249,7 @@ Content:
 
 """     
         combined_text = content_for_analysis
+        rule_category = detect_category(combined_text)
         analysis = None
 
         if ai_enabled:
@@ -276,13 +281,7 @@ Content:
 
             article["summary"] = analysis.get("summary")
 
-            rule_category = detect_category(combined_text)
-
-            article["category"] = (
-                rule_category
-                if rule_category
-                else analysis.get("category")
-            )
+            article["category"] = rule_category or "Other"
 
             article["importance_score"] = analysis.get("importance_score")
             article["risk_level"] = analysis.get("risk_level")
@@ -369,7 +368,7 @@ Content:
 {news.content or ""}
 """
 
-        analysis = analyze_news(combined_text[:3000])
+        analysis = analyze_news(combined_text[:1000])
 
         if not analysis:
           continue
@@ -378,11 +377,7 @@ Content:
 
         news.summary = analysis.get("summary")
 
-        news.category = (
-           rule_category
-           if rule_category
-           else analysis.get("category")
-        )
+        news.category = rule_category or "Other"
 
         news.importance_score = analysis.get("importance_score")
         news.risk_level = analysis.get("risk_level")

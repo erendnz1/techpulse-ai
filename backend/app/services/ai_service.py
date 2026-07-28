@@ -8,9 +8,6 @@ from app.core.config import GROQ_API_KEY, GEMINI_API_KEY, GEMINI_MODEL, AI_PROVI
 
 logger = logging.getLogger(__name__)
 
-# Tek istekte kaç makale analiz edilecek.
-# Groq free tier TPM sınırı dar olduğu için makul bir değerle başlayın,
-# TPM hatası alırsanız düşürün, hiç almıyorsanız yükseltebilirsiniz.
 DEFAULT_BATCH_SIZE = 5
 
 
@@ -18,7 +15,7 @@ def detect_category(text: str) -> str | None:
     text = text.lower()
 
     categories = {
-        # Security en başta olmalı — eşit skor durumunda öncelik kazansın
+        
         "Security": [
             "cve-",
             "zero-day",
