@@ -1,24 +1,28 @@
 # 🚀 TechPulse AI
 
-> **AI-powered software technology monitoring platform** that aggregates software news, framework releases, AI developments, security vulnerabilities, and technology updates from multiple trusted sources into one intelligent dashboard.
+AI-powered software technology monitoring platform that aggregates software news, framework releases, AI developments, security vulnerabilities, and technology updates from multiple trusted sources into one intelligent dashboard.
 
-![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss)
-![JWT](https://img.shields.io/badge/JWT-Authentication-orange?style=for-the-badge)
-![Groq](https://img.shields.io/badge/Groq-AI-blueviolet?style=for-the-badge)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=flat&logo=jsonwebtokens&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-F55036?style=flat&logoColor=white)
 
-> ## 📖 Project Overview
+---
 
-TechPulse AI is an AI-powered software technology monitoring platform designed for software developers, IT teams, and technology enthusiasts.
+## 📖 Project Overview
+
+**TechPulse AI** is an AI-powered software technology monitoring platform designed for software developers, IT teams, and technology enthusiasts.
 
 The platform automatically collects software-related news from multiple trusted sources, analyzes the content using artificial intelligence, categorizes articles, evaluates their importance and security risk, and delivers personalized updates through a modern dashboard.
 
 Instead of visiting dozens of technology websites every day, users can monitor everything from a single platform.
 
-The project was developed as a full-stack web application using FastAPI, Next.js, PostgreSQL, and AI-powered content analysis.
+The project was developed as a full-stack web application using **FastAPI**, **Next.js**, **PostgreSQL**, and AI-powered content analysis.
+
+---
 
 ## ✨ Key Features
 
@@ -35,34 +39,23 @@ The project was developed as a full-stack web application using FastAPI, Next.js
 - 🌙 Dark / Light Theme
 - 📱 Responsive Design
 
-- ## 📸 Platform Preview
+--
+## 📸 Platform Preview
 
-### Landing Page
+| Page | Preview |
+|---|---|
+| Landing Page | *Screenshot will be added.* |
+| Dashboard | *Screenshot will be added.* |
+| News | *Screenshot will be added.* |
+| Security | *Screenshot will be added.* |
+| Sources | *Screenshot will be added.* |
 
-> Screenshot will be added.
-
-### Dashboard
-
-> Screenshot will be added.
-
-### News
-
-> Screenshot will be added.
-
-### Security
-
-> Screenshot will be added.
-
-### Sources
-
-> Screenshot will be added.
->
-> ## 📰 News Sources
-
+---
+## 📰 News Sources
 TechPulse AI continuously monitors multiple trusted technology sources to provide comprehensive software updates.
 
 | Category | Sources |
-|----------|----------|
+|---|---|
 | 🤖 Artificial Intelligence | OpenAI, Hugging Face |
 | 💻 Framework | React, Next.js, Laravel, .NET Blog, Node.js |
 | ☁️ Cloud & DevOps | AWS, Cloudflare, Docker, Kubernetes |
@@ -71,14 +64,14 @@ TechPulse AI continuously monitors multiple trusted technology sources to provid
 | 🌍 Technology News | NewsAPI, DonanımHaber, ShiftDelete.Net |
 
 More sources can easily be added through the modular RSS architecture.
-
+---
 ## 🏗️ System Architecture
 
-```text
+```
                 ┌──────────────────────────┐
-                │   News APIs / RSS Feeds  │
-                │ GitHub • CVE • Dev.to    │
-                │ OpenAI • AWS • React     │
+                │   News APIs / RSS Feeds   │
+                │  GitHub • CVE • Dev.to    │
+                │  OpenAI • AWS • React     │
                 └────────────┬─────────────┘
                              │
                              ▼
@@ -99,14 +92,11 @@ More sources can easily be added through the modular RSS architecture.
                 │
                 ▼
              End Users
-
-# 8️⃣ Tech Stack
-
-```md
+```
+---
 ## 🛠️ Tech Stack
 
-### Backend
-
+**Backend**
 - FastAPI
 - SQLAlchemy
 - PostgreSQL
@@ -115,30 +105,27 @@ More sources can easily be added through the modular RSS architecture.
 - Pydantic
 - Groq API
 
-### Frontend
-
+**Frontend**
 - Next.js (App Router)
 - TypeScript
 - Tailwind CSS
 - Recharts
 - Framer Motion
 
-### AI
-
+**AI**
 - Groq Llama 3.3
 
-### Database
-
+**Database**
 - PostgreSQL
 
-### Version Control
-
+**Version Control**
 - Git
 - GitHub
 
+---
 ## 📁 Project Structure
 
-```text
+```
 TechPulseAI
 │
 ├── backend
@@ -160,68 +147,46 @@ TechPulseAI
 │   └── package.json
 │
 └── README.md
-
-
----
-
-# 🔟 Installation
-
-```md
+```
+--
 ## ⚙️ Installation
-
 ### Clone the repository
 
 ```bash
 git clone https://github.com/erendnz1/techpulse-ai.git
+cd techpulse-ai```
 
-cd techpulse-ai
-Backend
+### Backend
+```bash
 cd backend
-
 python -m venv .venv
-
 pip install -r requirements.txt
-
 uvicorn app.main:app --reload
-Frontend
+```
+### Frontend
+```bash
 cd frontend
-
 npm install
-
 npm run dev
-
-Backend will be available at:
-
-http://localhost:8000
-Frontend will be available at:
-
-http://localhost:3000
-
-# 1️⃣1️⃣ Environment Variables
-
-```md
+```
+The backend will be available at `http://localhost:8000`
+The frontend will be available at `http://localhost:3000`
+---
 ## 🔑 Environment Variables
 
-Create a `.env` file inside the backend directory.
-
+Create a `.env` file inside the `backend` directory:
 ```env
 DATABASE_URL=
-
 SECRET_KEY=
-
 ALGORITHM=
-
 ACCESS_TOKEN_EXPIRE_MINUTES=
-
 NEWS_API_KEY=
-
 GROQ_API_KEY=
-
-1️⃣2️⃣ API Endpoints
+```
+---
 ## 📡 API Endpoints
 
 The backend exposes a RESTful API built with FastAPI.
-
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/auth/register` | Register a new user |
@@ -235,12 +200,10 @@ The backend exposes a RESTful API built with FastAPI.
 | PUT | `/preferences/me` | Update user preferences |
 | GET | `/notifications` | Get user notifications |
 | PATCH | `/notifications/{id}/read` | Mark notification as read |
-
-1️⃣3️⃣ Dashboard Features
+---
 ## 📊 Dashboard Features
 
 The dashboard provides users with real-time insights into the software ecosystem.
-
 - 📈 Total Articles
 - 🔥 Trending Technologies
 - 🤖 AI Generated Summaries
@@ -251,13 +214,9 @@ The dashboard provides users with real-time insights into the software ecosystem
 - ⚡ Latest Software Updates
 - 📱 Responsive Interface
 
-1️⃣4️⃣ AI Analysis
+---
 ## 🤖 AI Analysis
-
-Every collected article is analyzed using Groq AI.
-
-The AI automatically generates:
-
+Every collected article is analyzed using Groq AI. The AI automatically generates:
 - News Summary
 - Category Classification
 - Importance Score
@@ -266,50 +225,29 @@ The AI automatically generates:
 - Recommended Action
 
 This allows users to quickly understand the relevance and potential impact of each software update.
-
-1️⃣5️⃣ Screenshots
-
-Şimdilik şöyle bırak.
-
+---
 ## 📸 Screenshots
 
 ### 🏠 Landing Page
-
 <img src="screenshots/landing.png" width="100%">
 
----
-
 ### 📊 Dashboard
-
 <img src="screenshots/dashboard.png" width="100%">
 
----
-
 ### 📰 News
-
 <img src="screenshots/news.png" width="100%">
 
----
-
 ### 🚨 Security
-
 <img src="screenshots/security.png" width="100%">
 
----
-
 ### ⚙️ Preferences
-
 <img src="screenshots/preferences.png" width="100%">
 
----
-
 ### 📚 Sources
-
 <img src="screenshots/sources.png" width="100%">
 
-1️⃣6️⃣ Future Improvements
+---
 ## 🚀 Future Improvements
-
 - 📧 Email Notifications
 - 📱 Mobile Application
 - 🔔 Push Notifications
@@ -319,24 +257,19 @@ This allows users to quickly understand the relevance and potential impact of ea
 - 📈 Advanced Trend Analytics
 - 🤖 AI Trend Prediction
 
-1️⃣7️⃣ Contributing
+---
 ## 🤝 Contributing
-
-Contributions are welcome!
-
-If you have ideas for improvements or new features, feel free to fork the repository and submit a pull request
-1️⃣8️⃣ License
+Contributions are welcome! If you have ideas for improvements or new features, feel free to fork the repository and submit a pull request.
+---
 ## 📄 License
-
 This project is licensed under the MIT License.
+
+---
 ## 👨‍💻 Author
 
 **Eren Deniz**
 Computer Engineering
 
-GitHub:
-https://github.com/erendnz1
-
----
-
+GitHub: [github.com/erendnz1](https://github.com/erendnz1)
+--
 ⭐ If you found this project useful, consider giving it a star.
