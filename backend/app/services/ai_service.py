@@ -97,7 +97,6 @@ ALLOWED_RISK_LEVELS = {"Low", "Medium", "High", "Critical"}
 
 
 def validate_result(result: dict, text: str) -> dict | None:
-    """Tek noktadan validasyon — hem Groq hem Gemini için ortak."""
     if not isinstance(result, dict):
         return None
 

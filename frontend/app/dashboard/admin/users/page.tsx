@@ -137,20 +137,37 @@ async function updateRole(
 
 
     return (
+      <div className="relative min-h-screen">
+
+    {/* Background */}
+    <div className="absolute inset-0 -z-10 overflow-hidden">
+      <div className="absolute -top-24 left-0 h-96 w-96 rounded-full bg-blue-200/40 blur-3xl" />
+
+      <div className="absolute top-40 right-0 h-96 w-96 rounded-full bg-cyan-200/40 blur-3xl" />
+    </div>
+
 <div className="space-y-6 px-4 py-6 sm:px-6 lg:space-y-8 lg:px-10 lg:py-10">
   <div>
-    <h1 className="text-3xl font-bold text-white">
+    <h1 className="text-4xl font-bold text-slate-900">
       User Management
     </h1>
 
-    <p className="mt-2 text-gray-400">
+    <p className="mt-2 text-slate-500">
       Manage platform users
     </p>
   </div>
 
  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
-    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
+    <div className="rounded-2xl border rounded-3xl
+border
+border-slate-200
+bg-white/80
+shadow-sm
+backdrop-blur-xl
+transition-all
+hover:-translate-y-1
+hover:shadow-xl p-6 backdrop-blur-xl">
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-400">
           Total Users
@@ -221,10 +238,13 @@ sm:max-w-sm
 rounded-xl
 border
 border-white/10
-bg-slate-900/60
+bg-white
+border-slate-200
+text-slate-800
+placeholder:text-slate-400
+shadow-sm
 px-4
 py-2
-text-white
 placeholder:text-gray-500
 outline-none
 backdrop-blur-xl
@@ -234,31 +254,35 @@ focus:border-violet-500
 
   </div>
 
-  <div className="overflow-x-auto rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl">
+  <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white
+border
+border-slate-200
+shadow-sm
+rounded-3xl backdrop-blur-xl">
 
    <table className="min-w-[900px] w-full">
 
-      <thead className="bg-white/5">
+      <thead className="bg-slate-50">
 
         <tr>
 
-          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
+          <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
             Username
           </th>
 
-          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
+          <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
             Email
           </th>
 
-          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
+          <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
             Role
           </th>
 
-          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
+          <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
             Created
           </th>
 
-          <th className="px-6 py-4 text-center text-sm font-semibold text-gray-300">
+          <th className="px-6 py-4 text-center text-sm font-semibold text-slate-600">
             Actions
           </th>
 
@@ -285,14 +309,14 @@ focus:border-violet-500
 
             <tr
               key={user.id}
-              className="border-t border-white/10 transition hover:bg-white/5"
+              className="border-t border-white/10 transition hover:bg-slate-50"
             >
 
-              <td className="px-6 py-5 font-semibold text-white">
+              <td className="px-6 py-5 font-semibold text-slate-900">
                 {user.username}
               </td>
 
-              <td className="px-6 py-5 text-gray-400">
+              <td className="px-6 py-5 text-slate-500">
                 {user.email}
               </td>
 
@@ -316,7 +340,7 @@ focus:border-violet-500
 
               </td>
 
-              <td className="px-6 py-5 text-gray-400">
+              <td className="px-6 py-5 text-slate-500">
                 {new Date(user.created_at).toLocaleDateString()}
               </td>
 
@@ -423,7 +447,8 @@ focus:border-violet-500
                       Admin
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-2 rounded-full bg-slate-700 px-3 py-1 text-sm font-medium text-gray-300">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-slate-100
+text-slate-700 px-3 py-1 text-sm font-medium text-gray-300">
                       <User size={15} />
                       User
                     </span>
@@ -467,6 +492,7 @@ focus:border-violet-500
         </div>
       )}
 
+    </div>
     </div>
   );
 }

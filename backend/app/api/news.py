@@ -35,6 +35,7 @@ router = APIRouter(
     prefix="/news",
     tags=["News"]
 )
+
 @router.post("", response_model=NewsResponse)
 def create_news_endpoint(
     news: NewsCreate,
