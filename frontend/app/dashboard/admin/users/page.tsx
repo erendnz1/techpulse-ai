@@ -159,71 +159,67 @@ async function updateRole(
 
  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
-    <div className="rounded-2xl border rounded-3xl
-border
-border-slate-200
-bg-white/80
-shadow-sm
-backdrop-blur-xl
-transition-all
-hover:-translate-y-1
-hover:shadow-xl p-6 backdrop-blur-xl">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-400">
-          Total Users
-        </p>
+  {/* Total Users */}
+  <div className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl transition-all hover:-translate-y-1 hover:shadow-xl">
+    <div className="flex items-center justify-between">
+      <p className="text-sm font-medium text-slate-500">
+        Total Users
+      </p>
 
-        <Users className="text-blue-400" size={22} />
-      </div>
-
-      <h2 className="mt-3 text-3xl font-bold text-white">
-        {totalUsers}
-      </h2>
+      <Users className="text-blue-500" size={26} />
     </div>
 
-    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-400">
-          Admins
-        </p>
-
-        <Shield className="text-violet-400" size={22} />
-      </div>
-
-      <h2 className="mt-3 text-3xl font-bold text-violet-400">
-        {adminCount}
-      </h2>
-    </div>
-
-    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-400">
-          Users
-        </p>
-
-        <User className="text-blue-400" size={22} />
-      </div>
-
-      <h2 className="mt-3 text-3xl font-bold text-blue-400">
-        {userCount}
-      </h2>
-    </div>
-
-    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-400">
-          New This Month
-        </p>
-
-        <Calendar className="text-green-400" size={22} />
-      </div>
-
-      <h2 className="mt-3 text-3xl font-bold text-green-400">
-        {newUsersThisMonth}
-      </h2>
-    </div>
-
+    <h2 className="mt-4 text-4xl font-bold text-slate-900">
+      {totalUsers}
+    </h2>
   </div>
+
+  {/* Admins */}
+  <div className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl transition-all hover:-translate-y-1 hover:shadow-xl">
+    <div className="flex items-center justify-between">
+      <p className="text-sm font-medium text-slate-500">
+        Admins
+      </p>
+
+      <Shield className="text-violet-500" size={26} />
+    </div>
+
+    <h2 className="mt-4 text-4xl font-bold text-violet-600">
+      {adminCount}
+    </h2>
+  </div>
+
+  {/* Users */}
+  <div className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl transition-all hover:-translate-y-1 hover:shadow-xl">
+    <div className="flex items-center justify-between">
+      <p className="text-sm font-medium text-slate-500">
+        Users
+      </p>
+
+      <User className="text-blue-500" size={26} />
+    </div>
+
+    <h2 className="mt-4 text-4xl font-bold text-blue-600">
+      {userCount}
+    </h2>
+  </div>
+
+  {/* New This Month */}
+  <div className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl transition-all hover:-translate-y-1 hover:shadow-xl">
+    <div className="flex items-center justify-between">
+      <p className="text-sm font-medium text-slate-500">
+        New This Month
+      </p>
+
+      <Calendar className="text-emerald-500" size={26} />
+    </div>
+
+    <h2 className="mt-4 text-4xl font-bold text-emerald-600">
+      {newUsersThisMonth}
+    </h2>
+  </div>
+
+</div>
 
 <div className="flex justify-stretch sm:justify-end">
 
