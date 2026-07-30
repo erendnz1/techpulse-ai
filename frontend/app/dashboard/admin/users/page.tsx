@@ -137,89 +137,76 @@ async function updateRole(
 
 
     return (
-      <div className="relative min-h-screen">
-
-    {/* Background */}
-    <div className="absolute inset-0 -z-10 overflow-hidden">
-      <div className="absolute -top-24 left-0 h-96 w-96 rounded-full bg-blue-200/40 blur-3xl" />
-
-      <div className="absolute top-40 right-0 h-96 w-96 rounded-full bg-cyan-200/40 blur-3xl" />
-    </div>
-
 <div className="space-y-6 px-4 py-6 sm:px-6 lg:space-y-8 lg:px-10 lg:py-10">
   <div>
-    <h1 className="text-4xl font-bold text-slate-900">
+    <h1 className="text-3xl font-bold text-white">
       User Management
     </h1>
 
-    <p className="mt-2 text-slate-500">
+    <p className="mt-2 text-gray-400">
       Manage platform users
     </p>
   </div>
 
  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
-  {/* Total Users */}
-  <div className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl transition-all hover:-translate-y-1 hover:shadow-xl">
-    <div className="flex items-center justify-between">
-      <p className="text-sm font-medium text-slate-500">
-        Total Users
-      </p>
+    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-400">
+          Total Users
+        </p>
 
-      <Users className="text-blue-500" size={26} />
+        <Users className="text-blue-400" size={22} />
+      </div>
+
+      <h2 className="mt-3 text-3xl font-bold text-white">
+        {totalUsers}
+      </h2>
     </div>
 
-    <h2 className="mt-4 text-4xl font-bold text-slate-900">
-      {totalUsers}
-    </h2>
-  </div>
+    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-400">
+          Admins
+        </p>
 
-  {/* Admins */}
-  <div className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl transition-all hover:-translate-y-1 hover:shadow-xl">
-    <div className="flex items-center justify-between">
-      <p className="text-sm font-medium text-slate-500">
-        Admins
-      </p>
+        <Shield className="text-violet-400" size={22} />
+      </div>
 
-      <Shield className="text-violet-500" size={26} />
+      <h2 className="mt-3 text-3xl font-bold text-violet-400">
+        {adminCount}
+      </h2>
     </div>
 
-    <h2 className="mt-4 text-4xl font-bold text-violet-600">
-      {adminCount}
-    </h2>
-  </div>
+    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-400">
+          Users
+        </p>
 
-  {/* Users */}
-  <div className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl transition-all hover:-translate-y-1 hover:shadow-xl">
-    <div className="flex items-center justify-between">
-      <p className="text-sm font-medium text-slate-500">
-        Users
-      </p>
+        <User className="text-blue-400" size={22} />
+      </div>
 
-      <User className="text-blue-500" size={26} />
+      <h2 className="mt-3 text-3xl font-bold text-blue-400">
+        {userCount}
+      </h2>
     </div>
 
-    <h2 className="mt-4 text-4xl font-bold text-blue-600">
-      {userCount}
-    </h2>
-  </div>
+    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-400">
+          New This Month
+        </p>
 
-  {/* New This Month */}
-  <div className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl transition-all hover:-translate-y-1 hover:shadow-xl">
-    <div className="flex items-center justify-between">
-      <p className="text-sm font-medium text-slate-500">
-        New This Month
-      </p>
+        <Calendar className="text-green-400" size={22} />
+      </div>
 
-      <Calendar className="text-emerald-500" size={26} />
+      <h2 className="mt-3 text-3xl font-bold text-green-400">
+        {newUsersThisMonth}
+      </h2>
     </div>
 
-    <h2 className="mt-4 text-4xl font-bold text-emerald-600">
-      {newUsersThisMonth}
-    </h2>
   </div>
-
-</div>
 
 <div className="flex justify-stretch sm:justify-end">
 
@@ -234,13 +221,10 @@ sm:max-w-sm
 rounded-xl
 border
 border-white/10
-bg-white
-border-slate-200
-text-slate-800
-placeholder:text-slate-400
-shadow-sm
+bg-slate-900/60
 px-4
 py-2
+text-white
 placeholder:text-gray-500
 outline-none
 backdrop-blur-xl
@@ -250,35 +234,31 @@ focus:border-violet-500
 
   </div>
 
-  <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white
-border
-border-slate-200
-shadow-sm
-rounded-3xl backdrop-blur-xl">
+  <div className="overflow-x-auto rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl">
 
    <table className="min-w-[900px] w-full">
 
-      <thead className="bg-slate-50">
+      <thead className="bg-white/5">
 
         <tr>
 
-          <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
             Username
           </th>
 
-          <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
             Email
           </th>
 
-          <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
             Role
           </th>
 
-          <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">
             Created
           </th>
 
-          <th className="px-6 py-4 text-center text-sm font-semibold text-slate-600">
+          <th className="px-6 py-4 text-center text-sm font-semibold text-gray-300">
             Actions
           </th>
 
@@ -305,14 +285,14 @@ rounded-3xl backdrop-blur-xl">
 
             <tr
               key={user.id}
-              className="border-t border-white/10 transition hover:bg-slate-50"
+              className="border-t border-white/10 transition hover:bg-white/5"
             >
 
-              <td className="px-6 py-5 font-semibold text-slate-900">
+              <td className="px-6 py-5 font-semibold text-white">
                 {user.username}
               </td>
 
-              <td className="px-6 py-5 text-slate-500">
+              <td className="px-6 py-5 text-gray-400">
                 {user.email}
               </td>
 
@@ -336,7 +316,7 @@ rounded-3xl backdrop-blur-xl">
 
               </td>
 
-              <td className="px-6 py-5 text-slate-500">
+              <td className="px-6 py-5 text-gray-400">
                 {new Date(user.created_at).toLocaleDateString()}
               </td>
 
@@ -443,8 +423,7 @@ rounded-3xl backdrop-blur-xl">
                       Admin
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-2 rounded-full bg-slate-100
-text-slate-700 px-3 py-1 text-sm font-medium text-gray-300">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-slate-700 px-3 py-1 text-sm font-medium text-gray-300">
                       <User size={15} />
                       User
                     </span>
@@ -488,7 +467,6 @@ text-slate-700 px-3 py-1 text-sm font-medium text-gray-300">
         </div>
       )}
 
-    </div>
     </div>
   );
 }
