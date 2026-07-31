@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.models.news import News
 from app.models.notification import Notification
 
-RETENTION_DAYS = 30
+RETENTION_DAYS = 15
 
 
 def cleanup_old_news(db: Session):
