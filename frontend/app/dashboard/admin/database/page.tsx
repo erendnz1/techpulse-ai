@@ -213,7 +213,7 @@ Retention Period
 
 
 <h2 className="mt-3 text-4xl font-bold text-white">
-30 Days
+15 Days
 </h2>
 
 
