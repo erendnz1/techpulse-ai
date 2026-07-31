@@ -27,18 +27,44 @@ def detect_category(text: str) -> str | None:
             "privilege escalation",
         ],
         "AI": [
-            "openai", "chatgpt", "gpt", "claude", "anthropic", "gemini",
-            "llm", "hugging face", "copilot", "stable diffusion", "midjourney",
-        ],
+    "openai", "chatgpt", "gpt", "claude", "anthropic",
+    "gemini", "llm", "hugging face", "copilot",
+    "stable diffusion", "midjourney",
+
+    "google ai",
+    "deepmind",
+    "vertex ai",
+    "veo",
+    "imagen",
+    "nano banana",
+    "perplexity",
+    "grok",
+    "xai",
+],
         "Framework": [
             "react", "next.js", "nextjs", "angular", "vue", "nuxt", "svelte",
             "node.js", "express", "nestjs", "laravel", "symfony", "django",
             "flask", "fastapi", "spring boot", "spring", "asp.net", ".net",
         ],
         "Cloud": [
-            "cloudflare", "aws", "amazon web services", "azure",
-            "google cloud", "gcp", "kubernetes", "serverless", "cdn", "cloud",
-        ],
+    "cloudflare",
+    "aws",
+    "amazon web services",
+    "azure",
+
+    "google cloud",
+    "gcp",
+
+    "icloud",
+
+    "oracle cloud",
+
+    "serverless",
+    "cdn",
+
+    "kubernetes",
+    "cloud",
+],
         "DevOps": [
             "docker", "terraform", "jenkins", "ansible", "github actions",
             "gitlab ci", "ci/cd", "helm", "argo cd",
@@ -52,19 +78,75 @@ def detect_category(text: str) -> str | None:
             "windows", "linux", "macos", "postgresql", "mysql",
             "chrome", "firefox",
         ],
-        "Hardware": [
-            "cpu", "gpu", "processor", "chip", "chips", "semiconductor",
-            "memory", "memory chip", "flash memory", "ram", "ssd", "storage",
-            "data storage", "intel", "amd", "nvidia", "qualcomm", "arm",
-            "tsmc", "micron", "sk hynix",
-        ],
-        "Mobile": ["android", "ios", "iphone", "ipad", "play store", "app store"],
+       "Hardware": [
+    "cpu",
+    "gpu",
+    "processor",
+    "chip",
+    "chips",
+    "semiconductor",
+
+    "snapdragon",
+    "exynos",
+    "mediatek",
+
+    "intel",
+    "amd",
+    "nvidia",
+
+    "tsmc",
+    "micron",
+    "sk hynix",
+
+    "ssd",
+    "ram",
+    "storage",
+],
+        "Mobile": [
+    "android",
+    "ios",
+    "iphone",
+    "ipad",
+    "apple watch",
+
+    "samsung",
+    "galaxy",
+
+    "xiaomi",
+    "redmi",
+    "poco",
+
+    "pixel",
+
+    "oneplus",
+    "oppo",
+    "vivo",
+    "huawei",
+
+    "snapdragon",
+    "mediatek",
+    "play store",
+    "app store",
+],
         "Gaming": ["steam", "xbox", "playstation", "unity", "unreal"],
         "Business": [
-            "acquisition", "investment", "funding", "earnings",
-            "revenue", "partnership", "layoffs", "bankruptcy",
-            "merger", "ipo", "restructuring",
-        ],
+    "acquisition",
+    "investment",
+    "funding",
+    "earnings",
+    "revenue",
+    "partnership",
+    "layoffs",
+    "bankruptcy",
+    "merger",
+    "ipo",
+    "restructuring",
+
+    "market share",
+    "sales",
+    "financial results",
+    "quarterly",
+],
     }
 
     scores = {}
@@ -104,9 +186,10 @@ def validate_result(result: dict, text: str) -> dict | None:
     if not summary:
         return None
 
-    category = detect_category(text) or "Other"
+    category = result.get("category")
+
     if category not in ALLOWED_CATEGORIES:
-        category = detect_category(text) or "Other"
+      category = detect_category(text) or "Other"
 
     importance_score = result.get("importance_score")
     if not isinstance(importance_score, int) or not 1 <= importance_score <= 10:
@@ -159,6 +242,7 @@ The "results" array must contain exactly the same number of objects as the input
 For each article, generate:
 
 - summary
+- category
 - importance_score
 - risk_level
 - affected_technologies
@@ -213,6 +297,7 @@ Each object inside "results" must follow exactly this schema:
   "summary": "2-3 sentence summary",
   "importance_score": 6,
   "risk_level": "Low",
+  "category": "Mobile",
   "affected_technologies": [],
   "recommended_action": "",
   "is_relevant": true
