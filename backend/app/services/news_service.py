@@ -38,6 +38,7 @@ from app.core.exceptions import QuotaExceededError
 
 
 def process_and_save_news(db: Session):
+    MIN_IMPORTANCE_SCORE = 5
     articles = []
     stats = {
     "sources": 0,
@@ -278,7 +279,11 @@ Content:
                 stats["irrelevant"] += 1
                 print(f"Irrelevant news skipped: {article['title']}")
                 continue
+            MIN_IMPORTANCE_SCORE = 5
 
+            if analysis.get("importance_score", 0) < MIN_IMPORTANCE_SCORE:
+              print(f"Low importance skipped: {article['title']}")
+              continue
             article["summary"] = analysis.get("summary")
 
             article["category"] = rule_category or "Other"
