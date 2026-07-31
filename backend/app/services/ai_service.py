@@ -145,7 +145,7 @@ def validate_result(result: dict, text: str) -> dict | None:
 # Prompt
 # ---------------------------------------------------------------------------
 
-_RULES_BLOCK = """Analyze the tech news articles below. Return ONLY a valid JSON object, no markdown, no explanations, in exactly this shape:
+_RULES_BLOCK = """Analyze the tech news articles below. Return ONLY a valid JSON object, with no markdown, comments, or explanations, in exactly this format:
 
 {
   "results": [
@@ -154,18 +154,61 @@ _RULES_BLOCK = """Analyze the tech news articles below. Return ONLY a valid JSON
   ]
 }
 
-The "results" array must have exactly as many objects as there are articles, in the same order as the input.
+The "results" array must contain exactly the same number of objects as the input articles, in the same order.
 
-Rate importance_score 1-10 (default 6 for typical dev news):
-1-3 minor · 4-5 routine · 6 notable · 7 major release · 8 industry-wide · 9 critical security event · 10 global emergency
-Most articles should score 5-7. Use 8-10 only for exceptional global events or critical security incidents.
+For each article, generate:
 
-risk_level: Low / Medium / High / Critical
-(High/Critical only for real security incidents; everything else Low)
+- summary
+- importance_score
+- risk_level
+- affected_technologies
+- recommended_action
+- is_relevant
 
-is_relevant: true only if useful for developers, DevOps, security or IT professionals.
+Importance Score (1-10):
 
-Each object in "results" must follow this schema:
+1-2 = Minor announcements, small fixes, or maintenance updates.
+3-4 = Routine product updates, blog posts, tutorials, or documentation.
+5-6 = Standard framework, library, cloud, AI, mobile, or developer tool updates.
+7 = Major product releases, significant new features, or important technology announcements.
+8 = Industry-wide impact affecting many developers or organizations.
+9 = Critical security incident, severe vulnerability, or major platform outage.
+10 = Global emergency or technology event with worldwide impact.
+
+Most articles should receive scores between 5 and 7.
+Assign scores of 8-10 only when the impact is truly exceptional.
+Do NOT assign a high importance score solely because an article is related to cybersecurity.
+
+Risk Level:
+
+- Low = General announcements, releases, tutorials, product updates, framework updates, AI news, cloud news, or developer tool updates.
+- Medium = Security vulnerabilities or issues that require attention but are not actively exploited.
+- High = Confirmed exploitation, severe vulnerabilities, or incidents requiring immediate action.
+- Critical = Large-scale actively exploited security incidents with widespread impact.
+
+Only security-related articles may receive High or Critical risk.
+All non-security articles should receive Low risk.
+
+Affected Technologies:
+
+Return a list of technologies directly mentioned in the article.
+Examples:
+["React", "Next.js"]
+["Docker", "Kubernetes"]
+["AWS"]
+Return an empty array if none are explicitly mentioned.
+
+Recommended Action:
+
+Provide one concise recommendation (maximum one sentence).
+Leave it empty if no action is required.
+
+is_relevant:
+
+Return true only if the article is useful for software developers, DevOps engineers, cloud engineers, security professionals, AI engineers, or other IT professionals.
+
+Each object inside "results" must follow exactly this schema:
+
 {
   "summary": "2-3 sentence summary",
   "importance_score": 6,
@@ -173,7 +216,8 @@ Each object in "results" must follow this schema:
   "affected_technologies": [],
   "recommended_action": "",
   "is_relevant": true
-}"""
+}
+"""
 
 
 def build_batch_prompt(texts: list[str]) -> str:

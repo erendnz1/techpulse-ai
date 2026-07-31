@@ -35,7 +35,12 @@ def fetch_rss(source: dict, limit: int = 5):
     limit = source.get("limit", limit)
 
     # Son 2 günün haberleri
-    cutoff = datetime.now(timezone.utc) - timedelta(days=2)
+    now = datetime.now(timezone.utc)
+
+    if source["category"] == "Security":
+      cutoff = now - timedelta(days=2)
+    else:
+      cutoff = now - timedelta(days=14)
 
     for entry in feed.entries[:limit]:
 

@@ -101,14 +101,14 @@ RSS_SOURCES = [
         "category": "Security",
         "region": "global",
         "url": "https://feeds.feedburner.com/TheHackersNews",
-        "limit": 5,
+        "limit": 2,
     },
     {
     "name": "BleepingComputer",
     "category": "Security",
     "region": "global",
     "url": "https://www.bleepingcomputer.com/feed/",
-    "limit": 5,
+    "limit": 2,
 },
 
 {
@@ -116,7 +116,7 @@ RSS_SOURCES = [
     "category": "Security",
     "region": "global",
     "url": "https://feeds.feedburner.com/securityweek",
-    "limit": 5,
+    "limit": 2,
 },
 
 {
@@ -124,7 +124,7 @@ RSS_SOURCES = [
     "category": "Security",
     "region": "global",
     "url": "https://isc.sans.edu/rssfeed.xml",
-    "limit": 5,
+    "limit": 2,
 },
 
 {
@@ -132,7 +132,7 @@ RSS_SOURCES = [
     "category": "Security",
     "region": "global",
     "url": "https://googleprojectzero.blogspot.com/feeds/posts/default",
-    "limit": 5,
+    "limit": 2,
 },
 
 {
@@ -140,7 +140,7 @@ RSS_SOURCES = [
     "category": "Security",
     "region": "global",
     "url": "https://www.microsoft.com/en-us/security/blog/feed/",
-    "limit": 5,
+    "limit": 2,
 },
     {
         "name": "Visual Studio Blog",
